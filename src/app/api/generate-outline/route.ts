@@ -104,7 +104,9 @@ For each module, provide detailed content including:
 3. **Assessment**:
    - 3 quiz questions with multiple choice options and explanations
 
-Format your response as a JSON object with this structure:
+IMPORTANT: Respond ONLY with valid JSON. Do not include any markdown formatting, explanations, or additional text. The response must be parseable JSON.
+
+Format your response as a JSON object with this exact structure:
 {
   "courseTitle": "Complete course title here",
   "description": "Comprehensive course description",
@@ -218,13 +220,103 @@ async function generateWithGemini(
   const response = await result.response;
   const content = response.text();
 
+  console.log('Raw Gemini response:', content);
+
   try {
     // Clean up the response in case it has markdown formatting
-    const cleanContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    return JSON.parse(cleanContent);
+    let cleanContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
+    // Try to find JSON content if it's wrapped in other text
+    const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      cleanContent = jsonMatch[0];
+    }
+
+    // Try to parse the JSON
+    const parsed = JSON.parse(cleanContent);
+    
+    // Validate the structure
+    if (!parsed.courseTitle || !parsed.modules || !Array.isArray(parsed.modules)) {
+      throw new Error('Invalid outline structure in response');
+    }
+
+    return parsed;
   } catch (error) {
     console.error('Failed to parse Gemini response:', content);
-    throw new Error('Invalid JSON response from Gemini');
+    console.error('Parse error:', error);
+    
+    // Try to create a fallback response
+    try {
+      const fallbackOutline: CourseOutline = {
+        courseTitle: `Complete ${topic} Course`,
+        description: `A comprehensive course on ${topic} designed for ${difficulty} learners using ${learningStyle} learning methods.`,
+        totalDuration: duration,
+        prerequisites: prerequisites ? [prerequisites] : [],
+        learningOutcomes: [
+          `Understand the fundamentals of ${topic}`,
+          `Apply ${topic} concepts in practical scenarios`,
+          `Develop skills for advanced ${topic} applications`
+        ],
+        modules: Array.from({ length: modules }, (_, i) => ({
+          title: `Module ${i + 1}: ${topic} Fundamentals`,
+          bulletPoints: [
+            `Introduction to ${topic} concepts`,
+            `Key principles and methodologies`,
+            `Practical applications and examples`,
+            `Assessment and evaluation`
+          ],
+          learningObjectives: [
+            `Understand basic ${topic} concepts`,
+            `Apply ${topic} principles`,
+            `Evaluate ${topic} applications`
+          ],
+          estimatedDuration: Math.round(duration * 60 / modules),
+          resources: {
+            videos: [
+              {
+                title: `${topic} Introduction Video`,
+                description: `Comprehensive introduction to ${topic}`,
+                duration: 15
+              }
+            ],
+            documents: [
+              {
+                title: `${topic} Study Guide`,
+                description: `Complete study materials for ${topic}`,
+                type: 'pdf'
+              }
+            ],
+            externalLinks: [
+              {
+                title: `${topic} Documentation`,
+                description: `Official documentation and resources`
+              }
+            ]
+          },
+          assessment: {
+            quizQuestions: [
+              {
+                question: `What is the primary focus of ${topic}?`,
+                options: [
+                  `Understanding basic concepts`,
+                  `Advanced applications only`,
+                  `Theoretical knowledge only`,
+                  `None of the above`
+                ],
+                correctAnswer: 0,
+                explanation: `${topic} focuses on understanding basic concepts before moving to advanced applications.`
+              }
+            ]
+          }
+        }))
+      };
+      
+      console.log('Using fallback outline due to parsing error');
+      return fallbackOutline;
+    } catch (fallbackError) {
+      console.error('Fallback creation failed:', fallbackError);
+      throw new Error('Failed to generate course outline. Please try again with a different topic or settings.');
+    }
   }
 }
 
@@ -257,30 +349,116 @@ export async function POST(request: NextRequest) {
 
     // Try to generate with available AI service
     let outline: CourseOutline;
+    let generatedWith: string;
 
-    if (openai) {
-      console.log('Generating outline with OpenAI...');
-      outline = await generateWithOpenAI(topic, modules, difficulty, learningStyle, duration, prerequisites);
-    } else if (genAI) {
-      console.log('Generating outline with Gemini...');
-      outline = await generateWithGemini(topic, modules, difficulty, learningStyle, duration, prerequisites);
-    } else {
-      return NextResponse.json(
-        { error: 'No AI service configured. Please set OPENAI_API_KEY or GEMINI_API_KEY in your environment variables.' },
-        { status: 500 }
-      );
+    try {
+      if (openai) {
+        console.log('Generating outline with OpenAI...');
+        outline = await generateWithOpenAI(topic, modules, difficulty, learningStyle, duration, prerequisites);
+        generatedWith = 'OpenAI';
+      } else if (genAI) {
+        console.log('Generating outline with Gemini...');
+        outline = await generateWithGemini(topic, modules, difficulty, learningStyle, duration, prerequisites);
+        generatedWith = 'Gemini';
+      } else {
+        return NextResponse.json(
+          { error: 'No AI service configured. Please set OPENAI_API_KEY or GEMINI_API_KEY in your environment variables.' },
+          { status: 500 }
+        );
+      }
+
+      // Validate the generated outline
+      if (!outline.courseTitle || !outline.modules || !Array.isArray(outline.modules)) {
+        throw new Error('Invalid outline structure generated');
+      }
+
+      return NextResponse.json({
+        success: true,
+        outline,
+        generatedWith
+      });
+
+    } catch (aiError) {
+      console.error('AI generation error:', aiError);
+      
+      // If AI generation fails, try to create a basic fallback
+      try {
+        console.log('Creating fallback outline...');
+        const fallbackOutline: CourseOutline = {
+          courseTitle: `Complete ${topic} Course`,
+          description: `A comprehensive course on ${topic} designed for ${difficulty} learners using ${learningStyle} learning methods.`,
+          totalDuration: duration,
+          prerequisites: prerequisites ? [prerequisites] : [],
+          learningOutcomes: [
+            `Understand the fundamentals of ${topic}`,
+            `Apply ${topic} concepts in practical scenarios`,
+            `Develop skills for advanced ${topic} applications`
+          ],
+          modules: Array.from({ length: modules }, (_, i) => ({
+            title: `Module ${i + 1}: ${topic} Fundamentals`,
+            bulletPoints: [
+              `Introduction to ${topic} concepts`,
+              `Key principles and methodologies`,
+              `Practical applications and examples`,
+              `Assessment and evaluation`
+            ],
+            learningObjectives: [
+              `Understand basic ${topic} concepts`,
+              `Apply ${topic} principles`,
+              `Evaluate ${topic} applications`
+            ],
+            estimatedDuration: Math.round(duration * 60 / modules),
+            resources: {
+              videos: [
+                {
+                  title: `${topic} Introduction Video`,
+                  description: `Comprehensive introduction to ${topic}`,
+                  duration: 15
+                }
+              ],
+              documents: [
+                {
+                  title: `${topic} Study Guide`,
+                  description: `Complete study materials for ${topic}`,
+                  type: 'pdf'
+                }
+              ],
+              externalLinks: [
+                {
+                  title: `${topic} Documentation`,
+                  description: `Official documentation and resources`
+                }
+              ]
+            },
+            assessment: {
+              quizQuestions: [
+                {
+                  question: `What is the primary focus of ${topic}?`,
+                  options: [
+                    `Understanding basic concepts`,
+                    `Advanced applications only`,
+                    `Theoretical knowledge only`,
+                    `None of the above`
+                  ],
+                  correctAnswer: 0,
+                  explanation: `${topic} focuses on understanding basic concepts before moving to advanced applications.`
+                }
+              ]
+            }
+          }))
+        };
+
+        return NextResponse.json({
+          success: true,
+          outline: fallbackOutline,
+          generatedWith: 'Fallback (AI service unavailable)'
+        });
+
+      } catch (fallbackError) {
+        console.error('Fallback creation failed:', fallbackError);
+        throw new Error('Failed to generate course outline. Please try again with a different topic or check your API configuration.');
+      }
     }
-
-    // Validate the generated outline
-    if (!outline.courseTitle || !outline.modules || !Array.isArray(outline.modules)) {
-      throw new Error('Invalid outline structure generated');
-    }
-
-    return NextResponse.json({
-      success: true,
-      outline,
-      generatedWith: openai ? 'OpenAI' : 'Gemini'
-    });
 
   } catch (error) {
     console.error('Error generating outline:', error);
