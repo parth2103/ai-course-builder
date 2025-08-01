@@ -24,7 +24,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        elements: {
+          formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",
+          card: "bg-white dark:bg-gray-800 shadow-lg",
+          headerTitle: "text-gray-900 dark:text-white",
+          headerSubtitle: "text-gray-600 dark:text-gray-400",
+        }
+      }}
+    >
       <html lang="en" suppressHydrationWarning={true}>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

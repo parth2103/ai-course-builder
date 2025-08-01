@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { userService } from '../../../../lib/db/services';
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, email, firstName, lastName, role } = await request.json();
+    const { userId } = await auth();
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    if (!userId || !email || !role) {
+    const { email, firstName, lastName, role } = await request.json();
+
+    if (!email || !role) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 

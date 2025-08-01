@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       success: true, 
       message: 'Database connection working',
       userCount: users.length,
-      users: users.map(u => ({ id: u.id, email: u.email, role: u.role }))
+      users: users.map((u: any) => ({ id: u.id, email: u.email, role: u.role }))
     });
 
   } catch (error) {

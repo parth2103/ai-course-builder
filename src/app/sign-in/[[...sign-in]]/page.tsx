@@ -9,10 +9,11 @@ export default function SignInPage() {
             Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Access your AI Course Builder dashboard
+            Welcome back to AI Course Builder
           </p>
         </div>
         <SignIn 
+          redirectUrl="/dashboard"
           appearance={{
             elements: {
               formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",
