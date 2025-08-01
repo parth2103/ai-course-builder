@@ -1,315 +1,184 @@
-# 🎓 AI Course Builder
+# AI Course Builder 🚀
 
-A comprehensive course creation platform powered by AI, featuring role-based authentication, database integration, and a beautiful marketplace for learners.
+A comprehensive AI-powered course creation and learning platform built with Next.js 15, React 19, and TypeScript.
 
 ## ✨ Features
 
-### 🚀 **AI-Powered Course Generation**
-- Generate comprehensive course outlines using Google Gemini AI
-- Customizable difficulty levels (Beginner, Intermediate, Advanced)
-- Multiple learning styles (Visual, Audio, Hands-on, Mixed)
-- Detailed module structure with learning objectives and assessments
-- **Real URLs for resources** - YouTube videos, PDFs, and external links
+### 🎓 **For Instructors**
+- **AI-Powered Course Generation** - Create comprehensive course outlines using Google Gemini AI
+- **Course Management** - Edit, save, and publish courses with full content control
+- **File Upload System** - Upload course materials (PDFs, videos, documents)
+- **Real-time Editing** - Inline editing of course content, modules, and resources
+- **Course Analytics** - Track student enrollment and engagement
+- **Role-Based Access** - Secure instructor dashboard with permissions
 
-### 🔐 **Authentication & Role-Based Access**
-- **Clerk Authentication**: Secure login/signup system
-- **Role Management**: Admin, Instructor, and Student roles
-- **Protected Routes**: Role-based access control
-- **User Management**: Admin can manage user roles and permissions
+### 📚 **For Students**
+- **Course Discovery** - Browse and enroll in published courses
+- **Interactive Learning** - Dynamic course interface with progress tracking
+- **Module Navigation** - Easy navigation through course modules
+- **Resource Access** - View videos, documents, and external links
+- **Progress Tracking** - Real-time progress updates and completion tracking
+- **Knowledge Checks** - Interactive quizzes and assessments
 
-### 🗄️ **Database Integration**
-- **Neon PostgreSQL**: Scalable serverless database
-- **Drizzle ORM**: Type-safe database operations
-- **Course Persistence**: Save and load generated courses
-- **User Data**: Store user profiles, enrollments, and progress
-- **Resource Management**: Database-driven resource library
+### 🔐 **Authentication & Security**
+- **Clerk Integration** - Secure user authentication and management
+- **Role-Based Access Control** - Admin, Instructor, and Student roles
+- **Protected Routes** - Secure API endpoints and page access
+- **Database Security** - Type-safe database operations with Drizzle ORM
 
-### 🎨 **Advanced Content Management**
-- **Course Generation**: AI-powered course outline creation
-- **Content Curation**: Edit modules, learning objectives, and resources
-- **Resource Library**: Upload files, add YouTube videos, and external links
-- **Real-time Preview**: See course structure as you build
-
-### 🛍️ **Marketplace Experience**
-- Beautiful course discovery interface
-- Advanced filtering by category and difficulty
-- Responsive design with dark mode support
-- Course cards with detailed information
-- **Course Enrollment**: Students can enroll in courses
-
-### 🔧 **Admin Dashboard**
-- **Course Hub**: Unified interface for all user types
-- **Role-Based Navigation**: Different menus for Admin, Instructor, Student
-- **Generate Course**: AI-powered course creation
-- **User Management**: Manage users and roles
-- **Analytics**: Platform metrics and insights
-
-### 👨‍🎓 **Student Features**
-- **Course Enrollment**: Browse and enroll in courses
-- **Learning Dashboard**: Track enrolled courses and progress
-- **Progress Tracking**: Monitor learning progress
-- **Course History**: View completed and ongoing courses
+### 🎨 **User Experience**
+- **Responsive Design** - Works seamlessly on desktop, tablet, and mobile
+- **Dark Mode Support** - Toggle between light and dark themes
+- **Modern UI** - Clean, intuitive interface with Tailwind CSS
+- **Real-time Updates** - Live progress tracking and course updates
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS 3 with dark mode
-- **AI Services**: Google Gemini API (gemini-1.5-flash)
-- **Authentication**: Clerk
-- **Database**: Neon PostgreSQL with Drizzle ORM
-- **Deployment**: Vercel
-- **State Management**: React hooks and context
+### **Frontend**
+- **Next.js 15** - React framework with App Router
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first CSS framework
+- **Vercel Analytics** - Performance and user analytics
+
+### **Backend & Database**
+- **Neon PostgreSQL** - Serverless PostgreSQL database
+- **Drizzle ORM** - Type-safe database operations
+- **Next.js API Routes** - Serverless API endpoints
+
+### **Authentication & AI**
+- **Clerk** - User authentication and management
+- **Google Gemini AI** - AI-powered course generation
+
+### **Deployment**
+- **Vercel** - Serverless deployment platform
+- **GitHub** - Version control and CI/CD
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+ 
-- npm or yarn
+- PostgreSQL database (Neon recommended)
 - Google Gemini API key
 - Clerk account
-- Neon PostgreSQL database
 
 ### Installation
 
 1. **Clone the repository**
-   ```bash
-   git clone https://github.com/parth2103/ai-course-builder.git
-   cd ai-course-builder
-   ```
+```bash
+git clone <repository-url>
+cd ai-course-builder/src
+```
 
 2. **Install dependencies**
-   ```bash
-   cd src
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. **Set up environment variables**
-   ```bash
-   # Create .env.local in the src directory
-   cp env.example .env.local
-   ```
+```bash
+cp .env.example .env.local
+```
 
-   Add your API keys to `.env.local`:
-   ```env
-   # Google Gemini API Configuration
-   GEMINI_API_KEY=your_gemini_api_key_here
+Add your environment variables:
+```env
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_OUT_URL=/landing
 
-   # Clerk Authentication Configuration
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-   CLERK_SECRET_KEY=your_clerk_secret_key
+# Database
+POSTGRES_URL=your_neon_database_url
+POSTGRES_URL_NON_POOLING=your_neon_database_url_non_pooling
 
-   # Clerk URLs (for development)
-   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-   NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
-   NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
-   NEXT_PUBLIC_CLERK_AFTER_SIGN_OUT_URL=/landing
-
-   # Neon Database Configuration
-   POSTGRES_URL=your_neon_database_url
-   POSTGRES_URL_NON_POOLING=your_neon_database_non_pooling_url
-   ```
+# AI
+GOOGLE_GEMINI_API_KEY=your_gemini_api_key
+```
 
 4. **Set up the database**
-   ```bash
-   # Generate and run migrations
-   npm run db:generate
-   npm run db:migrate:run
-   
-   # Seed the database with initial data
-   npm run db:seed
-   ```
+```bash
+# Generate migrations
+npm run db:generate
 
-5. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+# Run migrations
+npm run db:migrate
 
-6. **Set up Clerk Authentication**
-   - Create a free account at [Clerk.com](https://clerk.com)
-   - Create a new application
-   - Copy your publishable key and secret key
-   - Add them to your `.env.local` file
-   - Configure user roles in Clerk dashboard
+# Seed the database (optional)
+npm run db:seed
+```
 
-7. **Set up Neon Database**
-   - Create a free account at [Neon.tech](https://neon.tech)
-   - Create a new project
-   - Copy the connection strings
-   - Add them to your `.env.local` file
+5. **Start the development server**
+```bash
+npm run dev
+```
 
-8. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+6. **Open your browser**
+Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
 
 ```
 src/
-├── app/
-│   ├── admin/                    # Admin dashboard
-│   ├── api/                      # API routes
-│   │   ├── enroll/              # Course enrollment
-│   │   ├── generate-outline/    # AI course generation
-│   │   └── users/               # User management
-│   ├── components/              # Reusable components
-│   │   ├── AccountSettings.tsx
-│   │   ├── AuthHeader.tsx
-│   │   ├── CourseForm.tsx
-│   │   ├── EnhancedCourseDisplay.tsx
-│   │   ├── RoleBasedNavigation.tsx
-│   │   ├── RoleManager.tsx
-│   │   └── UserRoleBadge.tsx
-│   ├── dashboard/               # User dashboard
-│   ├── hub/                     # Course Hub (main interface)
-│   │   ├── admin/              # Admin features
-│   │   ├── analytics/          # Platform analytics
-│   │   ├── generate/           # Course generation
-│   │   ├── student/            # Student features
-│   │   └── users/              # User management
-│   ├── hooks/                  # Custom React hooks
-│   ├── landing/                # Landing page
-│   ├── lib/                    # Database and utilities
-│   │   └── db/                 # Database configuration
-│   │       ├── index.ts        # Database connection
-│   │       ├── schema.ts       # Database schema
-│   │       ├── services.ts     # Database services
-│   │       └── migrations/     # Database migrations
-│   ├── marketplace/            # Course marketplace
-│   ├── scripts/                # Database scripts
-│   ├── sign-in/                # Authentication pages
-│   ├── sign-up/                # Authentication pages
-│   └── student/                # Student dashboard
-├── lib/                        # Shared utilities
-├── package.json
-├── drizzle.config.ts           # Database configuration
-└── vercel.json                 # Deployment configuration
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   ├── components/        # Reusable components
+│   ├── hooks/            # Custom React hooks
+│   ├── hub/              # Main application pages
+│   ├── lib/              # Database and utilities
+│   └── globals.css       # Global styles
+├── scripts/              # Database scripts
+└── drizzle.config.ts     # Drizzle configuration
 ```
 
-## 🎯 Usage
+## 🔧 Available Scripts
 
-### **For Admins**
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run db:generate` - Generate database migrations
+- `npm run db:migrate` - Run database migrations
+- `npm run db:seed` - Seed database with sample data
+- `npm run db:studio` - Open Drizzle Studio
 
-1. **Sign in with admin account**
-   - Use an email configured as admin in Clerk
+## 🌟 Key Features in Detail
 
-2. **Access Course Hub**
-   - Navigate to the Course Hub after login
-   - Access admin-specific features from the sidebar
+### **AI Course Generation**
+- Generate comprehensive course outlines using natural language
+- Automatic module creation with learning objectives
+- Resource suggestions (videos, documents, external links)
+- Assessment question generation
 
-3. **Generate Courses**
-   - Use the "Generate Course" feature
-   - AI will create detailed course outlines with real resources
+### **Dynamic Learning Interface**
+- Module-based navigation
+- Progress tracking with visual indicators
+- Interactive resource access
+- Knowledge check assessments
+- Real-time progress updates
 
-4. **Manage Users**
-   - Access user management from the sidebar
-   - Change user roles and permissions
+### **Course Management**
+- Full CRUD operations for courses
+- Draft and published states
+- File upload and management
+- Course analytics and insights
 
-5. **View Analytics**
-   - Monitor platform usage and course statistics
-
-### **For Instructors**
-
-1. **Sign in with instructor account**
-   - Use an email configured as instructor in Clerk
-
-2. **Access Course Hub**
-   - Navigate to the Course Hub after login
-   - Access instructor-specific features
-
-3. **Create and Manage Courses**
-   - Generate courses using AI
-   - Edit and curate course content
-   - Manage course resources
-
-### **For Students**
-
-1. **Sign up/Sign in**
-   - Create an account or sign in with existing credentials
-
-2. **Browse Courses**
-   - Visit the marketplace to see available courses
-   - Use filters to find specific topics or difficulty levels
-
-3. **Enroll in Courses**
-   - Click "Enroll" on courses you're interested in
-   - Track your enrolled courses in the student dashboard
-
-4. **Track Progress**
-   - Monitor your learning progress
-   - View course completion status
-
-## 🔧 Development
-
-### **Available Scripts**
-
-```bash
-# Development
-npm run dev              # Start development server
-npm run build            # Build for production
-npm run start            # Start production server
-npm run lint             # Run ESLint
-
-# Database
-npm run db:generate      # Generate database migrations
-npm run db:migrate:run   # Run database migrations
-npm run db:seed          # Seed database with initial data
-npm run db:studio        # Open Drizzle Studio
-```
-
-### **Environment Variables**
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `GEMINI_API_KEY` | Google Gemini API key | Yes |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key | Yes |
-| `CLERK_SECRET_KEY` | Clerk secret key | Yes |
-| `POSTGRES_URL` | Neon database connection | Yes |
-| `POSTGRES_URL_NON_POOLING` | Neon database non-pooling connection | Yes |
+### **User Management**
+- Role-based access control
+- Secure authentication flow
+- User profile management
+- Enrollment tracking
 
 ## 🚀 Deployment
 
-### **Vercel Deployment**
+### **Deploy to Vercel**
 
-1. **Connect to Vercel**
-   - Push code to GitHub
-   - Connect repository to Vercel
-   - Set root directory to `src` in Vercel settings
+1. **Connect your GitHub repository to Vercel**
+2. **Set environment variables in Vercel dashboard**
+3. **Deploy automatically on push to main branch**
 
-2. **Configure Environment Variables**
-   - Add all environment variables in Vercel dashboard
-   - Ensure they're available for Production, Preview, and Development
-
-3. **Deploy**
-   - Vercel will automatically deploy on git push
-   - Or use `npx vercel --prod` for manual deployment
-
-## 🔮 Current Status
-
-### **✅ Completed Features**
-- [x] AI-powered course generation with real resource URLs
-- [x] Clerk authentication with role-based access
-- [x] Neon PostgreSQL database integration
-- [x] Course enrollment system
-- [x] User management and role assignment
-- [x] Responsive UI with dark mode
-- [x] Course Hub with role-based navigation
-- [x] Student dashboard and progress tracking
-- [x] Admin analytics and user management
-- [x] Vercel deployment
-
-### **🚧 In Progress**
-- [ ] Instructor-specific features
-- [ ] Advanced course analytics
-- [ ] Course completion certificates
-- [ ] Payment integration
-- [ ] Course reviews and ratings
-
-### **📋 Planned Features**
-- [ ] Advanced search and filtering
-- [ ] Course recommendations
-- [ ] Learning path creation
-- [ ] Mobile app development
-- [ ] Integration with LMS platforms
+### **Environment Variables for Production**
+Make sure to set all required environment variables in your Vercel project settings.
 
 ## 🤝 Contributing
 
@@ -325,15 +194,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Google Gemini AI** for powerful course generation
-- **Clerk** for seamless authentication
-- **Neon** for serverless PostgreSQL
-- **Next.js Team** for the amazing framework
-- **Tailwind CSS** for beautiful styling
-- **Vercel** for seamless deployment
+- **Next.js** - React framework
+- **Clerk** - Authentication service
+- **Google Gemini** - AI course generation
+- **Neon** - Serverless PostgreSQL
+- **Vercel** - Deployment platform
+- **Tailwind CSS** - Styling framework
+
+## 📞 Support
+
+For support, email support@aicoursebuilder.com or create an issue in this repository.
 
 ---
 
-**Built with ❤️ for better education**
-
-**Live Demo**: [https://ai-course-builder-2xnxlgsqn-parth-gohils-projects-6952869a.vercel.app](https://ai-course-builder-2xnxlgsqn-parth-gohils-projects-6952869a.vercel.app) 
+**Built with ❤️ using Next.js, React, and AI** 
