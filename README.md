@@ -33,6 +33,7 @@ A comprehensive course creation platform powered by AI, featuring an intuitive a
 - **Frontend**: Next.js 15, React 19, TypeScript
 - **Styling**: Tailwind CSS 3
 - **AI Services**: Google Gemini API, OpenAI API
+- **Authentication**: Clerk
 - **Deployment**: Vercel (planned)
 - **Database**: Vercel Postgres (planned)
 - **File Storage**: Vercel Blob Storage (planned)
@@ -66,8 +67,19 @@ A comprehensive course creation platform powered by AI, featuring an intuitive a
 
    Add your API keys to `.env.local`:
    ```env
+   # AI API Keys
    GEMINI_API_KEY=your_gemini_api_key_here
    OPENAI_API_KEY=your_openai_api_key_here
+   
+   # Clerk Authentication
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key_here
+   CLERK_SECRET_KEY=your_clerk_secret_key_here
+   
+   # Clerk URLs (for development)
+   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+   NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/admin
+   NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/admin
    ```
 
 4. **Run the development server**
@@ -75,7 +87,13 @@ A comprehensive course creation platform powered by AI, featuring an intuitive a
    npm run dev
    ```
 
-5. **Open your browser**
+5. **Set up Clerk Authentication**
+   - Create a free account at [Clerk.com](https://clerk.com)
+   - Create a new application
+   - Copy your publishable key and secret key
+   - Add them to your `.env.local` file
+
+6. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure

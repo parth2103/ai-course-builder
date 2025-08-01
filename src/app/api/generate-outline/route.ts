@@ -28,6 +28,7 @@ interface ModuleOutline {
       title: string;
       description: string;
       type: 'pdf' | 'ppt' | 'doc';
+      url?: string;
     }>;
     externalLinks: Array<{
       title: string;
@@ -96,13 +97,20 @@ For each module, provide detailed content including:
    - Estimated duration (in minutes)
    - 4 bullet points covering key topics
 
-2. **Multimedia Resources**:
-   - 2-3 relevant YouTube video suggestions with titles and descriptions
-   - 1-2 document suggestions (PDFs, PowerPoints) with descriptions
-   - 2-3 external resource links (documentation, articles, tools)
+2. **Multimedia Resources** (IMPORTANT: Provide ACTUAL URLs):
+   - 2-3 relevant YouTube video suggestions with REAL YouTube URLs (https://www.youtube.com/watch?v=...)
+   - 1-2 document suggestions with REAL URLs (PDFs, PowerPoints, official documentation)
+   - 2-3 external resource links with REAL URLs (documentation, articles, tools, official websites)
 
 3. **Assessment**:
    - 3 quiz questions with multiple choice options and explanations
+
+CRITICAL REQUIREMENTS:
+- ALL videos must have actual YouTube URLs (https://www.youtube.com/watch?v=...)
+- ALL documents must have real URLs (https://...)
+- ALL external links must be real, accessible URLs
+- Use popular, high-quality, educational content
+- Ensure all URLs are currently accessible and relevant to the topic
 
 IMPORTANT: Respond ONLY with valid JSON. Do not include any markdown formatting, explanations, or additional text. The response must be parseable JSON.
 
@@ -133,6 +141,7 @@ Format your response as a JSON object with this exact structure:
           {
             "title": "Video Title",
             "description": "Video description",
+            "url": "https://www.youtube.com/watch?v=ACTUAL_VIDEO_ID",
             "duration": 15
           }
         ],
@@ -140,20 +149,22 @@ Format your response as a JSON object with this exact structure:
           {
             "title": "Document Title",
             "description": "Document description",
-            "type": "pdf"
+            "type": "pdf",
+            "url": "https://actual-document-url.com/document.pdf"
           }
         ],
         "externalLinks": [
           {
             "title": "External Resource",
-            "description": "Resource description"
+            "description": "Resource description",
+            "url": "https://actual-external-url.com"
           }
         ]
       },
       "assessment": {
         "quizQuestions": [
           {
-            "question": "Quiz question?",
+            "question": "Question text here?",
             "options": ["Option A", "Option B", "Option C", "Option D"],
             "correctAnswer": 0,
             "explanation": "Explanation of the correct answer"
@@ -162,9 +173,7 @@ Format your response as a JSON object with this exact structure:
       }
     }
   ]
-}
-
-Ensure the content is educational, well-structured, and progresses logically from basic to advanced concepts. The difficulty level should be consistently ${difficultyText} throughout the course. Include practical, real-world examples and resources that would be valuable for ${difficultyText} learners.`;
+}`;
 }
 
 async function generateWithOpenAI(
@@ -352,29 +361,29 @@ export async function POST(request: NextRequest) {
     let generatedWith: string;
 
     try {
-      if (openai) {
-        console.log('Generating outline with OpenAI...');
+    if (openai) {
+      console.log('Generating outline with OpenAI...');
         outline = await generateWithOpenAI(topic, modules, difficulty, learningStyle, duration, prerequisites);
         generatedWith = 'OpenAI';
-      } else if (genAI) {
-        console.log('Generating outline with Gemini...');
+    } else if (genAI) {
+      console.log('Generating outline with Gemini...');
         outline = await generateWithGemini(topic, modules, difficulty, learningStyle, duration, prerequisites);
         generatedWith = 'Gemini';
-      } else {
-        return NextResponse.json(
-          { error: 'No AI service configured. Please set OPENAI_API_KEY or GEMINI_API_KEY in your environment variables.' },
-          { status: 500 }
-        );
-      }
+    } else {
+      return NextResponse.json(
+        { error: 'No AI service configured. Please set OPENAI_API_KEY or GEMINI_API_KEY in your environment variables.' },
+        { status: 500 }
+      );
+    }
 
-      // Validate the generated outline
-      if (!outline.courseTitle || !outline.modules || !Array.isArray(outline.modules)) {
-        throw new Error('Invalid outline structure generated');
-      }
+    // Validate the generated outline
+    if (!outline.courseTitle || !outline.modules || !Array.isArray(outline.modules)) {
+      throw new Error('Invalid outline structure generated');
+    }
 
-      return NextResponse.json({
-        success: true,
-        outline,
+    return NextResponse.json({
+      success: true,
+      outline,
         generatedWith
       });
 
@@ -452,7 +461,7 @@ export async function POST(request: NextRequest) {
           success: true,
           outline: fallbackOutline,
           generatedWith: 'Fallback (AI service unavailable)'
-        });
+    });
 
       } catch (fallbackError) {
         console.error('Fallback creation failed:', fallbackError);

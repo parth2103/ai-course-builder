@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface CourseFormProps {
   onSubmit: (data: CourseFormData) => void;
@@ -23,6 +23,46 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
   const [learningStyle, setLearningStyle] = useState<'visual' | 'audio' | 'hands-on' | 'mixed'>('mixed');
   const [duration, setDuration] = useState(20);
   const [prerequisites, setPrerequisites] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  // Progress steps for the generation process
+  const progressSteps = [
+    'Analyzing course requirements...',
+    'Generating module structure...',
+    'Creating learning resources...',
+    'Finalizing course outline...'
+  ];
+
+  // Simulate progress when loading starts
+  useEffect(() => {
+    if (loading) {
+      setProgress(0);
+      setCurrentStep(0);
+      
+      const progressInterval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 1000);
+
+      const stepInterval = setInterval(() => {
+        setCurrentStep(prev => {
+          if (prev >= progressSteps.length - 1) return prev;
+          return prev + 1;
+        });
+      }, 3000);
+
+      return () => {
+        clearInterval(progressInterval);
+        clearInterval(stepInterval);
+      };
+    } else {
+      setProgress(0);
+      setCurrentStep(0);
+    }
+  }, [loading]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,6 +208,58 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
             'Generate Course Outline'
           )}
         </button>
+
+        {/* Progress Bar */}
+        {loading && (
+          <div className="mt-4 space-y-3">
+            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+              <span>AI is generating your course outline...</span>
+              <span>Estimated time: 15-30 seconds</span>
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${Math.min(progress, 95)}%` }}
+              >
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
+                  style={{
+                    background: 'linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'progress 2s ease-in-out infinite'
+                  }}
+                >
+                </div>
+              </div>
+            </div>
+
+            {/* Progress Percentage */}
+            <div className="text-center text-xs text-gray-500 dark:text-gray-400">
+              {Math.round(progress)}% Complete
+            </div>
+
+            {/* Status Messages */}
+            <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+              {progressSteps.map((step, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <div 
+                    className={`w-2 h-2 rounded-full ${
+                      index <= currentStep 
+                        ? 'bg-green-500 animate-pulse' 
+                        : 'bg-gray-300 dark:bg-gray-600'
+                    }`}
+                    style={{ animationDelay: `${index * 0.5}s` }}
+                  ></div>
+                  <span className={index <= currentStep ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}>
+                    {step}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </form>
   );
 } 

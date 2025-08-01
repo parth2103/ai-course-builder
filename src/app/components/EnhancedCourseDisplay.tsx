@@ -20,6 +20,7 @@ interface DocumentResource {
   title: string;
   description: string;
   type: 'pdf' | 'ppt' | 'doc';
+  url?: string;
 }
 
 interface ExternalLink {
@@ -213,6 +214,16 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                               {video.description}
                               {video.duration && ` • ${video.duration} min`}
                             </div>
+                            {video.url && (
+                              <a
+                                href={video.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block mt-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium"
+                              >
+                                📺 Watch Video →
+                              </a>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -237,6 +248,16 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                             <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
                               {doc.description}
                             </div>
+                            {doc.url && (
+                              <a
+                                href={doc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block mt-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium"
+                              >
+                                📄 View Document →
+                              </a>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -258,6 +279,16 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                             <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
                               {link.description}
                             </div>
+                            {link.url && (
+                              <a
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block mt-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium"
+                              >
+                                🔗 Visit Resource →
+                              </a>
+                            )}
                           </div>
                         ))}
                       </div>

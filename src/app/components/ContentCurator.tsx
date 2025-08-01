@@ -138,6 +138,101 @@ export default function ContentCurator({ module, moduleIndex, onModuleUpdate }: 
     });
   };
 
+  // External Links logic
+  const addExternalLink = () => {
+    const newLink: ExternalLink = {
+      title: '',
+      description: '',
+      url: ''
+    };
+    setEditedModule({
+      ...editedModule,
+      resources: {
+        ...editedModule.resources,
+        externalLinks: [...editedModule.resources.externalLinks, newLink]
+      }
+    });
+  };
+
+  const updateExternalLink = (index: number, field: keyof ExternalLink, value: string) => {
+    const updatedLinks = [...editedModule.resources.externalLinks];
+    updatedLinks[index] = { ...updatedLinks[index], [field]: value };
+    setEditedModule({
+      ...editedModule,
+      resources: {
+        ...editedModule.resources,
+        externalLinks: updatedLinks
+      }
+    });
+  };
+
+  const removeExternalLink = (index: number) => {
+    const updatedLinks = editedModule.resources.externalLinks.filter((_, i) => i !== index);
+    setEditedModule({
+      ...editedModule,
+      resources: {
+        ...editedModule.resources,
+        externalLinks: updatedLinks
+      }
+    });
+  };
+
+  // Assessment logic
+  const addQuizQuestion = () => {
+    setEditedModule({
+      ...editedModule,
+      assessment: {
+        ...editedModule.assessment,
+        quizQuestions: [
+          ...editedModule.assessment.quizQuestions,
+          {
+            question: '',
+            options: ['', '', '', ''],
+            correctAnswer: 0,
+            explanation: ''
+          }
+        ]
+      }
+    });
+  };
+
+  const updateQuizQuestion = (index: number, field: keyof (typeof editedModule.assessment.quizQuestions[0]), value: any) => {
+    const updatedQuestions = [...editedModule.assessment.quizQuestions];
+    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
+    setEditedModule({
+      ...editedModule,
+      assessment: {
+        ...editedModule.assessment,
+        quizQuestions: updatedQuestions
+      }
+    });
+  };
+
+  const updateQuizOption = (qIndex: number, optIndex: number, value: string) => {
+    const updatedQuestions = [...editedModule.assessment.quizQuestions];
+    const updatedOptions = [...updatedQuestions[qIndex].options];
+    updatedOptions[optIndex] = value;
+    updatedQuestions[qIndex].options = updatedOptions;
+    setEditedModule({
+      ...editedModule,
+      assessment: {
+        ...editedModule.assessment,
+        quizQuestions: updatedQuestions
+      }
+    });
+  };
+
+  const removeQuizQuestion = (index: number) => {
+    const updatedQuestions = editedModule.assessment.quizQuestions.filter((_, i) => i !== index);
+    setEditedModule({
+      ...editedModule,
+      assessment: {
+        ...editedModule.assessment,
+        quizQuestions: updatedQuestions
+      }
+    });
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
@@ -367,6 +462,54 @@ export default function ContentCurator({ module, moduleIndex, onModuleUpdate }: 
                   ))}
                 </div>
               </div>
+
+              {/* External Links */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300">🔗 External Links</h5>
+                  <button
+                    onClick={addExternalLink}
+                    className="text-xs text-blue-600 hover:text-blue-800"
+                  >
+                    + Add Link
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {editedModule.resources.externalLinks.map((link, index) => (
+                    <div key={index} className="border border-gray-200 dark:border-gray-600 rounded p-3">
+                      <div className="grid grid-cols-1 gap-2">
+                        <input
+                          type="text"
+                          placeholder="Link title"
+                          value={link.title}
+                          onChange={(e) => updateExternalLink(index, 'title', e.target.value)}
+                          className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        />
+                        <input
+                          type="url"
+                          placeholder="URL"
+                          value={link.url || ''}
+                          onChange={(e) => updateExternalLink(index, 'url', e.target.value)}
+                          className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Description"
+                          value={link.description}
+                          onChange={(e) => updateExternalLink(index, 'description', e.target.value)}
+                          className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        />
+                        <button
+                          onClick={() => removeExternalLink(index)}
+                          className="text-red-600 hover:text-red-800 text-sm mt-1"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">
@@ -397,6 +540,112 @@ export default function ContentCurator({ module, moduleIndex, onModuleUpdate }: 
                     ))}
                   </div>
                 </div>
+              )}
+              {module.resources.externalLinks.length > 0 && (
+                <div>
+                  <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">🔗 External Links</h5>
+                  <div className="space-y-2">
+                    {module.resources.externalLinks.map((link, index) => (
+                      <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded p-2">
+                        <div className="font-medium text-sm text-gray-900 dark:text-white">{link.title}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">{link.description}</div>
+                        {link.url && (
+                          <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
+                            {link.url}
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Assessment (Quiz Questions) */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="text-md font-medium text-gray-900 dark:text-white">Assessment (Quiz Questions)</h4>
+            <button
+              onClick={() => setEditingSection(editingSection === 'assessment' ? null : 'assessment')}
+              className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              {editingSection === 'assessment' ? 'Cancel' : 'Edit'}
+            </button>
+          </div>
+          {editingSection === 'assessment' ? (
+            <div className="space-y-4">
+              {editedModule.assessment.quizQuestions.map((q, qIndex) => (
+                <div key={qIndex} className="border border-gray-200 dark:border-gray-600 rounded p-3 space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Question"
+                    value={q.question}
+                    onChange={(e) => updateQuizQuestion(qIndex, 'question', e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                  <div className="grid grid-cols-1 gap-2">
+                    {q.options.map((opt, optIndex) => (
+                      <div key={optIndex} className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          placeholder={`Option ${optIndex + 1}`}
+                          value={opt}
+                          onChange={(e) => updateQuizOption(qIndex, optIndex, e.target.value)}
+                          className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        />
+                        <input
+                          type="radio"
+                          name={`correct-${qIndex}`}
+                          checked={q.correctAnswer === optIndex}
+                          onChange={() => updateQuizQuestion(qIndex, 'correctAnswer', optIndex)}
+                        />
+                        <span className="text-xs">Correct</span>
+                      </div>
+                    ))}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Explanation"
+                    value={q.explanation}
+                    onChange={(e) => updateQuizQuestion(qIndex, 'explanation', e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                  <button
+                    onClick={() => removeQuizQuestion(qIndex)}
+                    className="text-red-600 hover:text-red-800 text-sm mt-1"
+                  >
+                    Remove Question
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={addQuizQuestion}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                + Add Quiz Question
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {module.assessment.quizQuestions.length === 0 ? (
+                <div className="text-gray-500 dark:text-gray-400">No quiz questions for this module.</div>
+              ) : (
+                module.assessment.quizQuestions.map((q, qIndex) => (
+                  <div key={qIndex} className="bg-gray-50 dark:bg-gray-700 rounded p-2">
+                    <div className="font-medium text-sm text-gray-900 dark:text-white mb-1">Q{qIndex + 1}: {q.question}</div>
+                    <ul className="list-decimal list-inside text-xs text-gray-700 dark:text-gray-300 mb-1">
+                      {q.options.map((opt, optIndex) => (
+                        <li key={optIndex} className={q.correctAnswer === optIndex ? 'font-bold text-green-600 dark:text-green-400' : ''}>
+                          {opt}
+                          {q.correctAnswer === optIndex && ' (Correct)'}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Explanation: {q.explanation}</div>
+                  </div>
+                ))
               )}
             </div>
           )}
