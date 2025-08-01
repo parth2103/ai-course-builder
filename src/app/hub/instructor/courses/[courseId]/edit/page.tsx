@@ -1,98 +1,74 @@
 'use client';
 
-import { useState } from 'react';
-import { useRoleAccess } from '../../hooks/useRoleAccess';
-import CourseForm from '../../components/CourseForm';
-import EnhancedCourseDisplay from '../../components/EnhancedCourseDisplay';
-import ExportOptions from '../../components/ExportOptions';
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useRoleAccess } from '../../../../../hooks/useRoleAccess';
+import CourseForm from '../../../../../components/CourseForm';
+import EnhancedCourseDisplay from '../../../../../components/EnhancedCourseDisplay';
+import EditableCourseContent from '../../../../../components/EditableCourseContent';
+import ExportOptions from '../../../../../components/ExportOptions';
 
 interface CourseOutline {
   courseTitle: string;
   description: string;
   totalDuration: number;
-  modules: ModuleOutline[];
+  modules: any[];
   prerequisites: string[];
   learningOutcomes: string[];
 }
 
-interface ModuleOutline {
-  title: string;
-  bulletPoints: string[];
-  learningObjectives: string[];
-  estimatedDuration: number;
-  resources: {
-    videos: VideoResource[];
-    documents: DocumentResource[];
-    externalLinks: ExternalLink[];
-  };
-  assessment: {
-    quizQuestions: QuizQuestion[];
-  };
-}
-
-interface QuizQuestion {
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation: string;
-}
-
-interface VideoResource {
-  title: string;
-  description: string;
-  url?: string;
-  duration?: number;
-}
-
-interface DocumentResource {
-  title: string;
-  description: string;
-  type: 'pdf' | 'ppt' | 'doc';
-}
-
-interface ExternalLink {
-  title: string;
-  description: string;
-  url?: string;
-}
-
-export default function HubGenerate() {
+export default function EditCourse() {
   const { isAdmin, isInstructor } = useRoleAccess();
+  const params = useParams();
+  const router = useRouter();
+  const courseId = params.courseId as string;
+  
+  const [course, setCourse] = useState<any>(null);
   const [outline, setOutline] = useState<CourseOutline | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState<'generate' | 'curate' | 'export'>('generate');
-  const [showExportModal, setShowExportModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'edit' | 'curate' | 'export'>('edit');
+  const [showExportModal, setShowExportModal] = useState(false);
 
-  if (!isAdmin && !isInstructor) {
-    return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-          Access Denied
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          This section is only available for administrators and instructors.
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (courseId) {
+      loadCourse();
+    }
+  }, [courseId]);
+
+  const loadCourse = async () => {
+    try {
+      const response = await fetch(`/api/courses/${courseId}`);
+      if (response.ok) {
+        const courseData = await response.json();
+        setCourse(courseData);
+        setOutline(courseData.outline);
+      } else {
+        console.error('Failed to load course');
+        router.push('/hub/instructor/courses');
+      }
+    } catch (error) {
+      console.error('Error loading course:', error);
+      router.push('/hub/instructor/courses');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSaveCourse = async () => {
     if (!outline) return;
     
     setIsSaving(true);
     try {
-      // Save course to database (draft status)
-      const response = await fetch('/api/courses/create', {
-        method: 'POST',
+      const response = await fetch(`/api/courses/${courseId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...outline,
           status: 'draft',
-          instructorId: 'current-user-id', // This should come from auth context
         }),
       });
 
@@ -114,16 +90,14 @@ export default function HubGenerate() {
     
     setIsPublishing(true);
     try {
-      // Save course to database (published status)
-      const response = await fetch('/api/courses/create', {
-        method: 'POST',
+      const response = await fetch(`/api/courses/${courseId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...outline,
           status: 'published',
-          instructorId: 'current-user-id', // This should come from auth context
         }),
       });
 
@@ -140,6 +114,47 @@ export default function HubGenerate() {
     }
   };
 
+  if (!isAdmin && !isInstructor) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Access Denied
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          This section is only available for administrators and instructors.
+        </p>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600 dark:text-gray-400">Loading course...</p>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Course Not Found
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
+          The course you're looking for doesn't exist or you don't have permission to edit it.
+        </p>
+        <button
+          onClick={() => router.push('/hub/instructor/courses')}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+        >
+          Back to My Courses
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -147,14 +162,20 @@ export default function HubGenerate() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              AI Course Generator
+              Edit Course: {course.title}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Create comprehensive courses using artificial intelligence
+              Modify your course content and settings
             </p>
           </div>
           <div className="flex items-center space-x-4">
-            {/* Dark mode toggle is handled globally in the layout */}
+            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+              course.status === 'published' 
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+            }`}>
+              {course.status === 'published' ? 'Published' : 'Draft'}
+            </span>
           </div>
         </div>
       </div>
@@ -164,14 +185,14 @@ export default function HubGenerate() {
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-8 px-6">
             <button
-              onClick={() => setActiveTab('generate')}
+              onClick={() => setActiveTab('edit')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'generate'
+                activeTab === 'edit'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              🤖 Generate Course
+              ✏️ Edit Course
             </button>
             <button
               onClick={() => setActiveTab('curate')}
@@ -182,7 +203,7 @@ export default function HubGenerate() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               } ${!outline ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              ✏️ Curate Content
+              📝 Curate Content
             </button>
             <button
               onClick={() => setActiveTab('export')}
@@ -199,38 +220,24 @@ export default function HubGenerate() {
         </div>
 
         <div className="p-6">
-          {activeTab === 'generate' && (
+          {activeTab === 'edit' && (
             <div className="space-y-6">
-              <CourseForm
-                onSubmit={async (data) => {
-                  setIsGenerating(true);
-                  try {
-                    const response = await fetch('/api/generate-outline', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(data),
-                    });
-
-                    if (!response.ok) {
-                      throw new Error('Failed to generate course outline');
-                    }
-
-                    const responseData = await response.json();
-                    // Extract just the outline data from the response
-                    const generatedOutline = responseData.outline || responseData;
-                    setOutline(generatedOutline);
-                    setActiveTab('curate');
-                  } catch (error) {
-                    console.error('Error generating course:', error);
-                    alert('Failed to generate course outline. Please try again.');
-                  } finally {
-                    setIsGenerating(false);
-                  }
-                }}
-                loading={isGenerating}
-              />
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  Course Information
+                </h3>
+                <p className="text-blue-700 dark:text-blue-300 text-sm">
+                  This course was created on {new Date(course.createdAt).toLocaleDateString()}. 
+                  You can modify the content below and save your changes.
+                </p>
+              </div>
+              
+              {outline && (
+                <EditableCourseContent 
+                  outline={outline} 
+                  onOutlineChange={setOutline}
+                />
+              )}
             </div>
           )}
 
@@ -242,7 +249,7 @@ export default function HubGenerate() {
                     Curate Your Course Content
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Review and customize the AI-generated course outline. You can edit module titles, 
+                    Review and customize your course outline. You can edit module titles, 
                     learning objectives, add resources, and modify assessment questions.
                   </p>
                   <EnhancedCourseDisplay outline={outline} generatedWith="AI Course Builder" />
@@ -265,7 +272,7 @@ export default function HubGenerate() {
                           </>
                         ) : (
                           <>
-                            💾 Save as Draft
+                            💾 Save Changes
                           </>
                         )}
                       </button>
@@ -285,14 +292,11 @@ export default function HubGenerate() {
                           </>
                         ) : (
                           <>
-                            🚀 Publish Course
+                            🚀 Publish Changes
                           </>
                         )}
                       </button>
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 text-center">
-                      Save as draft to work on it later, or publish to make it available to students.
-                    </p>
                   </div>
                 </div>
               ) : (
@@ -303,17 +307,11 @@ export default function HubGenerate() {
                     </svg>
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    No course generated yet
+                    No course content available
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-400 mb-4">
-                    Generate a course outline first to start curating content.
+                  <p className="text-gray-500 dark:text-gray-400">
+                    This course doesn't have any content to curate.
                   </p>
-                  <button
-                    onClick={() => setActiveTab('generate')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    Generate Course
-                  </button>
                 </div>
               )}
             </div>
@@ -359,15 +357,9 @@ export default function HubGenerate() {
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                     No course to export
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-400 mb-4">
-                    Generate and curate a course first to export it.
+                  <p className="text-gray-500 dark:text-gray-400">
+                    This course doesn't have any content to export.
                   </p>
-                  <button
-                    onClick={() => setActiveTab('generate')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    Generate Course
-                  </button>
                 </div>
               )}
             </div>

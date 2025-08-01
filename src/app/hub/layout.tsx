@@ -67,7 +67,7 @@ export default function HubLayout({
     },
     {
       name: 'Create Course',
-      href: '/hub/instructor/create',
+      href: '/hub/generate',
       icon: '➕',
       show: isInstructor
     },
@@ -83,12 +83,6 @@ export default function HubLayout({
       name: 'My Learning',
       href: '/hub/student/learning',
       icon: '🎓',
-      show: isStudent
-    },
-    {
-      name: 'Enrolled Courses',
-      href: '/hub/student/enrolled',
-      icon: '📋',
       show: isStudent
     },
     {

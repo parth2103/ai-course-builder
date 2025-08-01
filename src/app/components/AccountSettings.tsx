@@ -64,7 +64,9 @@ export default function AccountSettings() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500 dark:text-gray-400">Role:</span>
-                    <span className="text-gray-900 dark:text-white">Administrator</span>
+                    <span className="text-gray-900 dark:text-white capitalize">
+                      {user.publicMetadata?.role as string || 'Student'}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500 dark:text-gray-400">Member Since:</span>

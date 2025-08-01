@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth, currentUser } from '@clerk/nextjs/server';
+import { auth, currentUser, clerkClient } from '@clerk/nextjs/server';
 import { userService } from '../../../../lib/db/services';
 
 export async function POST(request: NextRequest) {
@@ -16,19 +16,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Create user in database
-    const user = await userService.createUser({
-      id: userId,
-      email,
-      firstName: firstName || '',
-      lastName: lastName || '',
-      role
+    // Check if user already exists
+    let user = await userService.getUserById(userId);
+    
+    if (user) {
+      // User exists, update their role
+      user = await userService.updateUserRole(userId, role);
+    } else {
+      // User doesn't exist, create new user
+      user = await userService.createUser({
+        id: userId,
+        email,
+        firstName: firstName || '',
+        lastName: lastName || '',
+        role
+      });
+    }
+
+    // Update Clerk's publicMetadata with the role
+    const clerk = await clerkClient();
+    await clerk.users.updateUser(userId, {
+      publicMetadata: {
+        role: role
+      }
     });
 
     return NextResponse.json({ 
       success: true, 
       user,
-      message: 'User created successfully' 
+      message: user ? 'User updated successfully' : 'User created successfully' 
     });
 
   } catch (error) {

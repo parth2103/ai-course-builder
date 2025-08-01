@@ -78,6 +78,7 @@ export const enrollments = pgTable('enrollments', {
   totalLessons: integer('total_lessons').notNull(),
   lastAccessed: timestamp('last_accessed').defaultNow().notNull(),
   isActive: boolean('is_active').default(true).notNull(),
+  detailedProgress: jsonb('detailed_progress').default('{}'), // Store quiz results, completed modules, etc.
 });
 
 // Course Analytics table

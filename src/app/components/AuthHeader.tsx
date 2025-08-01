@@ -36,8 +36,8 @@ export default function AuthHeader() {
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
                             {user?.firstName || user?.emailAddresses[0]?.emailAddress}
                           </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">
-                            Admin
+                          <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                            {user?.publicMetadata?.role as string || 'Student'}
                           </div>
                         </div>
                         <UserButton

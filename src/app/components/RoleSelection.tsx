@@ -13,6 +13,7 @@ interface RoleSelectionProps {
 export default function RoleSelection({ userId, email, firstName, lastName }: RoleSelectionProps) {
   const [selectedRole, setSelectedRole] = useState<'student' | 'instructor' | 'admin' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const roles = [
@@ -46,6 +47,7 @@ export default function RoleSelection({ userId, email, firstName, lastName }: Ro
     if (!selectedRole) return;
 
     setIsLoading(true);
+    setError(null);
     try {
       // Create user in database with selected role
       const response = await fetch('/api/users/create', {
@@ -66,9 +68,12 @@ export default function RoleSelection({ userId, email, firstName, lastName }: Ro
         // Redirect to dashboard
         router.push('/dashboard');
       } else {
-        console.error('Failed to create user');
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to create user. Please try again.');
+        console.error('Failed to create user:', errorData);
       }
     } catch (error) {
+      setError('Network error. Please check your connection and try again.');
       console.error('Error creating user:', error);
     } finally {
       setIsLoading(false);
@@ -129,6 +134,11 @@ export default function RoleSelection({ userId, email, firstName, lastName }: Ro
         </div>
 
         <div className="text-center">
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+            </div>
+          )}
           <button
             onClick={handleRoleSelection}
             disabled={!selectedRole || isLoading}

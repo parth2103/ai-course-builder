@@ -12,6 +12,32 @@ export const userService = {
     lastName: string;
     role?: 'admin' | 'instructor' | 'student';
   }) {
+    // Check if user with this email already exists
+    const existingUser = await this.getUserByEmail(userData.email);
+    
+    if (existingUser) {
+      // If the existing user has a different ID, we need to handle foreign key constraints
+      if (existingUser.id !== userData.id) {
+        // First, delete any enrollments for the old user (since we can't update to non-existent user)
+        await db.delete(enrollments)
+          .where(eq(enrollments.userId, existingUser.id));
+      }
+      
+      // Update the existing user with new Clerk ID and role
+      const [user] = await db.update(users)
+        .set({
+          id: userData.id,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          role: userData.role || 'student',
+          updatedAt: new Date()
+        })
+        .where(eq(users.email, userData.email))
+        .returning();
+      return user;
+    }
+
+    // Create new user
     const [user] = await db.insert(users).values({
       id: userData.id,
       email: userData.email,
@@ -55,16 +81,29 @@ export const courseService = {
     title: string;
     description: string;
     instructorId?: string;
-    difficulty: 'beginner' | 'intermediate' | 'advanced';
-    duration: number;
-    modules: number;
-    category: string;
+    difficulty?: 'beginner' | 'intermediate' | 'advanced';
+    duration?: number;
+    totalDuration?: number;
+    modules?: number;
+    category?: string;
+    status?: 'draft' | 'published';
     outline?: any;
   }) {
     const [course] = await db.insert(courses).values({
       id: nanoid(),
-      ...courseData,
-      status: 'draft',
+      title: courseData.title,
+      description: courseData.description,
+      instructorId: courseData.instructorId,
+      difficulty: courseData.difficulty || 'beginner',
+      duration: courseData.duration || courseData.totalDuration || 0,
+      modules: courseData.modules || (courseData.outline?.modules?.length || 0),
+      category: courseData.category || 'General',
+      status: courseData.status || 'draft',
+      outline: courseData.outline,
+      enrolledStudents: 0,
+      rating: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }).returning();
     return course;
   },
@@ -102,6 +141,12 @@ export const courseService = {
 
   async deleteCourse(id: string) {
     await db.delete(courses).where(eq(courses.id, id));
+  },
+
+  async getCoursesByInstructor(instructorId: string) {
+    return await db.select().from(courses)
+      .where(eq(courses.instructorId, instructorId))
+      .orderBy(desc(courses.createdAt));
   }
 };
 
@@ -175,6 +220,17 @@ export const enrollmentService = {
       .set({ 
         progress, 
         completedLessons, 
+        lastAccessed: new Date() 
+      })
+      .where(eq(enrollments.id, enrollmentId))
+      .returning();
+    return enrollment;
+  },
+
+  async updateDetailedProgress(enrollmentId: string, detailedProgress: any) {
+    const [enrollment] = await db.update(enrollments)
+      .set({ 
+        detailedProgress, 
         lastAccessed: new Date() 
       })
       .where(eq(enrollments.id, enrollmentId))

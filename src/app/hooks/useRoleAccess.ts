@@ -60,18 +60,8 @@ export function useRoleAccess() {
     }
   };
 
-  // Temporary fix: Set roles for specific users
-  let userRole = user?.publicMetadata?.role as string || 'student';
-  
-  // Check if user is parth2103@gmail.com and set admin role
-  if (user?.emailAddresses?.[0]?.emailAddress === 'parth2103@gmail.com') {
-    userRole = 'admin';
-  }
-  
-  // Check if user is pkg@csu.fullerton.edu and set student role
-  if (user?.emailAddresses?.[0]?.emailAddress === 'pkg@csu.fullerton.edu') {
-    userRole = 'student';
-  }
+  // Get role from Clerk's publicMetadata
+  const userRole = user?.publicMetadata?.role as string || 'student';
   
   const permissions = getRolePermissions(userRole);
 

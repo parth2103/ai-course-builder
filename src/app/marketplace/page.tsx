@@ -9,11 +9,32 @@ export default function Marketplace() {
   const { userRole } = useRoleAccess();
   const { user } = useUser();
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    fetchPublishedCourses();
+  }, []);
+
+  const fetchPublishedCourses = async () => {
+    try {
+      const response = await fetch('/api/courses/published');
+      if (response.ok) {
+        const data = await response.json();
+        setCourses(data.courses || []);
+      } else {
+        console.error('Failed to fetch published courses');
+      }
+    } catch (error) {
+      console.error('Error fetching published courses:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [appliedCategory, setAppliedCategory] = useState('all');
   const [appliedDifficulty, setAppliedDifficulty] = useState('all');
-  const [courses, setCourses] = useState(dataStore.getPublishedCourses());
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState<string | null>(null);
 
   const categories = [
@@ -73,7 +94,7 @@ export default function Marketplace() {
       if (data.success) {
         alert('Successfully enrolled in course!');
         // Refresh courses to update enrollment counts
-        setCourses(dataStore.getPublishedCourses());
+        fetchPublishedCourses();
       } else {
         alert(data.error || 'Failed to enroll in course');
       }
@@ -95,6 +116,14 @@ export default function Marketplace() {
   });
 
   const featuredCourses = filteredCourses.filter(course => course.rating >= 4.5);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

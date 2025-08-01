@@ -61,6 +61,25 @@ interface EnhancedCourseDisplayProps {
 export default function EnhancedCourseDisplay({ outline, generatedWith }: EnhancedCourseDisplayProps) {
   const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set());
 
+  // Safety check for outline
+  if (!outline) {
+    return (
+      <div className="text-center py-12">
+        <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          No course outline available
+        </h3>
+        <p className="text-gray-500 dark:text-gray-400">
+          Please generate a course outline first.
+        </p>
+      </div>
+    );
+  }
+
   const toggleModule = (index: number) => {
     const newExpanded = new Set(expandedModules);
     if (newExpanded.has(index)) {
@@ -91,14 +110,14 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
           {outline.description}
         </p>
         <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
-          <span>⏱️ {outline.totalDuration} hours</span>
-          <span>📚 {outline.modules.length} modules</span>
+          <span>⏱️ {outline.totalDuration || 0} hours</span>
+          <span>📚 {outline.modules?.length || 0} modules</span>
           <span>🤖 Generated with {generatedWith}</span>
         </div>
       </div>
 
       {/* Prerequisites */}
-      {outline.prerequisites.length > 0 && (
+      {outline.prerequisites && outline.prerequisites.length > 0 && (
         <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             📋 Prerequisites
@@ -112,7 +131,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
       )}
 
       {/* Learning Outcomes */}
-      {outline.learningOutcomes.length > 0 && (
+      {outline.learningOutcomes && outline.learningOutcomes.length > 0 && (
         <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             🎯 Learning Outcomes
@@ -130,7 +149,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
           📖 Course Modules
         </h3>
-        {outline.modules.map((module, index) => (
+        {outline.modules?.map((module, index) => (
           <div key={index} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <button
               onClick={() => toggleModule(index)}
@@ -171,7 +190,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                     🎯 Learning Objectives
                   </h5>
                   <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
-                    {module.learningObjectives.map((objective, objIndex) => (
+                    {module.learningObjectives?.map((objective, objIndex) => (
                       <li key={objIndex}>{objective}</li>
                     ))}
                   </ul>
@@ -183,7 +202,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                     📝 Key Topics
                   </h5>
                   <ul className="space-y-2">
-                    {module.bulletPoints.map((point, pointIndex) => (
+                    {module.bulletPoints?.map((point, pointIndex) => (
                       <li key={pointIndex} className="flex items-start">
                         <div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
                         <span className="text-gray-700 dark:text-gray-300 text-sm">{point}</span>
@@ -199,7 +218,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                   </h5>
                   
                   {/* Videos */}
-                  {module.resources.videos.length > 0 && (
+                  {module.resources?.videos?.length > 0 && (
                     <div className="mb-4">
                       <h6 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         🎥 Videos
@@ -231,7 +250,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                   )}
 
                   {/* Documents */}
-                  {module.resources.documents.length > 0 && (
+                  {module.resources?.documents?.length > 0 && (
                     <div className="mb-4">
                       <h6 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         📄 Documents
@@ -265,7 +284,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                   )}
 
                   {/* External Links */}
-                  {module.resources.externalLinks.length > 0 && (
+                  {module.resources?.externalLinks?.length > 0 && (
                     <div className="mb-4">
                       <h6 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         🔗 External Resources
@@ -297,7 +316,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                 </div>
 
                 {/* Assessment */}
-                {module.assessment.quizQuestions.length > 0 && (
+                {module.assessment?.quizQuestions?.length > 0 && (
                   <div>
                     <h5 className="text-md font-semibold text-gray-900 dark:text-white mb-3">
                       🧠 Assessment
@@ -309,7 +328,7 @@ export default function EnhancedCourseDisplay({ outline, generatedWith }: Enhanc
                             {question.question}
                           </div>
                           <div className="space-y-2">
-                            {question.options.map((option, optIndex) => (
+                            {question.options?.map((option, optIndex) => (
                               <div
                                 key={optIndex}
                                 className={`text-sm p-2 rounded ${

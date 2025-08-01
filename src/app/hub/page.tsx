@@ -79,7 +79,7 @@ export default function CourseHub() {
         subtitle: "Create and manage your courses",
         description: "Welcome to your instructor dashboard. Create engaging courses, track student progress, and manage your teaching content.",
         quickActions: [
-          { name: "Create Course", href: "/hub/instructor/create", icon: "➕", color: "bg-green-500" },
+          { name: "Create Course", href: "/hub/generate", icon: "➕", color: "bg-green-500" },
           { name: "My Courses", href: "/hub/instructor/courses", icon: "📖", color: "bg-blue-500" },
           { name: "My Analytics", href: "/hub/instructor/analytics", icon: "📈", color: "bg-purple-500" }
         ]
