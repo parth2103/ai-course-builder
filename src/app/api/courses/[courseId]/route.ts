@@ -78,7 +78,7 @@ export async function PUT(
     const course = await courseService.updateCourse(courseId, {
       title: courseTitle,
       description,
-      totalDuration: totalDuration || 0,
+      duration: totalDuration || 0,
       status: status as 'draft' | 'published',
       outline: {
         courseTitle,
