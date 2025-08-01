@@ -1,0 +1,13 @@
+{
+  "name": "ai-course-builder",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd src && npm run build",
+    "dev": "cd src && npm run dev",
+    "start": "cd src && npm run start"
+  },
+  "workspaces": [
+    "src"
+  ]
+} 
