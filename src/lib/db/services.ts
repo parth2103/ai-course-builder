@@ -144,7 +144,28 @@ export const enrollmentService = {
   },
 
   async getUserEnrollments(userId: string) {
-    return await db.select().from(enrollments)
+    return await db.select({
+      id: enrollments.id,
+      userId: enrollments.userId,
+      courseId: enrollments.courseId,
+      progress: enrollments.progress,
+      completedLessons: enrollments.completedLessons,
+      totalLessons: enrollments.totalLessons,
+      enrolledAt: enrollments.enrolledAt,
+      lastAccessed: enrollments.lastAccessed,
+      isActive: enrollments.isActive,
+      course: {
+        id: courses.id,
+        title: courses.title,
+        description: courses.description,
+        difficulty: courses.difficulty,
+        duration: courses.duration,
+        category: courses.category,
+        instructorId: courses.instructorId,
+        status: courses.status,
+      }
+    }).from(enrollments)
+      .innerJoin(courses, eq(enrollments.courseId, courses.id))
       .where(eq(enrollments.userId, userId))
       .orderBy(desc(enrollments.enrolledAt));
   },
