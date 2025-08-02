@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   description: "Generate comprehensive course outlines using AI",
 };
 
+// Force dynamic rendering to avoid Clerk build-time issues
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{

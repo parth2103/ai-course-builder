@@ -1,5 +1,9 @@
 import Link from 'next/link';
 
+// Force dynamic rendering to avoid Clerk build-time issues
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
