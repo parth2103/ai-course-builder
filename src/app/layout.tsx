@@ -19,9 +19,6 @@ export const metadata: Metadata = {
   description: "Generate comprehensive course outlines using AI",
 };
 
-// Runtime configuration
-export const runtime = 'edge';
-
 export default function RootLayout({
   children,
 }: Readonly<{
