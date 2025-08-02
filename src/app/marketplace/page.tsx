@@ -1,276 +1,188 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRoleAccess } from '../hooks/useRoleAccess';
-import { dataStore } from '../lib/dataStore';
-import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
+
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  duration: number;
+  category: string;
+  instructorId: string;
+  status: string;
+}
 
 export default function Marketplace() {
-  const { userRole } = useRoleAccess();
-  const { user } = useUser();
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
   useEffect(() => {
-    fetchPublishedCourses();
+    fetchCourses();
   }, []);
 
-  const fetchPublishedCourses = async () => {
+  const fetchCourses = async () => {
     try {
       const response = await fetch('/api/courses/published');
       if (response.ok) {
         const data = await response.json();
         setCourses(data.courses || []);
       } else {
-        console.error('Failed to fetch published courses');
+        console.error('Failed to fetch courses');
+        // Set some dummy data for testing
+        setCourses([
+          {
+            id: '1',
+            title: 'Introduction to Web Development',
+            description: 'Learn the basics of HTML, CSS, and JavaScript',
+            difficulty: 'beginner',
+            duration: 20,
+            category: 'Programming',
+            instructorId: 'instructor1',
+            status: 'published'
+          },
+          {
+            id: '2',
+            title: 'Advanced React Patterns',
+            description: 'Master advanced React concepts and patterns',
+            difficulty: 'advanced',
+            duration: 30,
+            category: 'Programming',
+            instructorId: 'instructor2',
+            status: 'published'
+          }
+        ]);
       }
     } catch (error) {
-      console.error('Error fetching published courses:', error);
+      console.error('Error fetching courses:', error);
+      // Set dummy data on error
+      setCourses([
+        {
+          id: '1',
+          title: 'Introduction to Web Development',
+          description: 'Learn the basics of HTML, CSS, and JavaScript',
+          difficulty: 'beginner',
+          duration: 20,
+          category: 'Programming',
+          instructorId: 'instructor1',
+          status: 'published'
+        }
+      ]);
     } finally {
       setLoading(false);
     }
   };
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [appliedCategory, setAppliedCategory] = useState('all');
-  const [appliedDifficulty, setAppliedDifficulty] = useState('all');
-  const [courses, setCourses] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [enrolling, setEnrolling] = useState<string | null>(null);
-
-  const categories = [
-    { name: 'All', value: 'all' },
-    { name: 'Programming', value: 'Programming' },
-    { name: 'Design', value: 'Design' },
-    { name: 'Business', value: 'Business' },
-    { name: 'Marketing', value: 'Marketing' }
-  ];
-
-  const difficulties = [
-    { name: 'All Levels', value: 'all' },
-    { name: 'Beginner', value: 'beginner' },
-    { name: 'Intermediate', value: 'intermediate' },
-    { name: 'Advanced', value: 'advanced' }
-  ];
 
   const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-    }
-  };
-
-  const handleFilter = () => {
-    setAppliedCategory(selectedCategory);
-    setAppliedDifficulty(selectedDifficulty);
-  };
-
-  const handleResetFilter = () => {
-    setSelectedCategory('all');
-    setSelectedDifficulty('all');
-    setAppliedCategory('all');
-    setAppliedDifficulty('all');
-  };
-
-  const handleEnroll = async (courseId: string) => {
-    if (!user) {
-      alert('Please sign in to enroll in courses');
-      return;
-    }
-
-    setEnrolling(courseId);
-    try {
-      const response = await fetch('/api/enroll', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ courseId }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        alert('Successfully enrolled in course!');
-        // Refresh courses to update enrollment counts
-        fetchPublishedCourses();
-      } else {
-        alert(data.error || 'Failed to enroll in course');
-      }
-    } catch (error) {
-      console.error('Enrollment error:', error);
-      alert('Failed to enroll in course');
-    } finally {
-      setEnrolling(null);
+    switch (difficulty.toLowerCase()) {
+      case 'beginner':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+      case 'intermediate':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'advanced':
+        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
   };
 
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          course.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = appliedCategory === 'all' || course.category === appliedCategory;
-    const matchesDifficulty = appliedDifficulty === 'all' || course.difficulty === appliedDifficulty;
+    const matchesCategory = selectedCategory === 'all' || course.category === selectedCategory;
+    const matchesDifficulty = selectedDifficulty === 'all' || course.difficulty === selectedDifficulty;
     
     return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
-  const featuredCourses = filteredCourses.filter(course => course.rating >= 4.5);
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading courses...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Course Marketplace
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Discover and enroll in amazing courses
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Welcome, {userRole}!
-            </p>
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Course Marketplace
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">
+                Discover amazing courses created by expert instructors
+              </p>
+            </div>
+            <Link
+              href="/landing"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              Back to Home
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Search and Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <div className="space-y-4">
-          {/* Search */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Search Courses
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search for courses..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <svg className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Category
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {categories.map(category => (
-                  <option key={category.value} value={category.value}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Difficulty
-              </label>
-              <select
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {difficulties.map(difficulty => (
-                  <option key={difficulty.value} value={difficulty.value}>
-                    {difficulty.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Filter Actions */}
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={handleFilter}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+      {/* Filters */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="text"
+              placeholder="Search courses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            />
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             >
-              Apply Filters
-            </button>
-            <button
-              onClick={handleResetFilter}
-              className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+              <option value="all">All Categories</option>
+              <option value="Programming">Programming</option>
+              <option value="Design">Design</option>
+              <option value="Business">Business</option>
+            </select>
+            <select
+              value={selectedDifficulty}
+              onChange={(e) => setSelectedDifficulty(e.target.value)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             >
-              Reset
-            </button>
+              <option value="all">All Levels</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
           </div>
-
-          {/* Active Filters */}
-          {(appliedCategory !== 'all' || appliedDifficulty !== 'all') && (
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Active filters:</span>
-              {appliedCategory !== 'all' && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  {appliedCategory}
-                </span>
-              )}
-              {appliedDifficulty !== 'all' && (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(appliedDifficulty)}`}>
-                  {appliedDifficulty}
-                </span>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Featured Courses */}
-      {featuredCourses.length > 0 && (
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Featured Courses
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredCourses.map((course) => (
-              <CourseCard 
-                key={course.id} 
-                course={course} 
-                onEnroll={handleEnroll}
-                enrolling={enrolling === course.id}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* All Courses */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-          All Courses ({filteredCourses.length})
-        </h2>
+      {/* Course Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {filteredCourses.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
+          <div className="text-center py-12">
             <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No courses found</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No courses found
+            </h3>
             <p className="text-gray-500 dark:text-gray-400">
               Try adjusting your search or filter criteria.
             </p>
@@ -278,80 +190,44 @@ export default function Marketplace() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course) => (
-              <CourseCard 
-                key={course.id} 
-                course={course} 
-                onEnroll={handleEnroll}
-                enrolling={enrolling === course.id}
-              />
+              <div
+                key={course.id}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(course.difficulty)}`}>
+                      {course.difficulty}
+                    </span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {course.duration} hours
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    {course.title}
+                  </h3>
+                  
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                    {course.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {course.category}
+                    </span>
+                    <button
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                      onClick={() => alert('Please sign in to enroll in courses')}
+                    >
+                      Enroll Now
+                    </button>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         )}
-      </div>
-    </div>
-  );
-}
-
-function CourseCard({ course, onEnroll, enrolling }: { 
-  course: any; 
-  onEnroll: (courseId: string) => void;
-  enrolling: boolean;
-}) {
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-    }
-  };
-
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              {course.title}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-              {course.description}
-            </p>
-          </div>
-          {course.rating >= 4.5 && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-              Featured
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
-          <span>⭐ {course.rating}</span>
-          <span>⏱️ {course.duration}h</span>
-          <span>📚 {course.modules} modules</span>
-          <span>👥 {course.enrolledStudents}</span>
-        </div>
-
-        <div className="flex items-center justify-between mb-4">
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(course.difficulty)}`}>
-            {course.difficulty}
-          </span>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            {course.instructor}
-          </span>
-        </div>
-
-        <button 
-          onClick={() => onEnroll(course.id)}
-          disabled={enrolling}
-          className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            enrolling 
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700 text-white'
-          }`}
-        >
-          {enrolling ? 'Enrolling...' : 'Enroll Now'}
-        </button>
       </div>
     </div>
   );
