@@ -166,12 +166,21 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
             type="number"
             id="duration"
             value={duration}
-            onChange={(e) => setDuration(parseInt(e.target.value) || 20)}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              console.log('Duration input changed:', e.target.value, 'parsed:', value);
+              setDuration(value || 20);
+            }}
             min="1"
             max="200"
+            step="1"
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             disabled={loading}
+            style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
           />
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Current value: {duration} hours
+          </p>
         </div>
 
         {/* Prerequisites */}

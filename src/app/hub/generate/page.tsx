@@ -200,37 +200,126 @@ export default function HubGenerate() {
 
         <div className="p-6">
           {activeTab === 'generate' && (
-            <div className="space-y-6">
-              <CourseForm
-                onSubmit={async (data) => {
-                  setIsGenerating(true);
-                  try {
-                    const response = await fetch('/api/generate-outline', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(data),
-                    });
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Course Form - Left Side (50%) */}
+              <div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Course Configuration
+                  </h3>
+                  <CourseForm
+                    onSubmit={async (data) => {
+                      setIsGenerating(true);
+                      try {
+                        const response = await fetch('/api/generate-outline', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify(data),
+                        });
 
-                    if (!response.ok) {
-                      throw new Error('Failed to generate course outline');
-                    }
+                        if (!response.ok) {
+                          const errorData = await response.json();
+                          throw new Error(errorData.error || 'Failed to generate course outline');
+                        }
 
-                    const responseData = await response.json();
-                    // Extract just the outline data from the response
-                    const generatedOutline = responseData.outline || responseData;
-                    setOutline(generatedOutline);
-                    setActiveTab('curate');
-                  } catch (error) {
-                    console.error('Error generating course:', error);
-                    alert('Failed to generate course outline. Please try again.');
-                  } finally {
-                    setIsGenerating(false);
-                  }
-                }}
-                loading={isGenerating}
-              />
+                        const responseData = await response.json();
+                        // Extract just the outline data from the response
+                        const generatedOutline = responseData.outline || responseData;
+                        setOutline(generatedOutline);
+                        setActiveTab('curate');
+                      } catch (error) {
+                        console.error('Error generating course:', error);
+                        alert(`Failed to generate course outline: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                      } finally {
+                        setIsGenerating(false);
+                      }
+                    }}
+                    loading={isGenerating}
+                  />
+                </div>
+              </div>
+
+              {/* Animation Area - Right Side (50%) */}
+              <div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 h-full">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Generation Status
+                  </h3>
+                  
+                  {isGenerating ? (
+                    <div className="space-y-6">
+                      {/* AI Generation Animation */}
+                      <div className="text-center">
+                        <div className="relative">
+                          <div className="w-24 h-24 mx-auto mb-4">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
+                            <div className="absolute inset-2 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center">
+                              <svg className="w-12 h-12 text-blue-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                              </svg>
+                            </div>
+                          </div>
+                          <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            AI is Generating Your Course
+                          </h4>
+                          <p className="text-gray-600 dark:text-gray-400">
+                            This usually takes 15-30 seconds
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Progress Steps */}
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm text-gray-700 dark:text-gray-300">Analyzing course requirements...</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                          <span className="text-sm text-gray-700 dark:text-gray-300">Generating module structure...</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Creating learning resources...</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                          <span className="text-sm text-gray-400 dark:text-gray-500">Finalizing course outline...</span>
+                        </div>
+                      </div>
+
+                      {/* Tips */}
+                      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                        <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                          💡 Tips for Better Results
+                        </h5>
+                        <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                          <li>• Be specific about your course topic</li>
+                          <li>• Include relevant prerequisites</li>
+                          <li>• Choose appropriate difficulty level</li>
+                          <li>• Consider your target audience</li>
+                        </ul>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="mx-auto h-16 w-16 text-gray-300 mb-4">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                      </div>
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                        Ready to Generate
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Fill out the form on the left and click "Generate Course Outline" to start
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
