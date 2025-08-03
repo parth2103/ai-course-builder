@@ -2,9 +2,9 @@
 
 A comprehensive AI-powered course creation and learning platform built with Next.js 15, React 19, and TypeScript.
 
-## ✨ Features
+## Features
 
-### 🎓 **For Instructors**
+### **For Instructors**
 - **AI-Powered Course Generation** - Create comprehensive course outlines using Google Gemini AI
 - **Course Management** - Edit, save, and publish courses with full content control
 - **File Upload System** - Upload course materials (PDFs, videos, documents)
@@ -12,7 +12,7 @@ A comprehensive AI-powered course creation and learning platform built with Next
 - **Course Analytics** - Track student enrollment and engagement
 - **Role-Based Access** - Secure instructor dashboard with permissions
 
-### 📚 **For Students**
+### **For Students**
 - **Course Discovery** - Browse and enroll in published courses
 - **Interactive Learning** - Dynamic course interface with progress tracking
 - **Module Navigation** - Easy navigation through course modules
@@ -20,19 +20,19 @@ A comprehensive AI-powered course creation and learning platform built with Next
 - **Progress Tracking** - Real-time progress updates and completion tracking
 - **Knowledge Checks** - Interactive quizzes and assessments
 
-### 🔐 **Authentication & Security**
+### **Authentication & Security**
 - **Clerk Integration** - Secure user authentication and management
 - **Role-Based Access Control** - Admin, Instructor, and Student roles
 - **Protected Routes** - Secure API endpoints and page access
 - **Database Security** - Type-safe database operations with Drizzle ORM
 
-### 🎨 **User Experience**
+### **User Experience**
 - **Responsive Design** - Works seamlessly on desktop, tablet, and mobile
 - **Dark Mode Support** - Toggle between light and dark themes
 - **Modern UI** - Clean, intuitive interface with Tailwind CSS
 - **Real-time Updates** - Live progress tracking and course updates
 
-## 🛠️ Tech Stack
+## 🛠Tech Stack
 
 ### **Frontend**
 - **Next.js 15** - React framework with App Router
@@ -58,7 +58,7 @@ A comprehensive AI-powered course creation and learning platform built with Next
 
 **🌐 Live Application:** [https://ai-course-builder-bkml15u0w-parth-gohils-projects-6952869a.vercel.app](https://ai-course-builder-bkml15u0w-parth-gohils-projects-6952869a.vercel.app)
 
-### 🎯 Demo Accounts
+### Demo Accounts
 
 We've set up demo accounts for you to test all features:
 
@@ -70,7 +70,7 @@ We've set up demo accounts for you to test all features:
 
 **Quick Access:** Click the "🚀 Try Demo" button in the header for one-click login!
 
-### 🧪 How to Test
+### How to Test
 
 1. **Visit the live application**
 2. **Click "Sign In"** in the header
@@ -80,7 +80,7 @@ We've set up demo accounts for you to test all features:
 
 ---
 
-## 🛠️ Local Development
+## 🛠Local Development
 
 ### Prerequisites
 - Node.js 18+ 
@@ -143,7 +143,7 @@ npm run dev
 6. **Open your browser**
 Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -158,7 +158,7 @@ src/
 └── drizzle.config.ts     # Drizzle configuration
 ```
 
-## 🔧 Available Scripts
+## Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -168,7 +168,7 @@ src/
 - `npm run db:seed` - Seed database with sample data
 - `npm run db:studio` - Open Drizzle Studio
 
-## 🌟 Key Features in Detail
+## Key Features in Detail
 
 ### **AI Course Generation**
 - Generate comprehensive course outlines using natural language
@@ -195,7 +195,7 @@ src/
 - User profile management
 - Enrollment tracking
 
-## 🚀 Deployment
+## Deployment
 
 ### **Deploy to Vercel**
 
@@ -206,7 +206,7 @@ src/
 ### **Environment Variables for Production**
 Make sure to set all required environment variables in your Vercel project settings.
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -218,7 +218,7 @@ Make sure to set all required environment variables in your Vercel project setti
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Next.js** - React framework
 - **Clerk** - Authentication service
@@ -227,9 +227,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Vercel** - Deployment platform
 - **Tailwind CSS** - Styling framework
 
-## 📞 Support
+## Support
 
-For support, email support@aicoursebuilder.com or create an issue in this repository.
+For support, email pkg@csu.fullerton.edu or create an issue in this repository.
 
 ---
 
