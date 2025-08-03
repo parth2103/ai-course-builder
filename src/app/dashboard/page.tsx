@@ -19,6 +19,20 @@ export default function Dashboard() {
   const checkUserAndRedirect = async () => {
     try {
       console.log('Dashboard: Checking user:', user?.id);
+      console.log('Dashboard: User publicMetadata:', user?.publicMetadata);
+      
+      // First check if user has a role in Clerk's publicMetadata
+      const userRole = user?.publicMetadata?.role;
+      
+      if (userRole) {
+        // User has a role, redirect to course hub
+        console.log('Dashboard: User has role:', userRole, 'redirecting to hub');
+        router.push('/hub');
+        return;
+      }
+      
+      // If no role in Clerk, check if user exists in our database
+      console.log('Dashboard: No role in Clerk, checking database...');
       const response = await fetch(`/api/users/${user?.id}`);
       console.log('Dashboard: Response status:', response.status);
       
@@ -27,8 +41,8 @@ export default function Dashboard() {
         console.log('Dashboard: User not found, redirecting to role selection');
         router.push('/role-selection');
       } else if (response.ok) {
-        // User exists, redirect to course hub
-        console.log('Dashboard: User found, redirecting to hub');
+        // User exists in database, redirect to course hub
+        console.log('Dashboard: User found in database, redirecting to hub');
         router.push('/hub');
       } else {
         // Some other error

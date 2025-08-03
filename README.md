@@ -54,7 +54,33 @@ A comprehensive AI-powered course creation and learning platform built with Next
 - **Vercel** - Serverless deployment platform
 - **GitHub** - Version control and CI/CD
 
-## 🚀 Getting Started
+## 🚀 Live Demo
+
+**🌐 Live Application:** [https://ai-course-builder-bkml15u0w-parth-gohils-projects-6952869a.vercel.app](https://ai-course-builder-bkml15u0w-parth-gohils-projects-6952869a.vercel.app)
+
+### 🎯 Demo Accounts
+
+We've set up demo accounts for you to test all features:
+
+| Role | Email | Password | Features |
+|------|-------|----------|----------|
+| **Student** | `demo.student@aicoursebuilder.com` | `DemoStudent123!` | Browse courses, enroll, track progress |
+| **Instructor** | `demo.instructor@aicoursebuilder.com` | `DemoInstructor123!` | Create courses, manage content, view analytics |
+| **Admin** | `demo.admin@aicoursebuilder.com` | `DemoAdmin123!` | Manage users, view platform analytics |
+
+**Quick Access:** Click the "🚀 Try Demo" button in the header for one-click login!
+
+### 🧪 How to Test
+
+1. **Visit the live application**
+2. **Click "Sign In"** in the header
+3. **Use any demo credentials** above
+4. **Explore the platform** with full functionality
+5. **Try different roles** to see different features
+
+---
+
+## 🛠️ Local Development
 
 ### Prerequisites
 - Node.js 18+ 

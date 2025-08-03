@@ -19,9 +19,6 @@ export const metadata: Metadata = {
   description: "Generate comprehensive course outlines using AI",
 };
 
-// Force dynamic rendering to avoid Clerk build-time issues
-export const dynamic = 'force-dynamic';
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,8 +30,20 @@ export default function RootLayout({
         elements: {
           formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",
           card: "bg-white dark:bg-gray-800 shadow-lg",
-          headerTitle: "text-gray-900 dark:text-white",
-          headerSubtitle: "text-gray-600 dark:text-gray-400",
+          headerTitle: "text-gray-900 dark:text-white font-semibold",
+          headerSubtitle: "text-gray-600 dark:text-gray-300",
+          formFieldLabel: "text-gray-700 dark:text-gray-200 font-medium",
+          formFieldInput: "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400",
+          formFieldInputShowPasswordButton: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200",
+          dividerLine: "bg-gray-200 dark:bg-gray-600",
+          dividerText: "text-gray-500 dark:text-gray-400",
+          socialButtonsBlockButton: "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600",
+          socialButtonsBlockButtonText: "text-gray-700 dark:text-gray-200",
+          formResendCodeLink: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300",
+          footerActionLink: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300",
+          footerActionText: "text-gray-600 dark:text-gray-300",
+          identityPreviewText: "text-gray-600 dark:text-gray-300",
+          identityPreviewEditButton: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300",
         }
       }}
     >

@@ -45,12 +45,7 @@ export default function HubLayout({
       icon: '🤖',
       show: isAdmin
     },
-    {
-      name: 'User Management',
-      href: '/hub/users',
-      icon: '👥',
-      show: isAdmin
-    },
+
     {
       name: 'Analytics',
       href: '/hub/analytics',

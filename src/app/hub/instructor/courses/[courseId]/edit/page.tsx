@@ -249,10 +249,15 @@ export default function EditCourse() {
                     Curate Your Course Content
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Review and customize your course outline. You can edit module titles, 
-                    learning objectives, add resources, and modify assessment questions.
+                    Edit every aspect of your course: module titles, learning objectives, 
+                    resources, assessment questions, and more. All changes are saved automatically.
                   </p>
-                  <EnhancedCourseDisplay outline={outline} generatedWith="AI Course Builder" />
+                  
+                  {/* Full Editable Course Content */}
+                  <EditableCourseContent 
+                    outline={outline} 
+                    onOutlineChange={setOutline}
+                  />
                   
                   {/* Save and Publish Buttons */}
                   <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -272,7 +277,7 @@ export default function EditCourse() {
                           </>
                         ) : (
                           <>
-                            💾 Save Changes
+                            💾 Save as Draft
                           </>
                         )}
                       </button>
@@ -292,7 +297,7 @@ export default function EditCourse() {
                           </>
                         ) : (
                           <>
-                            🚀 Publish Changes
+                            🚀 Publish Course
                           </>
                         )}
                       </button>

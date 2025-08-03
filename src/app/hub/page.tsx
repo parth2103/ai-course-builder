@@ -69,7 +69,7 @@ export default function CourseHub() {
         description: "Welcome to the admin dashboard. You have full control over the platform, including user management, course oversight, and system analytics.",
         quickActions: [
           { name: "Generate Course", href: "/hub/generate", icon: "🤖", color: "bg-purple-500" },
-          { name: "User Management", href: "/hub/users", icon: "👥", color: "bg-blue-500" },
+      
           { name: "System Analytics", href: "/hub/analytics", icon: "📊", color: "bg-green-500" }
         ]
       };

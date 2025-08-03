@@ -40,6 +40,42 @@ export default function EditableCourseContent({ outline, onOutlineChange }: Edit
     updateOutline({ modules: newModules });
   };
 
+  const updateResource = (moduleIndex: number, resourceType: 'videos' | 'documents' | 'externalLinks', resourceIndex: number, updates: any) => {
+    const newModules = [...outline.modules];
+    newModules[moduleIndex].resources[resourceType][resourceIndex] = {
+      ...newModules[moduleIndex].resources[resourceType][resourceIndex],
+      ...updates
+    };
+    updateOutline({ modules: newModules });
+  };
+
+  const addAssessmentQuestion = (moduleIndex: number, question: any) => {
+    const newModules = [...outline.modules];
+    if (!newModules[moduleIndex].assessment) {
+      newModules[moduleIndex].assessment = { quizQuestions: [] };
+    }
+    if (!newModules[moduleIndex].assessment.quizQuestions) {
+      newModules[moduleIndex].assessment.quizQuestions = [];
+    }
+    newModules[moduleIndex].assessment.quizQuestions.push(question);
+    updateOutline({ modules: newModules });
+  };
+
+  const updateAssessmentQuestion = (moduleIndex: number, questionIndex: number, updates: any) => {
+    const newModules = [...outline.modules];
+    newModules[moduleIndex].assessment.quizQuestions[questionIndex] = {
+      ...newModules[moduleIndex].assessment.quizQuestions[questionIndex],
+      ...updates
+    };
+    updateOutline({ modules: newModules });
+  };
+
+  const removeAssessmentQuestion = (moduleIndex: number, questionIndex: number) => {
+    const newModules = [...outline.modules];
+    newModules[moduleIndex].assessment.quizQuestions.splice(questionIndex, 1);
+    updateOutline({ modules: newModules });
+  };
+
   const handleFileUpload = (moduleIndex: number, file: File) => {
     const resource = {
       title: file.name,
@@ -356,6 +392,59 @@ export default function EditableCourseContent({ outline, onOutlineChange }: Edit
                 />
               </div>
 
+              {/* Add New Resource */}
+              <div className="mb-4 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Add New Resource</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <button
+                    onClick={() => {
+                      const newVideo = {
+                        title: 'New Video',
+                        description: 'Video description',
+                        url: 'https://youtube.com/watch?v=',
+                        duration: '10:00'
+                      };
+                      addResource(activeModule, 'videos', newVideo);
+                    }}
+                    className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-center"
+                  >
+                    <div className="text-2xl mb-1">🎥</div>
+                    <div className="text-sm font-medium">Add Video</div>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      const newLink = {
+                        title: 'New External Link',
+                        description: 'Link description',
+                        url: 'https://example.com'
+                      };
+                      addResource(activeModule, 'externalLinks', newLink);
+                    }}
+                    className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-center"
+                  >
+                    <div className="text-2xl mb-1">🔗</div>
+                    <div className="text-sm font-medium">Add Link</div>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      const newDoc = {
+                        title: 'New Document',
+                        description: 'Document description',
+                        url: '#',
+                        type: 'pdf'
+                      };
+                      addResource(activeModule, 'documents', newDoc);
+                    }}
+                    className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-center"
+                  >
+                    <div className="text-2xl mb-1">📄</div>
+                    <div className="text-sm font-medium">Add Document</div>
+                  </button>
+                </div>
+              </div>
+
               {/* Existing Resources */}
               <div className="space-y-4">
                 {/* Videos */}
@@ -364,14 +453,27 @@ export default function EditableCourseContent({ outline, onOutlineChange }: Edit
                     <h4 className="font-medium text-gray-900 dark:text-white mb-2">Videos</h4>
                     <div className="space-y-2">
                       {outline.modules[activeModule].resources.videos.map((video: any, index: number) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{video.title}</span>
-                          <button
-                            onClick={() => removeResource(activeModule, 'videos', index)}
-                            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
-                          >
-                            Remove
-                          </button>
+                        <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <EditableField
+                              value={video.title}
+                              onSave={(value) => updateResource(activeModule, 'videos', index, { title: value })}
+                              fieldName={`video-title-${activeModule}-${index}`}
+                              placeholder="Video title..."
+                            />
+                            <button
+                              onClick={() => removeResource(activeModule, 'videos', index)}
+                              className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          <EditableField
+                            value={video.url}
+                            onSave={(value) => updateResource(activeModule, 'videos', index, { url: value })}
+                            fieldName={`video-url-${activeModule}-${index}`}
+                            placeholder="Video URL..."
+                          />
                         </div>
                       ))}
                     </div>
@@ -384,14 +486,27 @@ export default function EditableCourseContent({ outline, onOutlineChange }: Edit
                     <h4 className="font-medium text-gray-900 dark:text-white mb-2">Documents</h4>
                     <div className="space-y-2">
                       {outline.modules[activeModule].resources.documents.map((doc: any, index: number) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{doc.title}</span>
-                          <button
-                            onClick={() => removeResource(activeModule, 'documents', index)}
-                            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
-                          >
-                            Remove
-                          </button>
+                        <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <EditableField
+                              value={doc.title}
+                              onSave={(value) => updateResource(activeModule, 'documents', index, { title: value })}
+                              fieldName={`doc-title-${activeModule}-${index}`}
+                              placeholder="Document title..."
+                            />
+                            <button
+                              onClick={() => removeResource(activeModule, 'documents', index)}
+                              className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          <EditableField
+                            value={doc.url}
+                            onSave={(value) => updateResource(activeModule, 'documents', index, { url: value })}
+                            fieldName={`doc-url-${activeModule}-${index}`}
+                            placeholder="Document URL..."
+                          />
                         </div>
                       ))}
                     </div>
@@ -404,20 +519,133 @@ export default function EditableCourseContent({ outline, onOutlineChange }: Edit
                     <h4 className="font-medium text-gray-900 dark:text-white mb-2">External Links</h4>
                     <div className="space-y-2">
                       {outline.modules[activeModule].resources.externalLinks.map((link: any, index: number) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{link.title}</span>
-                          <button
-                            onClick={() => removeResource(activeModule, 'externalLinks', index)}
-                            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
-                          >
-                            Remove
-                          </button>
+                        <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <EditableField
+                              value={link.title}
+                              onSave={(value) => updateResource(activeModule, 'externalLinks', index, { title: value })}
+                              fieldName={`link-title-${activeModule}-${index}`}
+                              placeholder="Link title..."
+                            />
+                            <button
+                              onClick={() => removeResource(activeModule, 'externalLinks', index)}
+                              className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          <EditableField
+                            value={link.url}
+                            onSave={(value) => updateResource(activeModule, 'externalLinks', index, { url: value })}
+                            fieldName={`link-url-${activeModule}-${index}`}
+                            placeholder="Link URL..."
+                          />
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Assessment Questions */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Assessment Questions
+              </label>
+              
+              {/* Add New Question */}
+              <div className="mb-4">
+                <button
+                  onClick={() => {
+                    const newQuestion = {
+                      question: 'New question?',
+                      options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+                      correctAnswer: 0,
+                      explanation: 'Explanation for the correct answer'
+                    };
+                    addAssessmentQuestion(activeModule, newQuestion);
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  + Add Assessment Question
+                </button>
+              </div>
+
+              {/* Existing Questions */}
+              {outline.modules[activeModule].assessment?.quizQuestions?.length > 0 && (
+                <div className="space-y-4">
+                  {outline.modules[activeModule].assessment.quizQuestions.map((question: any, index: number) => (
+                    <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-medium text-gray-900 dark:text-white">Question {index + 1}</h5>
+                        <button
+                          onClick={() => removeAssessmentQuestion(activeModule, index)}
+                          className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      
+                      {/* Question Text */}
+                      <div className="mb-3">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Question
+                        </label>
+                        <EditableField
+                          value={question.question}
+                          onSave={(value) => updateAssessmentQuestion(activeModule, index, { question: value })}
+                          fieldName={`question-${activeModule}-${index}`}
+                          placeholder="Enter question..."
+                        />
+                      </div>
+
+                      {/* Options */}
+                      <div className="mb-3">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Options
+                        </label>
+                        <div className="space-y-2">
+                          {question.options?.map((option: string, optionIndex: number) => (
+                            <div key={optionIndex} className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                name={`correct-${activeModule}-${index}`}
+                                checked={question.correctAnswer === optionIndex}
+                                onChange={() => updateAssessmentQuestion(activeModule, index, { correctAnswer: optionIndex })}
+                                className="text-blue-600"
+                              />
+                              <EditableField
+                                value={option}
+                                onSave={(value) => {
+                                  const newOptions = [...question.options];
+                                  newOptions[optionIndex] = value;
+                                  updateAssessmentQuestion(activeModule, index, { options: newOptions });
+                                }}
+                                fieldName={`option-${activeModule}-${index}-${optionIndex}`}
+                                placeholder={`Option ${optionIndex + 1}...`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Explanation */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Explanation
+                        </label>
+                        <EditableField
+                          value={question.explanation}
+                          onSave={(value) => updateAssessmentQuestion(activeModule, index, { explanation: value })}
+                          fieldName={`explanation-${activeModule}-${index}`}
+                          placeholder="Enter explanation..."
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

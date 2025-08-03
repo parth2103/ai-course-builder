@@ -9,7 +9,7 @@ import ResourceLibrary from '../components/ResourceLibrary';
 import ContentCurator from '../components/ContentCurator';
 import DarkModeToggle from '../components/DarkModeToggle';
 import AccountSettings from '../components/AccountSettings';
-import RoleManager from '../components/RoleManager';
+
 import { useRoleAccess } from '../hooks/useRoleAccess';
 
 interface VideoResource {
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
   const [outline, setOutline] = useState<CourseOutline | null>(null);
   const [error, setError] = useState<string>('');
   const [generatedWith, setGeneratedWith] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'generate' | 'curate' | 'resources' | 'courses' | 'users'>('generate');
+  const [activeTab, setActiveTab] = useState<'generate' | 'curate' | 'resources' | 'courses'>('generate');
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedModuleIndex, setSelectedModuleIndex] = useState<number | null>(null);
   const [savedCourses, setSavedCourses] = useState<Array<{
@@ -370,18 +370,7 @@ export default function AdminDashboard() {
             >
               📖 My Courses ({savedCourses.length})
             </button>
-            {isAdmin && (
-              <button
-                onClick={() => setActiveTab('users')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'users'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                👥 User Management
-              </button>
-            )}
+
           </div>
         </div>
       </div>
@@ -696,11 +685,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {activeTab === 'users' && isAdmin && (
-          <div className="space-y-6">
-            <RoleManager />
-          </div>
-        )}
+
       </main>
         </div>
       </SignedIn>
