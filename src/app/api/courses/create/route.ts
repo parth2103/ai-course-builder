@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
-import { courseService } from '../../../../lib/db/services';
+import { currentUser, clerkClient } from '@clerk/nextjs/server';
+import { courseService, userService } from '../../../../lib/db/services';
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +19,29 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('Creating course for instructor:', user.id, 'with status:', status);
+    console.log('Course data:', { courseTitle, description, totalDuration, modules, status });
+
+    // Check if user exists in database, if not create them
+    let dbUser = await userService.getUserById(user.id);
+    if (!dbUser) {
+      console.log('User not found in database, creating user...');
+      try {
+        dbUser = await userService.createUser({
+          id: user.id,
+          email: user.emailAddresses[0]?.emailAddress || '',
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          role: 'instructor' // Default to instructor since they're creating a course
+        });
+        console.log('User created successfully:', dbUser);
+      } catch (userError) {
+        console.error('Error creating user:', userError);
+        return NextResponse.json({ 
+          error: 'Failed to create user account',
+          details: userError instanceof Error ? userError.message : 'Unknown error'
+        }, { status: 500 });
+      }
+    }
 
     // Create course in database
     const course = await courseService.createCourse({
@@ -47,6 +70,9 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error creating course:', error);
-    return NextResponse.json({ error: 'Failed to create course' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to create course',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
   }
 } 
