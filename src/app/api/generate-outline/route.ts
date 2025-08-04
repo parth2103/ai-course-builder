@@ -97,20 +97,38 @@ For each module, provide detailed content including:
    - Estimated duration (in minutes)
    - 4 bullet points covering key topics
 
-2. **Multimedia Resources** (IMPORTANT: Provide ACTUAL URLs):
-   - 2-3 relevant YouTube video suggestions with REAL YouTube URLs (https://www.youtube.com/watch?v=...)
-   - 1-2 document suggestions with REAL URLs (PDFs, PowerPoints, official documentation)
-   - 2-3 external resource links with REAL URLs (documentation, articles, tools, official websites)
+2. **Multimedia Resources** (CRITICAL: Provide HIGH-QUALITY, VERIFIED URLs):
+   
+   **VIDEO REQUIREMENTS:**
+   - 2-3 relevant YouTube videos from TOP educational channels:
+     * Khan Academy, MIT OpenCourseWare, Harvard, Stanford, Coursera, edX
+     * TED-Ed, Crash Course, freeCodeCamp, The Net Ninja, Traversy Media
+     * Channels with 500K+ subscribers and 4.5+ star ratings
+   - Videos must have 100,000+ views and be published within last 2 years
+   - Duration: 5-30 minutes (optimal learning length)
+   - Must be directly relevant to the specific topic
+   - Provide REAL, accessible YouTube URLs (https://www.youtube.com/watch?v=...)
+   
+   **DOCUMENT REQUIREMENTS:**
+   - 1-2 high-quality document suggestions with REAL URLs
+   - Official documentation, research papers, or educational PDFs
+   - From reputable sources (universities, official documentation, research institutions)
+   
+   **EXTERNAL RESOURCE REQUIREMENTS:**
+   - 2-3 external resource links with REAL URLs
+   - Official documentation, tools, articles from reputable sources
+   - Must be currently accessible and relevant
 
 3. **Assessment**:
    - 3 quiz questions with multiple choice options and explanations
 
 CRITICAL REQUIREMENTS:
-- ALL videos must have actual YouTube URLs (https://www.youtube.com/watch?v=...)
-- ALL documents must have real URLs (https://...)
-- ALL external links must be real, accessible URLs
-- Use popular, high-quality, educational content
-- Ensure all URLs are currently accessible and relevant to the topic
+- ALL videos must be from reputable educational channels with proven track records
+- ALL documents must have real URLs from authoritative sources
+- ALL external links must be real, accessible URLs from trusted websites
+- Use only high-quality, currently accessible content
+- Ensure all URLs are relevant to the specific topic and difficulty level
+- Verify that all suggested content is appropriate for the target audience
 
 IMPORTANT: Respond ONLY with valid JSON. Do not include any markdown formatting, explanations, or additional text. The response must be parseable JSON.
 
@@ -139,8 +157,8 @@ Format your response as a JSON object with this exact structure:
       "resources": {
         "videos": [
           {
-            "title": "Video Title",
-            "description": "Video description",
+            "title": "Exact Video Title from YouTube",
+            "description": "Brief description of video content and relevance to topic",
             "url": "https://www.youtube.com/watch?v=ACTUAL_VIDEO_ID",
             "duration": 15
           }
