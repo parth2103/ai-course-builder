@@ -218,54 +218,15 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
           )}
         </button>
 
-        {/* Progress Bar */}
+        {/* Simple loading indicator */}
         {loading && (
-          <div className="mt-4 space-y-3">
-            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-              <span>AI is generating your course outline...</span>
-              <span>Estimated time: 15-30 seconds</span>
-            </div>
-            
-            {/* Progress Bar */}
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${Math.min(progress, 95)}%` }}
-              >
-                <div 
-                  className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
-                  style={{
-                    background: 'linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%)',
-                    backgroundSize: '200% 100%',
-                    animation: 'progress 2s ease-in-out infinite'
-                  }}
-                >
-                </div>
-              </div>
-            </div>
-
-            {/* Progress Percentage */}
-            <div className="text-center text-xs text-gray-500 dark:text-gray-400">
-              {Math.round(progress)}% Complete
-            </div>
-
-            {/* Status Messages */}
-            <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
-              {progressSteps.map((step, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <div 
-                    className={`w-2 h-2 rounded-full ${
-                      index <= currentStep 
-                        ? 'bg-green-500 animate-pulse' 
-                        : 'bg-gray-300 dark:bg-gray-600'
-                    }`}
-                    style={{ animationDelay: `${index * 0.5}s` }}
-                  ></div>
-                  <span className={index <= currentStep ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}>
-                    {step}
-                  </span>
-                </div>
-              ))}
+          <div className="mt-4 text-center">
+            <div className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400">
+              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Generating course outline...
             </div>
           </div>
         )}

@@ -12,29 +12,29 @@ export default function AuthHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
               AI Course Builder
             </h1>
           </div>
           
-                            <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
                     <DarkModeToggle />
                     <SignedOut>
                       <DemoLogin />
                       <SignInButton mode="modal">
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors">
                           Sign In
                         </button>
                       </SignInButton>
                       <SignUpButton mode="modal">
-                        <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                        <button className="bg-green-600 hover:bg-green-700 text-white px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors">
                           Sign Up
                         </button>
                       </SignUpButton>
                     </SignedOut>
                     <SignedIn>
-                      <div className="flex items-center space-x-3">
-                        <div className="text-right">
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="text-right hidden sm:block">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
                             {user?.firstName || user?.emailAddresses[0]?.emailAddress}
                           </div>

@@ -65,19 +65,19 @@ export default function DemoLogin() {
       {/* Demo Login Button */}
       <button
         onClick={() => setShowCredentials(!showCredentials)}
-        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
       >
         🚀 Try Demo
       </button>
 
       {/* Credentials Dropdown */}
       {showCredentials && (
-        <div className="absolute top-full right-0 mt-2 w-96 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50">
-          <div className="p-4">
+        <div className="absolute top-full right-0 mt-2 w-80 sm:w-96 max-w-[85vw] bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 sm:right-0 right-1/2 sm:transform-none transform translate-x-1/2">
+          <div className="p-3 sm:p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Demo Accounts
-              </h3>
+                              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                  Demo Accounts
+                </h3>
               <button
                 onClick={() => setShowCredentials(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -86,15 +86,15 @@ export default function DemoLogin() {
               </button>
             </div>
             
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4">
               Choose a role to automatically log in and explore the platform:
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {demoAccounts.map((account, index) => (
-                <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-2 sm:p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-gray-900 dark:text-white">
+                    <h4 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
                       {account.role}
                     </h4>
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -113,13 +113,13 @@ export default function DemoLogin() {
                   <div className="space-y-2 mb-3">
                     <div className="flex flex-col space-y-1">
                       <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Email:</span>
-                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 break-all">
+                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 sm:px-3 py-1 sm:py-2 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 break-all">
                         {account.email}
                       </code>
                     </div>
                     <div className="flex flex-col space-y-1">
                       <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Password:</span>
-                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 break-all">
+                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 sm:px-3 py-1 sm:py-2 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 break-all">
                         {account.password}
                       </code>
                     </div>
@@ -128,7 +128,7 @@ export default function DemoLogin() {
                   <button
                     onClick={() => handleDemoLogin(account.role)}
                     disabled={isLoggingIn}
-                    className={`w-full px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`w-full px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                       isLoggingIn
                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         : account.role === 'Student' ? 'bg-blue-600 hover:bg-blue-700 text-white' :
@@ -138,7 +138,7 @@ export default function DemoLogin() {
                   >
                     {isLoggingIn ? (
                       <div className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-2 h-3 w-3 sm:h-4 sm:w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>

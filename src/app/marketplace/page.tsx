@@ -20,10 +20,38 @@ export default function Marketplace() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [enrollingCourseId, setEnrollingCourseId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  const handleEnroll = async (courseId: string) => {
+    setEnrollingCourseId(courseId);
+    try {
+      const response = await fetch('/api/enroll', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ courseId }),
+      });
+
+      if (response.ok) {
+        alert('Successfully enrolled in course!');
+        // Refresh courses to update enrollment status
+        fetchCourses();
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to enroll in course');
+      }
+    } catch (error) {
+      console.error('Enrollment error:', error);
+      alert('Failed to enroll in course. Please try again.');
+    } finally {
+      setEnrollingCourseId(null);
+    }
+  };
 
   const fetchCourses = async () => {
     try {
@@ -217,10 +245,15 @@ export default function Marketplace() {
                       {course.category}
                     </span>
                     <button
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                      onClick={() => alert('Please sign in to enroll in courses')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        enrollingCourseId === course.id
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-blue-600 hover:bg-blue-700 text-white'
+                      }`}
+                      onClick={() => handleEnroll(course.id)}
+                      disabled={enrollingCourseId === course.id}
                     >
-                      Enroll Now
+                      {enrollingCourseId === course.id ? 'Enrolling...' : 'Enroll Now'}
                     </button>
                   </div>
                 </div>

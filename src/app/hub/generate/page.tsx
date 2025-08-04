@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRoleAccess } from '../../hooks/useRoleAccess';
 import CourseForm from '../../components/CourseForm';
 import EnhancedCourseDisplay from '../../components/EnhancedCourseDisplay';
@@ -64,6 +64,46 @@ export default function HubGenerate() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  // Progress steps for the generation process
+  const progressSteps = [
+    'Analyzing course requirements...',
+    'Generating module structure...',
+    'Creating learning resources...',
+    'Finalizing course outline...'
+  ];
+
+  // Simulate progress when loading starts
+  useEffect(() => {
+    if (isGenerating) {
+      setProgress(0);
+      setCurrentStep(0);
+      
+      const progressInterval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 1000);
+
+      const stepInterval = setInterval(() => {
+        setCurrentStep(prev => {
+          if (prev >= progressSteps.length - 1) return prev;
+          return prev + 1;
+        });
+      }, 3000);
+
+      return () => {
+        clearInterval(progressInterval);
+        clearInterval(stepInterval);
+      };
+    } else {
+      setProgress(0);
+      setCurrentStep(0);
+    }
+  }, [isGenerating]);
 
   if (!isAdmin && !isInstructor) {
     return (
@@ -250,43 +290,53 @@ export default function HubGenerate() {
                   
                   {isGenerating ? (
                     <div className="space-y-6">
-                      {/* AI Generation Animation */}
-                      <div className="text-center">
-                        <div className="relative">
-                          <div className="w-24 h-24 mx-auto mb-4">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
-                            <div className="absolute inset-2 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center">
-                              <svg className="w-12 h-12 text-blue-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                              </svg>
+                      {/* Progress Bar Animation */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                          <span>AI is generating your course outline...</span>
+                          <span>Estimated time: 15-30 seconds</span>
+                        </div>
+                        
+                        {/* Progress Bar */}
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
+                            style={{ width: `${Math.min(progress, 95)}%` }}
+                          >
+                            <div 
+                              className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
+                              style={{
+                                background: 'linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%)',
+                                backgroundSize: '200% 100%',
+                                animation: 'progress 2s ease-in-out infinite'
+                              }}
+                            >
                             </div>
                           </div>
-                          <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                            AI is Generating Your Course
-                          </h4>
-                          <p className="text-gray-600 dark:text-gray-400">
-                            This usually takes 15-30 seconds
-                          </p>
                         </div>
-                      </div>
 
-                      {/* Progress Steps */}
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                          <span className="text-sm text-gray-700 dark:text-gray-300">Analyzing course requirements...</span>
+                        {/* Progress Percentage */}
+                        <div className="text-center text-xs text-gray-500 dark:text-gray-400">
+                          {Math.round(progress)}% Complete
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-                          <span className="text-sm text-gray-700 dark:text-gray-300">Generating module structure...</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">Creating learning resources...</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                          <span className="text-sm text-gray-400 dark:text-gray-500">Finalizing course outline...</span>
+
+                        {/* Status Messages */}
+                        <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                          {progressSteps.map((step, index) => (
+                            <div key={index} className="flex items-center space-x-2">
+                              <div 
+                                className={`w-2 h-2 rounded-full ${
+                                  index <= currentStep 
+                                    ? 'bg-green-500 animate-pulse' 
+                                    : 'bg-gray-300 dark:bg-gray-600'
+                                }`}
+                                style={{ animationDelay: `${index * 0.5}s` }}
+                              ></div>
+                              <span className={index <= currentStep ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}>
+                                {step}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
 
