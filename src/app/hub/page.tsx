@@ -91,7 +91,7 @@ export default function CourseHub() {
         description: "Welcome to your learning dashboard. Continue your courses, track your progress, and discover new learning opportunities.",
         quickActions: [
           { name: "My Learning", href: "/hub/student/learning", icon: "🎓", color: "bg-purple-500" },
-          { name: "Enrolled Courses", href: "/hub/student/enrolled", icon: "📋", color: "bg-blue-500" },
+          { name: "Enrolled Courses", href: "/hub/student/learning", icon: "📋", color: "bg-blue-500" },
           { name: "Browse Courses", href: "/marketplace", icon: "📚", color: "bg-green-500" }
         ]
       };
