@@ -21,8 +21,8 @@
 }
 
 .content-area {
-  padding-left: 16rem !important;
-  width: calc(100% - 16rem) !important;
+  flex: 1 !important;
+  width: auto !important;
 }
 
 /* Background overlay shadow effect */
@@ -37,8 +37,8 @@
   }
   
   .content-area {
-    padding-left: 14rem !important;
-    width: calc(100% - 14rem) !important;
+    flex: 1 !important;
+    width: auto !important;
   }
 }
 

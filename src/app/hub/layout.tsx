@@ -122,7 +122,7 @@ export default function HubLayout({
             )}
             
             {/* Sidebar */}
-            <div className={`sidebar w-64 xl:w-64 lg:w-56 bg-white dark:bg-gray-800 transition-all duration-300 ease-in-out flex-shrink-0 ${
+            <div className={`sidebar w-64 xl:w-64 lg:w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out flex-shrink-0 ${
               sidebarOpen ? 'open' : ''
             }`}>
               <div className="flex flex-col h-full">
