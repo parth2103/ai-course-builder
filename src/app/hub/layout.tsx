@@ -103,7 +103,7 @@ export default function HubLayout({
           <div className="sidebar-toggle">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="fixed top-20 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-md shadow-lg"
+              className="fixed top-20 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-md shadow-lg lg:hidden"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -138,7 +138,7 @@ export default function HubLayout({
                   </div>
                   <button
                     onClick={() => setSidebarOpen(false)}
-                    className="p-1 rounded-md text-gray-400 hover:text-gray-600"
+                    className="lg:hidden p-1 rounded-md text-gray-400 hover:text-gray-600"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
