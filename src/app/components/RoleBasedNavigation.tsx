@@ -15,7 +15,7 @@ export default function RoleBasedNavigation() {
             href="/"
             className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
           >
-            🏠 Browse Courses
+            Browse Courses
           </Link>
 
           {/* Admin Navigation */}
@@ -25,19 +25,19 @@ export default function RoleBasedNavigation() {
                 href="/admin"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                🚀 Admin Dashboard
+                Admin Dashboard
               </Link>
               <Link 
                 href="/admin/users"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                👥 Manage Users
+                Manage Users
               </Link>
               <Link 
                 href="/admin/analytics"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                📊 Analytics
+                Analytics
               </Link>
             </>
           )}
@@ -49,19 +49,19 @@ export default function RoleBasedNavigation() {
                 href="/instructor/dashboard"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                📚 My Courses
+                My Courses
               </Link>
               <Link 
                 href="/hub/generate"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                ➕ Create Course
+                Create Course
               </Link>
               <Link 
                 href="/instructor/analytics"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                📈 My Analytics
+                My Analytics
               </Link>
             </>
           )}
@@ -73,19 +73,19 @@ export default function RoleBasedNavigation() {
                 href="/hub/student/learning"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                📖 My Learning
+                My Learning
               </Link>
               <Link 
                 href="/hub/student/learning"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                🎓 Enrolled Courses
+                Enrolled Courses
               </Link>
               <Link 
                 href="/student/progress"
                 className="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                📊 My Progress
+                My Progress
               </Link>
             </>
           )}
