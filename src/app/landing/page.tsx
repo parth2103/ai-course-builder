@@ -561,12 +561,12 @@ export default function LandingPage() {
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Features</h4>
+              <h4 className="font-semibold mb-4">For Students</h4>
               <ul className="space-y-2 text-gray-400">
-                <li>AI Course Generation</li>
-                <li>Content Management</li>
-                <li>Role-Based Access</li>
-                <li>Progress Tracking</li>
+                <li><Link href="/student-landing" className="hover:text-white transition-colors">Student Home</Link></li>
+                <li><Link href="/marketplace" className="hover:text-white transition-colors">Browse Courses</Link></li>
+                <li><Link href="/hub/student/learning" className="hover:text-white transition-colors">My Learning</Link></li>
+                <li><Link href="/hub/student/progress" className="hover:text-white transition-colors">Track Progress</Link></li>
               </ul>
             </div>
             <div>
