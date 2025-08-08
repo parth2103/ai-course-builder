@@ -1,6 +1,0 @@
-{
-  "buildCommand": "cd src && npm install && npm run build",
-  "outputDirectory": "src/.next",
-  "installCommand": "echo 'Dependencies will be installed during build'",
-  "framework": "nextjs"
-} 
