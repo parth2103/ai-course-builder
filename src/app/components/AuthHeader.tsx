@@ -20,29 +20,29 @@ export default function AuthHeader() {
                 alt="Learnify Logo"
                 width={160}
                 height={50}
-                className="dark:hidden"
+                className="dark:hidden w-32 h-10 md:w-[160px] md:h-[50px]"
               />
               <Image
                 src="/images/logos/learnify-logo-white.svg"
                 alt="Learnify Logo"
                 width={160}
                 height={50}
-                className="hidden dark:block"
+                className="hidden dark:block w-32 h-10 md:w-[160px] md:h-[50px]"
               />
             </div>
           </div>
           
-          <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <DarkModeToggle />
             <SignedOut>
               <DemoLogin />
               <SignInButton mode="modal">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors">
+                <button className="text-sm md:text-base border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-3 py-1.5 md:px-4 md:py-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   Sign In
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="bg-green-600 hover:bg-green-700 text-white px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors">
+                <button className="text-sm md:text-base bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-md transition-colors">
                   Sign Up
                 </button>
               </SignUpButton>

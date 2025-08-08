@@ -38,14 +38,14 @@ export default function LandingPage() {
                   alt="Learnify Logo"
                   width={300}
                   height={150}
-                  className="transition-all duration-300 dark:hidden"
+                  className="transition-all duration-300 dark:hidden w-48 h-24 md:w-[300px] md:h-[150px]"
                 />
                 <Image
                   src="/images/logos/learnify-logo-white.svg"
                   alt="Learnify Logo"
                   width={300}
                   height={150}
-                  className="transition-all duration-300 hidden dark:block"
+                  className="transition-all duration-300 hidden dark:block w-48 h-24 md:w-[300px] md:h-[150px]"
                 />
               </div>
             </div>
@@ -54,10 +54,10 @@ export default function LandingPage() {
               <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span>
               AI-Powered Course Creation Platform
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Create Professional Courses in Minutes, Not Weeks
             </h1>
-            <p className="text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <p className="text-lg md:text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-fade-in-up px-4" style={{ animationDelay: '0.4s' }}>
               Transform your expertise into engaging learning experiences with AI-powered course generation. 
               From outline to assessment, our platform handles everything while you focus on what matters most.
             </p>

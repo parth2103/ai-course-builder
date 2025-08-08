@@ -36,27 +36,27 @@ export default function StudentLandingPage() {
                 alt="Learnify Logo"
                 width={300}
                 height={150}
-                className="drop-shadow-2xl dark:hidden"
+                className="drop-shadow-2xl dark:hidden w-48 h-24 md:w-[300px] md:h-[150px]"
               />
               <Image
                 src="/images/logos/learnify-logo-white.svg"
                 alt="Learnify Logo"
                 width={300}
                 height={150}
-                className="drop-shadow-2xl hidden dark:block"
+                className="drop-shadow-2xl hidden dark:block w-48 h-24 md:w-[300px] md:h-[150px]"
               />
             </div>
             
-            <div className="inline-flex items-center px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-purple-600 dark:text-purple-400 text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
-              AI-Generated Learning Platform
+            <div className="inline-flex items-center px-4 py-2 bg-emerald-600/20 border border-emerald-500/30 rounded-full text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-6 animate-fade-in-up">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span>
+              Discover Amazing Courses
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
-              Master New Skills with AI-Generated Courses
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Learn from the Best Instructors
             </h1>
-            <p className="text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Discover expertly crafted courses created by AI and refined by real instructors. 
-              Learn at your own pace with interactive content designed for modern learners.
+            <p className="text-lg md:text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-fade-in-up px-4" style={{ animationDelay: '0.4s' }}>
+              Access high-quality courses created by expert instructors. 
+              Enhance your skills and advance your career with our curated learning platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <SignedOut>
