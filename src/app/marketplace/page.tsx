@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Course {
   id: string;
@@ -226,34 +227,53 @@ export default function Marketplace() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Course Marketplace
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
-                Discover amazing courses created by expert instructors
-              </p>
-              <div className="flex items-center space-x-6 mt-3 text-sm text-gray-500 dark:text-gray-400">
-                <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  {courses.length}+ Courses
-                </span>
-                <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                  </svg>
-                  50K+ Students
-                </span>
-                <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  4.8★ Average Rating
-                </span>
+            <div className="flex items-center space-x-2">
+              {/* Logo */}
+              <div className="flex items-center">
+                <Image
+                  src="/images/logos/learnify-logo-black.svg"
+                  alt="Learnify Logo"
+                  width={50}
+                  height={50}
+                  className="dark:hidden"
+                />
+                <Image
+                  src="/images/logos/learnify-logo-white.svg"
+                  alt="Learnify Logo"
+                  width={50}
+                  height={50}
+                  className="hidden dark:block"
+                />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Course Marketplace
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                  Discover amazing courses created by expert instructors
+                </p>
+                <div className="flex items-center space-x-6 mt-3 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="flex items-center">
+                    <svg className="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    {courses.length}+ Courses
+                  </span>
+                  <span className="flex items-center">
+                    <svg className="w-4 h-4 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                    </svg>
+                    50K+ Students
+                  </span>
+                  <span className="flex items-center">
+                    <svg className="w-4 h-4 mr-1 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    4.8★ Average Rating
+                  </span>
+                </div>
               </div>
             </div>
             <Link

@@ -4,37 +4,72 @@ import Link from 'next/link';
 import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import AuthHeader from '../components/AuthHeader';
 import DarkModeToggle from '../components/DarkModeToggle';
+import Image from 'next/image';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Fixed Background - Doesn't move with scroll */}
+      <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-gray-900">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#374151_1px,transparent_1px),linear-gradient(to_bottom,#374151_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#d5c5ff,transparent)] dark:bg-[radial-gradient(circle_800px_at_100%_200px,#d5c5ff,transparent)]"></div>
+      </div>
+
       {/* Auth Header */}
       <AuthHeader />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <section className="text-gray-900 dark:text-white relative overflow-hidden">
+        {/* Floating Elements */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-[#8ebb7a]/10 rounded-full blur-xl animate-float"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 bg-purple-500/10 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 right-1/3 w-12 h-12 bg-yellow-500/10 rounded-full blur-xl animate-float" style={{ animationDelay: '3s' }}></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
           <div className="text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-emerald-600/20 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
+            {/* Logo Image */}
+            <div className="-mb-6 flex justify-center">
+              <div className="relative">
+                <Image
+                  src="/images/logos/learnify-logo-black.svg"
+                  alt="Learnify Logo"
+                  width={300}
+                  height={150}
+                  className="transition-all duration-300 dark:hidden"
+                />
+                <Image
+                  src="/images/logos/learnify-logo-white.svg"
+                  alt="Learnify Logo"
+                  width={300}
+                  height={150}
+                  className="transition-all duration-300 hidden dark:block"
+                />
+              </div>
+            </div>
+            
+            <div className="inline-flex items-center px-4 py-2 bg-emerald-600/20 border border-emerald-500/30 rounded-full text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-6 animate-fade-in-up">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span>
               AI-Powered Course Creation Platform
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Create Professional Courses in Minutes, Not Weeks
             </h1>
-            <p className="text-xl mb-8 text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               Transform your expertise into engaging learning experiences with AI-powered course generation. 
               From outline to assessment, our platform handles everything while you focus on what matters most.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <SignedOut>
                 <SignUpButton mode="modal">
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">
+                  <button className="bg-[#8ebb7a] hover:bg-[#7daa69] text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">
                     Start Creating Free
                   </button>
                 </SignUpButton>
                 <SignInButton mode="modal">
-                  <button className="border-2 border-gray-400 text-gray-300 px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all duration-200">
+                  <button className="border-2 border-gray-400 dark:border-gray-500 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-lg font-semibold hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all duration-200">
                     Sign In
                   </button>
                 </SignInButton>
@@ -48,7 +83,7 @@ export default function LandingPage() {
                 </Link>
               </SignedIn>
             </div>
-            <div className="flex items-center justify-center space-x-8 text-sm text-gray-400">
+            <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center">
                 <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -69,11 +104,11 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-                </div>
+        </div>
       </section>
 
       {/* Dashboard Preview Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-purple-600/10 border border-purple-500/20 rounded-full text-purple-600 dark:text-purple-400 text-sm font-medium mb-4">
@@ -102,7 +137,8 @@ export default function LandingPage() {
 
             {/* Dashboard Preview */}
             <div className="bg-white dark:bg-gray-800 rounded-b-lg shadow-2xl overflow-hidden">
-              <div className="flex">
+              {/* Desktop Layout */}
+              <div className="hidden lg:flex">
                 {/* Sidebar */}
                 <div className="w-64 bg-gray-50 dark:bg-gray-700 border-r border-gray-200 dark:border-gray-600">
                   <div className="p-4 border-b border-gray-200 dark:border-gray-600">
@@ -202,19 +238,129 @@ export default function LandingPage() {
                   </div>
 
                   <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">View all</span>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex items-center">
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                        0 total student enrollments across all courses
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">Course "JavaScript Fundamentals" published</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p>
+                        </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center">
                         <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                        0 courses currently published on platform
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">New student enrolled in "React Basics"</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">4 hours ago</p>
+                        </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center">
                         <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-                        Platform serving 0 registered users
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">Course "Python for Beginners" updated</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">1 day ago</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Layout */}
+              <div className="lg:hidden">
+                {/* Mobile Header */}
+                <div className="p-4 border-b border-gray-200 dark:border-gray-600">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">CH</span>
+                      </div>
+                      <span className="ml-3 text-lg font-semibold text-gray-900 dark:text-white">
+                        Course Hub
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">I</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Content */}
+                <div className="p-4">
+                  <div className="mb-6">
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Instructor Dashboard</h1>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Create and manage your courses</p>
+                  </div>
+
+                  {/* Mobile Action Cards */}
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-lg text-white">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-base font-semibold mb-1">Create Course</h3>
+                          <p className="text-green-100 text-xs">Access create course</p>
+                        </div>
+                        <svg className="w-6 h-6 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-lg text-white">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-base font-semibold mb-1">My Courses</h3>
+                          <p className="text-blue-100 text-xs">Access my courses</p>
+                        </div>
+                        <svg className="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-lg text-white">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-base font-semibold mb-1">My Analytics</h3>
+                          <p className="text-purple-100 text-xs">Access my analytics</p>
+                        </div>
+                        <svg className="w-6 h-6 text-purple-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mobile Navigation */}
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Quick Navigation</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center px-3 py-2 text-sm font-medium rounded-md bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200">
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                        </svg>
+                        Course Hub
+                      </div>
+                      <div className="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300">
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        My Courses
+                      </div>
+                      <div className="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300">
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Create Course
+                      </div>
+                      <div className="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300">
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        My Analytics
                       </div>
                     </div>
                   </div>
@@ -226,7 +372,7 @@ export default function LandingPage() {
       </section>
 
       {/* Time Comparison Section */}
-      <section className="py-20 bg-white dark:bg-gray-800">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-orange-600/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 text-sm font-medium mb-4">
@@ -319,14 +465,14 @@ export default function LandingPage() {
           </div>
 
           <div className="text-center mt-12">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white">
+            <div className="bg-gradient-to-r from-[#8ebb7a] to-[#7daa69] rounded-xl p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">Save Up to 95% of Your Time</h3>
-              <p className="text-lg text-blue-100 mb-6">
+              <p className="text-lg text-white/90 mb-6">
                 Focus on what you do best - teaching and inspiring students
               </p>
               <SignedOut>
                 <SignUpButton mode="modal">
-                  <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                  <button className="bg-white text-[#8ebb7a] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                     Start Saving Time Today
                   </button>
                 </SignUpButton>
@@ -334,7 +480,7 @@ export default function LandingPage() {
               <SignedIn>
                 <Link
                   href="/hub"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                  className="bg-white text-[#8ebb7a] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
                 >
                   Go to Course Hub
                 </Link>
@@ -345,7 +491,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white dark:bg-gray-800">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-blue-600/10 border border-blue-500/20 rounded-full text-blue-600 dark:text-blue-400 text-sm font-medium mb-4">
@@ -420,7 +566,7 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-yellow-600/10 border border-yellow-500/20 rounded-full text-yellow-600 dark:text-yellow-400 text-sm font-medium mb-4">
@@ -495,24 +641,24 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <section className="py-20 relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-12 border border-blue-500/20">
+          <div className="bg-gradient-to-br from-[#8ebb7a] to-[#7daa69] rounded-2xl p-12 border border-[#8ebb7a]/20 shadow-xl">
             <h2 className="text-4xl font-bold text-white mb-4">
               Ready to Transform Your Teaching?
             </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Join thousands of educators who are already using AI Course Builder to create amazing learning experiences in minutes, not weeks.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <SignedOut>
                 <SignUpButton mode="modal">
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">
+                  <button className="bg-white text-[#8ebb7a] px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
                     Start Creating Free
                   </button>
                 </SignUpButton>
                 <SignInButton mode="modal">
-                  <button className="border-2 border-gray-400 text-gray-300 px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all duration-200">
+                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#8ebb7a] transition-all duration-200">
                     Sign In
                   </button>
                 </SignInButton>
@@ -520,27 +666,27 @@ export default function LandingPage() {
               <SignedIn>
                 <Link
                   href="/hub"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  className="bg-white text-[#8ebb7a] px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg"
                 >
                   Go to Course Hub
                 </Link>
               </SignedIn>
             </div>
-            <div className="flex items-center justify-center space-x-8 text-sm text-gray-400">
+            <div className="flex items-center justify-center space-x-8 text-sm text-white/80">
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 No credit card required
               </div>
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Free forever plan
               </div>
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Setup in 2 minutes
@@ -555,7 +701,14 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">AI Course Builder</h3>
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/images/logos/learnify-logo-white.svg"
+                  alt="Learnify Logo"
+                  width={100}
+                  height={40}
+                />
+              </div>
               <p className="text-gray-400">
                 Empowering educators to create amazing learning experiences with AI.
               </p>
@@ -589,7 +742,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 AI Course Builder. All rights reserved.</p>
+            <p>&copy; 2024 Learnify. All rights reserved.</p>
           </div>
         </div>
       </footer>

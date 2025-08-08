@@ -3,69 +3,102 @@
 import Link from 'next/link';
 import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import AuthHeader from '../components/AuthHeader';
+import DarkModeToggle from '../components/DarkModeToggle';
+import Image from "next/image";
 
 export default function StudentLandingPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Fixed Background - Doesn't move with scroll */}
+      <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-gray-900">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#374151_1px,transparent_1px),linear-gradient(to_bottom,#374151_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#d5c5ff,transparent)] dark:bg-[radial-gradient(circle_800px_at_100%_200px,#d5c5ff,transparent)]"></div>
+      </div>
+
       {/* Auth Header */}
       <AuthHeader />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <section className="text-gray-900 dark:text-white relative overflow-hidden">
+        {/* Floating Elements */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-[#8ebb7a]/10 rounded-full blur-xl animate-float"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 bg-purple-500/10 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }}></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
           <div className="text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-white/20 border border-white/30 rounded-full text-white text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+            {/* Logo */}
+            <div className="-mb-6 flex justify-center">
+              <Image
+                src="/images/logos/learnify-logo-black.svg"
+                alt="Learnify Logo"
+                width={300}
+                height={150}
+                className="drop-shadow-2xl dark:hidden"
+              />
+              <Image
+                src="/images/logos/learnify-logo-white.svg"
+                alt="Learnify Logo"
+                width={300}
+                height={150}
+                className="drop-shadow-2xl hidden dark:block"
+              />
+            </div>
+            
+            <div className="inline-flex items-center px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-purple-600 dark:text-purple-400 text-sm font-medium mb-6">
+              <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
               AI-Generated Learning Platform
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
               Master New Skills with AI-Generated Courses
             </h1>
-            <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
               Discover expertly crafted courses created by AI and refined by real instructors. 
               Learn at your own pace with interactive content designed for modern learners.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <SignedOut>
                 <Link href="/marketplace">
-                  <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                  <button className="bg-[#8ebb7a] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#7daa69] transition-all duration-200 transform hover:scale-105 shadow-lg">
                     Browse Courses
                   </button>
                 </Link>
                 <SignUpButton mode="modal">
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-200">
+                  <button className="border-2 border-gray-400 dark:border-gray-500 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-lg font-semibold hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all duration-200">
                     Start Learning Free
                   </button>
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
                 <Link href="/marketplace">
-                  <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                  <button className="bg-[#8ebb7a] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#7daa69] transition-all duration-200 transform hover:scale-105 shadow-lg">
                     Browse Courses
                   </button>
                 </Link>
                 <Link href="/hub/student/learning">
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-200">
+                  <button className="border-2 border-gray-400 dark:border-gray-500 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-lg font-semibold hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all duration-200">
                     My Learning
                   </button>
                 </Link>
               </SignedIn>
             </div>
-            <div className="flex items-center justify-center space-x-8 text-sm text-blue-200">
+            <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Free courses available
               </div>
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Learn at your own pace
               </div>
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Certificate upon completion
@@ -75,18 +108,79 @@ export default function StudentLandingPage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-600/10 border border-blue-500/20 rounded-full text-blue-600 dark:text-blue-400 text-sm font-medium mb-4">
+              Simple Learning
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              How It Works
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              Get started with AI-generated courses in just a few simple steps
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800 hover:shadow-lg transition-all duration-200">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Step 1: Choose a Course
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                Browse our vast collection of AI-generated courses. Select one that interests you.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800 hover:shadow-lg transition-all duration-200">
+              <div className="bg-gradient-to-r from-purple-600 to-purple-700 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Step 2: Start Learning
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                Begin your journey with interactive content, quizzes, and hands-on projects.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 border border-green-200 dark:border-green-800 hover:shadow-lg transition-all duration-200">
+              <div className="bg-gradient-to-r from-green-600 to-green-700 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Step 3: Complete and Earn
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                Complete your course, earn a certificate, and apply your new skills to real-world projects.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Courses Section */}
-      <section className="py-20 bg-white dark:bg-gray-800">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-green-600/10 border border-green-500/20 rounded-full text-green-600 dark:text-green-400 text-sm font-medium mb-4">
-              Popular Courses
+              Featured Courses
             </div>
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Trending Courses Right Now
+              Discover Amazing Courses
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Join thousands of students learning these in-demand skills
+              Explore our curated collection of AI-generated courses designed for modern learners
             </p>
           </div>
 
@@ -209,7 +303,7 @@ export default function StudentLandingPage() {
       </section>
 
       {/* Learning Benefits Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-blue-600/10 border border-blue-500/20 rounded-full text-blue-600 dark:text-blue-400 text-sm font-medium mb-4">
@@ -369,42 +463,42 @@ export default function StudentLandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+      <section className="py-20 relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-white/10 rounded-2xl p-12 border border-white/20">
+          <div className="bg-gradient-to-br from-[#8ebb7a] to-[#7daa69] rounded-2xl p-12 border border-[#8ebb7a]/20 shadow-xl">
             <h2 className="text-4xl font-bold text-white mb-4">
               Ready to Start Your Learning Journey?
             </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Join thousands of students who are already mastering new skills with our AI-generated courses.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <SignedOut>
                 <Link href="/marketplace">
-                  <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                  <button className="bg-white text-[#8ebb7a] px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
                     Browse All Courses
                   </button>
                 </Link>
                 <SignUpButton mode="modal">
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-200">
+                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#8ebb7a] transition-all duration-200">
                     Start Learning Free
                   </button>
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
                 <Link href="/marketplace">
-                  <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                  <button className="bg-white text-[#8ebb7a] px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg">
                     Browse All Courses
                   </button>
                 </Link>
                 <Link href="/hub/student/learning">
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-200">
+                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#8ebb7a] transition-all duration-200">
                     Continue Learning
                   </button>
                 </Link>
               </SignedIn>
             </div>
-            <div className="flex items-center justify-center space-x-8 text-sm text-blue-200">
+            <div className="flex items-center justify-center space-x-8 text-sm text-white/80">
               <div className="flex items-center">
                 <svg className="w-5 h-5 text-green-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -433,7 +527,14 @@ export default function StudentLandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">AI Course Builder</h3>
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/images/logos/learnify-logo-white.svg"
+                  alt="Learnify Logo"
+                  width={40}
+                  height={40}
+                />
+              </div>
               <p className="text-gray-400">
                 Empowering students to learn with AI-generated courses designed for modern learners.
               </p>
@@ -467,7 +568,7 @@ export default function StudentLandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 AI Course Builder. All rights reserved.</p>
+            <p>&copy; 2024 Learnify. All rights reserved.</p>
           </div>
         </div>
       </footer>
