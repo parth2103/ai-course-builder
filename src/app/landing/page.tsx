@@ -36,16 +36,16 @@ export default function LandingPage() {
                 <Image
                   src="/images/logos/learnify-logo-black.svg"
                   alt="Learnify Logo"
-                  width={300}
-                  height={150}
-                  className="transition-all duration-300 dark:hidden w-48 h-24 md:w-[300px] md:h-[150px]"
+                  width={400}
+                  height={200}
+                  className="transition-all duration-300 dark:hidden w-48 h-24 md:w-[400px] md:h-[200px]"
                 />
                 <Image
                   src="/images/logos/learnify-logo-white.svg"
                   alt="Learnify Logo"
-                  width={300}
-                  height={150}
-                  className="transition-all duration-300 hidden dark:block w-48 h-24 md:w-[300px] md:h-[150px]"
+                  width={400}
+                  height={200}
+                  className="transition-all duration-300 hidden dark:block w-48 h-24 md:w-[400px] md:h-[200px]"
                 />
               </div>
             </div>
