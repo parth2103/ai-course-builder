@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import AuthHeader from '../components/AuthHeader';
 import DarkModeToggle from '../components/DarkModeToggle';
+import Image from 'next/image';
 
 export default function HubLayout({
   children,
@@ -202,8 +203,21 @@ export default function HubLayout({
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-center">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">CH</span>
+                    <div className="flex-shrink-0">
+                      <Image
+                        src="/images/logos/learnify-logo-black.svg"
+                        alt="Learnify Logo"
+                        width={120}
+                        height={40}
+                        className="dark:hidden w-24 h-8 md:w-[120px] md:h-[40px]"
+                      />
+                      <Image
+                        src="/images/logos/learnify-logo-white.svg"
+                        alt="Learnify Logo"
+                        width={120}
+                        height={40}
+                        className="hidden dark:block w-24 h-8 md:w-[120px] md:h-[40px]"
+                      />
                     </div>
                     <span className="ml-3 text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
                       Course Hub

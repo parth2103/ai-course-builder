@@ -9,6 +9,7 @@ import ResourceLibrary from '../components/ResourceLibrary';
 import ContentCurator from '../components/ContentCurator';
 import DarkModeToggle from '../components/DarkModeToggle';
 import AccountSettings from '../components/AccountSettings';
+import Image from 'next/image';
 
 import { useRoleAccess } from '../hooks/useRoleAccess';
 
@@ -305,26 +306,37 @@ export default function AdminDashboard() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900" suppressHydrationWarning={true}>
           {/* Header */}
           <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Course Builder</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Admin Dashboard</p>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center py-6">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <Image
+                      src="/images/logos/learnify-logo-black.svg"
+                      alt="Learnify Logo"
+                      width={160}
+                      height={50}
+                      className="dark:hidden w-32 h-10 md:w-[160px] md:h-[50px]"
+                    />
+                    <Image
+                      src="/images/logos/learnify-logo-white.svg"
+                      alt="Learnify Logo"
+                      width={160}
+                      height={50}
+                      className="hidden dark:block w-32 h-10 md:w-[160px] md:h-[50px]"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Admin Dashboard</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Course Management</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <AccountSettings />
+                  <DarkModeToggle />
+                </div>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <AccountSettings />
-              <DarkModeToggle />
-            </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
       {/* Tab Navigation */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
