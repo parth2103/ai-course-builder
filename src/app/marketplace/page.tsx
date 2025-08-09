@@ -237,14 +237,14 @@ export default function Marketplace() {
                   alt="Learnify Logo"
                   width={80}
                   height={80}
-                  className="dark:hidden"
+                  className="dark:hidden w-20 h-20"
                 />
                 <Image
                   src="/images/logos/learnify-logo-white.svg"
                   alt="Learnify Logo"
                   width={80}
                   height={80}
-                  className="hidden dark:block"
+                  className="hidden dark:block w-20 h-20"
                 />
               </div>
               <div>
