@@ -235,15 +235,15 @@ export default function Marketplace() {
                 <Image
                   src="/images/logos/learnify-logo-black.svg"
                   alt="Learnify Logo"
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   className="dark:hidden"
                 />
                 <Image
                   src="/images/logos/learnify-logo-white.svg"
                   alt="Learnify Logo"
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   className="hidden dark:block"
                 />
               </div>
@@ -289,7 +289,7 @@ export default function Marketplace() {
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col lg:flex-row gap-4">
             <input
               type="text"
               placeholder="Search courses..."
@@ -297,52 +297,54 @@ export default function Marketplace() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            >
-              <option value="all">All Categories</option>
-              <option value="Programming">Programming</option>
-              <option value="Data Science">Data Science</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Design">Design</option>
-              <option value="Business">Business</option>
-              <option value="Finance">Finance</option>
-              <option value="Health & Fitness">Health & Fitness</option>
-              <option value="Language Learning">Language Learning</option>
-              <option value="Music">Music</option>
-              <option value="Photography">Photography</option>
-              <option value="Personal Development">Personal Development</option>
-            </select>
-            <select
-              value={selectedDifficulty}
-              onChange={(e) => setSelectedDifficulty(e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            >
-              <option value="all">All Levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            >
-              <option value="popularity">Most Popular</option>
-              <option value="rating">Highest Rated</option>
-              <option value="price">Price: Low to High</option>
-              <option value="newest">Newest First</option>
-            </select>
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            <div className="flex flex-col sm:flex-row gap-2 lg:gap-4 min-w-0">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white min-w-0 flex-1"
               >
-                Clear Filters
-              </button>
-            )}
+                <option value="all">All Categories</option>
+                <option value="Programming">Programming</option>
+                <option value="Data Science">Data Science</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Design">Design</option>
+                <option value="Business">Business</option>
+                <option value="Finance">Finance</option>
+                <option value="Health & Fitness">Health & Fitness</option>
+                <option value="Language Learning">Language Learning</option>
+                <option value="Music">Music</option>
+                <option value="Photography">Photography</option>
+                <option value="Personal Development">Personal Development</option>
+              </select>
+              <select
+                value={selectedDifficulty}
+                onChange={(e) => setSelectedDifficulty(e.target.value)}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white min-w-0 flex-1"
+              >
+                <option value="all">All Levels</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white min-w-0 flex-1"
+              >
+                <option value="popularity">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price">Price: Low to High</option>
+                <option value="newest">Newest First</option>
+              </select>
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
           </div>
           
           {/* Active Filter Tags */}
