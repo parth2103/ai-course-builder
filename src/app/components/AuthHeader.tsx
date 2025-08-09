@@ -95,20 +95,18 @@ export default function AuthHeader() {
         {/* Mobile menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between px-3 py-2">
-                <DarkModeToggle />
-              </div>
+            <div className="px-2 pt-2 pb-3 space-y-2 sm:px-3 border-t border-gray-200 dark:border-gray-700">
               <SignedOut>
-                <div className="space-y-2">
+                <div className="flex items-center justify-between space-x-2">
+                  <DarkModeToggle />
                   <DemoLogin />
                   <SignInButton mode="modal">
-                    <button className="w-full text-left px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <button className="flex-1 text-xs border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-2 py-1.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                       Sign In
                     </button>
                   </SignInButton>
                   <SignUpButton mode="modal">
-                    <button className="w-full text-left px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
+                    <button className="flex-1 text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded-md transition-colors">
                       Sign Up
                     </button>
                   </SignUpButton>
@@ -122,7 +120,8 @@ export default function AuthHeader() {
                   <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                     {user?.publicMetadata?.role as string || 'Student'}
                   </div>
-                  <div className="mt-2">
+                  <div className="mt-2 flex items-center justify-between">
+                    <DarkModeToggle />
                     <UserButton
                       appearance={{
                         elements: {
