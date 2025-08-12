@@ -254,25 +254,27 @@ export default function EditCourse() {
                     Export Your Course
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Fine-tune each module individually with detailed control over learning objectives, 
-                    resources, and assessments. Perfect for comprehensive course development.
+                    Export your course in various formats for different use cases.
                   </p>
-                  
-                  {/* Module-by-Module Content Curation */}
-                  <div className="space-y-6">
-                    {outline.modules?.map((module: any, index: number) => (
-                      <ContentCurator
-                        key={index}
-                        module={module}
-                        moduleIndex={index}
-                        onModuleUpdate={(moduleIndex: number, updatedModule: any) => {
-                          const newModules = [...outline.modules];
-                          newModules[moduleIndex] = updatedModule;
-                          setOutline({ ...outline, modules: newModules });
-                        }}
-                      />
-                    ))}
+                  <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <button
+                        onClick={() => setShowExportModal(true)}
+                        className="p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-center"
+                      >
+                        <div className="text-2xl mb-2">📤</div>
+                        <div className="font-medium text-gray-900 dark:text-white">Export Options</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">Choose format</div>
+                      </button>
+                    </div>
                   </div>
+                  
+                  {showExportModal && (
+                    <ExportOptions 
+                      outline={outline} 
+                      onClose={() => setShowExportModal(false)} 
+                    />
+                  )}
                   
                   {/* Save and Publish Buttons */}
                   <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
