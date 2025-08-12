@@ -28,7 +28,7 @@ export default function EditCourse() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'edit' | 'curate' | 'export'>('edit');
+  const [activeTab, setActiveTab] = useState<'edit' | 'export'>('edit');
   const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
@@ -156,79 +156,84 @@ export default function EditCourse() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Edit Course: {course.title}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Modify your course content and settings
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 dark:text-blue-400 text-lg">✏️</span>
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white truncate">
+                {course.title}
+              </h1>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">
+              Modify your course content and settings • Created {new Date(course.createdAt).toLocaleDateString()}
             </p>
           </div>
-          <div className="flex items-center space-x-4">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              {course.enrolledStudents || 0} students enrolled
+            </div>
+            <span className={`px-4 py-2 rounded-full text-sm font-medium border ${
               course.status === 'published' 
-                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 border-green-200 dark:border-green-800'
+                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800'
             }`}>
-              {course.status === 'published' ? 'Published' : 'Draft'}
+              {course.status === 'published' ? '🌟 Published' : '📝 Draft'}
             </span>
           </div>
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-1 p-1">
             <button
               onClick={() => setActiveTab('edit')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`flex-1 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${
                 activeTab === 'edit'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
-              ✏️ Edit Course
-            </button>
-            <button
-              onClick={() => setActiveTab('curate')}
-              disabled={!outline}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'curate'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              } ${!outline ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              📝 Curate Content
+              <div className="flex items-center justify-center gap-2">
+                <span>✏️</span>
+                <span>Edit Course</span>
+              </div>
+              <div className="text-xs mt-1 opacity-75">Modify course content and structure</div>
             </button>
             <button
               onClick={() => setActiveTab('export')}
               disabled={!outline}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`flex-1 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${
                 activeTab === 'export'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
               } ${!outline ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              📤 Export Course
+              <div className="flex items-center justify-center gap-2">
+                <span>📤</span>
+                <span>Export Course</span>
+              </div>
+              <div className="text-xs mt-1 opacity-75">Download & share</div>
             </button>
           </nav>
         </div>
 
-        <div className="p-6">
+        <div className="p-8">
           {activeTab === 'edit' && (
             <div className="space-y-6">
               <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
                 <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                  Course Information
+                  Course Content Editor
                 </h3>
                 <p className="text-blue-700 dark:text-blue-300 text-sm">
-                  This course was created on {new Date(course.createdAt).toLocaleDateString()}. 
-                  You can modify the content below and save your changes.
+                  Edit your course structure, overview, module content, learning objectives, 
+                  resources, and assessments. All changes are saved automatically.
                 </p>
               </div>
               
@@ -241,23 +246,33 @@ export default function EditCourse() {
             </div>
           )}
 
-          {activeTab === 'curate' && (
+          {activeTab === 'export' && (
             <div className="space-y-6">
               {outline ? (
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                    Curate Your Course Content
+                    Export Your Course
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Edit every aspect of your course: module titles, learning objectives, 
-                    resources, assessment questions, and more. All changes are saved automatically.
+                    Fine-tune each module individually with detailed control over learning objectives, 
+                    resources, and assessments. Perfect for comprehensive course development.
                   </p>
                   
-                  {/* Full Editable Course Content */}
-                  <EditableCourseContent 
-                    outline={outline} 
-                    onOutlineChange={setOutline}
-                  />
+                  {/* Module-by-Module Content Curation */}
+                  <div className="space-y-6">
+                    {outline.modules?.map((module: any, index: number) => (
+                      <ContentCurator
+                        key={index}
+                        module={module}
+                        moduleIndex={index}
+                        onModuleUpdate={(moduleIndex: number, updatedModule: any) => {
+                          const newModules = [...outline.modules];
+                          newModules[moduleIndex] = updatedModule;
+                          setOutline({ ...outline, modules: newModules });
+                        }}
+                      />
+                    ))}
+                  </div>
                   
                   {/* Save and Publish Buttons */}
                   <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">

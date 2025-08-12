@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRoleAccess } from '../../hooks/useRoleAccess';
 import CourseForm from '../../components/CourseForm';
 import EnhancedCourseDisplay from '../../components/EnhancedCourseDisplay';
+import EditableCourseContent from '../../components/EditableCourseContent';
 import ExportOptions from '../../components/ExportOptions';
 
 interface CourseOutline {
@@ -381,10 +382,29 @@ export default function HubGenerate() {
                     Curate Your Course Content
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Review and customize the AI-generated course outline. You can edit module titles, 
-                    learning objectives, add resources, and modify assessment questions.
+                    Edit and customize your AI-generated course outline. Modify course details, 
+                    module content, learning objectives, resources, and assessment questions.
                   </p>
-                  <EnhancedCourseDisplay outline={outline} generatedWith="AI Course Builder" />
+                  
+                  {/* Course Preview */}
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+                          {outline.courseTitle}
+                        </h3>
+                        <p className="text-blue-700 dark:text-blue-300 text-sm">
+                          🤖 Generated with AI Course Builder • ⏱️ {outline.totalDuration || 0} hours • 📚 {outline.modules?.length || 0} modules
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Editable Course Content */}
+                  <EditableCourseContent 
+                    outline={outline} 
+                    onOutlineChange={setOutline}
+                  />
                   
                   {/* Save and Publish Buttons */}
                   <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">

@@ -115,39 +115,41 @@ export default function EditableCourseContent({ outline, onOutlineChange }: Edit
 
     if (editingField === fieldName) {
       return (
-        <div className="flex items-center space-x-2">
-          <input
-            type={type}
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            className="flex-1 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            placeholder={placeholder}
-            autoFocus
-          />
-          <button
-            onClick={handleSave}
-            className="px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
-          >
-            ✓
-          </button>
-          <button
-            onClick={handleCancel}
-            className="px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700"
-          >
-            ✕
-          </button>
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border-2 border-blue-200 dark:border-blue-800">
+          <div className="flex items-center space-x-3">
+            <input
+              type={type}
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder={placeholder}
+              autoFocus
+            />
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+            >
+              ✓ Save
+            </button>
+            <button
+              onClick={handleCancel}
+              className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+            >
+              ✕ Cancel
+            </button>
+          </div>
         </div>
       );
     }
 
     return (
-      <div className="flex items-center justify-between group">
-        <span className="text-gray-900 dark:text-white">{value || placeholder}</span>
+      <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+        <span className="text-gray-900 dark:text-white flex-1">{value || placeholder}</span>
         <button
           onClick={() => setEditingField(fieldName)}
-          className="opacity-0 group-hover:opacity-100 px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-opacity"
+          className="ml-3 px-3 py-1 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
         >
-          ✏️
+          ✏️ Edit
         </button>
       </div>
     );
