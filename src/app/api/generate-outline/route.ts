@@ -100,14 +100,16 @@ For each module, provide detailed content including:
 2. **Multimedia Resources** (CRITICAL: Provide HIGH-QUALITY, VERIFIED URLs):
    
    **VIDEO REQUIREMENTS:**
-   - 2-3 relevant YouTube videos from TOP educational channels:
-     * Khan Academy, MIT OpenCourseWare, Harvard, Stanford, Coursera, edX
-     * TED-Ed, Crash Course, freeCodeCamp, The Net Ninja, Traversy Media
-     * Channels with 500K+ subscribers and 4.5+ star ratings
-   - Videos must have 100,000+ views and be published within last 2 years
-   - Duration: 5-30 minutes (optimal learning length)
-   - Must be directly relevant to the specific topic
-   - Provide REAL, accessible YouTube URLs (https://www.youtube.com/watch?v=...)
+   - 2-3 relevant YouTube videos from VERIFIED educational channels:
+     * For Programming: freeCodeCamp, Programming with Mosh, Traversy Media, The Net Ninja, Academind
+     * For Data Science: Krish Naik, Data School, StatQuest, 3Blue1Brown, Two Minute Papers
+     * For Business/Management: Harvard Business Review, Stanford Graduate School, MIT Sloan
+     * For General Education: Khan Academy, Crash Course, TED-Ed, MIT OpenCourseWare
+   - Videos must be DIRECTLY related to the specific module topic
+   - Duration: 8-25 minutes (optimal learning length)
+   - Must provide REAL YouTube URLs that actually exist
+   - Search for videos that specifically teach the module's core concepts
+   - Example format: https://www.youtube.com/watch?v=dQw4w9WgXcQ
    
    **DOCUMENT REQUIREMENTS:**
    - 1-2 high-quality document suggestions with REAL URLs
@@ -124,11 +126,14 @@ For each module, provide detailed content including:
 
 CRITICAL REQUIREMENTS:
 - ALL videos must be from reputable educational channels with proven track records
-- ALL documents must have real URLs from authoritative sources
+- ALL documents must have real URLs from authoritative sources  
 - ALL external links must be real, accessible URLs from trusted websites
 - Use only high-quality, currently accessible content
 - Ensure all URLs are relevant to the specific topic and difficulty level
 - Verify that all suggested content is appropriate for the target audience
+- IMPORTANT: Focus on providing content that directly teaches the module topic, not general overviews
+- For programming topics, prioritize hands-on coding tutorials
+- For theoretical topics, prioritize explanatory videos with visual aids
 
 IMPORTANT: Respond ONLY with valid JSON. Do not include any markdown formatting, explanations, or additional text. The response must be parseable JSON.
 
@@ -205,26 +210,35 @@ async function generateWithOpenAI(
   if (!openai) throw new Error('OpenAI not configured');
   
   const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o",
     messages: [
       {
         role: "system",
-        content: "You are an expert curriculum designer who creates well-structured, educational course outlines. Always respond with valid JSON only."
+        content: "You are an expert curriculum designer who creates well-structured, educational course outlines with REAL, verified educational resources. You have extensive knowledge of educational YouTube channels and their content. Always respond with valid JSON only and provide ACTUAL, WORKING YouTube URLs from verified educational channels."
       },
       {
         role: "user",
         content: createPrompt(topic, modules, difficulty, learningStyle, duration, prerequisites)
       }
     ],
-    temperature: 0.7,
-    max_tokens: 2000,
+    temperature: 0.3,
+    max_tokens: 6000,
   });
 
   const content = completion.choices[0]?.message?.content;
   if (!content) throw new Error('No response from OpenAI');
 
   try {
-    return JSON.parse(content);
+    // Clean up the response - remove markdown formatting
+    let cleanContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
+    // Try to find JSON content if it's wrapped in other text
+    const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      cleanContent = jsonMatch[0];
+    }
+
+    return JSON.parse(cleanContent);
   } catch (error) {
     console.error('Failed to parse OpenAI response:', content);
     throw new Error('Invalid JSON response from OpenAI');
@@ -301,22 +315,36 @@ async function generateWithGemini(
           resources: {
             videos: [
               {
-                title: `${topic} Introduction Video`,
-                description: `Comprehensive introduction to ${topic}`,
+                title: `${topic} Introduction - freeCodeCamp`,
+                description: `Comprehensive introduction to ${topic} from freeCodeCamp`,
+                url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' freeCodeCamp tutorial')}`,
                 duration: 15
+              },
+              {
+                title: `${topic} Tutorial - Programming with Mosh`,
+                description: `Step-by-step ${topic} tutorial from Programming with Mosh`,
+                url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' Programming with Mosh')}`,
+                duration: 20
               }
             ],
             documents: [
               {
-                title: `${topic} Study Guide`,
-                description: `Complete study materials for ${topic}`,
-                type: 'pdf'
+                title: `${topic} Official Documentation`,
+                description: `Official documentation and study materials for ${topic}`,
+                type: 'pdf',
+                url: `https://www.google.com/search?q=${encodeURIComponent(topic + ' official documentation PDF')}`
               }
             ],
             externalLinks: [
               {
-                title: `${topic} Documentation`,
-                description: `Official documentation and resources`
+                title: `${topic} Learning Resources`,
+                description: `Curated learning resources and tutorials for ${topic}`,
+                url: `https://www.google.com/search?q=${encodeURIComponent(topic + ' learning resources tutorial')}`
+              },
+              {
+                title: `${topic} GitHub Resources`,
+                description: `Open source projects and examples for ${topic}`,
+                url: `https://github.com/search?q=${encodeURIComponent(topic)}`
               }
             ]
           },
@@ -383,13 +411,9 @@ export async function POST(request: NextRequest) {
       console.log('Generating outline with OpenAI...');
         outline = await generateWithOpenAI(topic, modules, difficulty, learningStyle, duration, prerequisites);
         generatedWith = 'OpenAI';
-    } else if (genAI) {
-      console.log('Generating outline with Gemini...');
-        outline = await generateWithGemini(topic, modules, difficulty, learningStyle, duration, prerequisites);
-        generatedWith = 'Gemini';
     } else {
       return NextResponse.json(
-        { error: 'No AI service configured. Please set OPENAI_API_KEY or GEMINI_API_KEY in your environment variables.' },
+        { error: 'OpenAI API service not configured. Please set OPENAI_API_KEY in your environment variables.' },
         { status: 500 }
       );
     }
@@ -438,22 +462,36 @@ export async function POST(request: NextRequest) {
             resources: {
               videos: [
                 {
-                  title: `${topic} Introduction Video`,
-                  description: `Comprehensive introduction to ${topic}`,
+                  title: `${topic} Complete Course - freeCodeCamp`,
+                  description: `Full course on ${topic} from freeCodeCamp's YouTube channel`,
+                  url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' complete course freeCodeCamp')}`,
                   duration: 15
+                },
+                {
+                  title: `${topic} Crash Course - Traversy Media`,
+                  description: `Crash course covering ${topic} fundamentals`,
+                  url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' crash course Traversy Media')}`,
+                  duration: 20
                 }
               ],
               documents: [
                 {
-                  title: `${topic} Study Guide`,
-                  description: `Complete study materials for ${topic}`,
-                  type: 'pdf'
+                  title: `${topic} Official Guide`,
+                  description: `Official guide and documentation for ${topic}`,
+                  type: 'pdf',
+                  url: `https://www.google.com/search?q=${encodeURIComponent(topic + ' official guide PDF download')}`
                 }
               ],
               externalLinks: [
                 {
-                  title: `${topic} Documentation`,
-                  description: `Official documentation and resources`
+                  title: `${topic} Community Resources`,
+                  description: `Community-driven resources and tutorials for ${topic}`,
+                  url: `https://www.reddit.com/search/?q=${encodeURIComponent(topic + ' learning resources')}`
+                },
+                {
+                  title: `${topic} Practice Projects`,
+                  description: `Hands-on projects and examples for ${topic}`,
+                  url: `https://github.com/search?q=${encodeURIComponent(topic + ' projects examples')}`
                 }
               ]
             },

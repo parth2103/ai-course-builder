@@ -69,70 +69,102 @@ export default function Marketplace() {
         setCourses(data.courses || []);
       } else {
         console.error('Failed to fetch courses');
-        // Set some dummy data for testing
+        // Set enhanced dummy data for testing
         setCourses([
           {
             id: '1',
-            title: 'Introduction to Web Development',
-            description: 'Learn the basics of HTML, CSS, and JavaScript to build modern websites from scratch. Perfect for beginners starting their coding journey.',
+            title: 'Introduction to C Programming: A Beginner\'s Guide',
+            description: 'A comprehensive introduction to the C programming language, designed for beginner programmers with no prior experience.',
             difficulty: 'beginner',
             duration: 20,
-            category: 'Programming',
+            category: 'General',
             instructorId: 'instructor1',
             status: 'published',
             rating: 4.8,
             reviewCount: 1247,
-            instructorName: 'Dr. Sarah Chen',
+            instructorName: 'Dr. Sarah Thompson',
             enrollmentCount: 5432,
-            price: 0,
-            isFree: true
+            price: 99,
+            isFree: false
           },
           {
             id: '2',
-            title: 'Advanced React Patterns',
-            description: 'Master advanced React concepts and patterns including hooks, context, and performance optimization techniques.',
-            difficulty: 'advanced',
-            duration: 30,
-            category: 'Programming',
+            title: 'Introduction to C Programming',
+            description: 'A beginner-friendly course covering the fundamentals of the C programming language.',
+            difficulty: 'beginner',
+            duration: 20,
+            category: 'General',
             instructorId: 'instructor2',
             status: 'published',
-            rating: 4.9,
+            rating: 4.6,
             reviewCount: 892,
-            instructorName: 'Mike Rodriguez',
+            instructorName: 'Prof. Michael Chen',
             enrollmentCount: 2341,
-            price: 49,
+            price: 99,
             isFree: false
           },
           {
             id: '3',
-            title: 'Data Science Fundamentals',
-            description: 'Learn Python, statistics, and machine learning fundamentals for data analysis and visualization.',
-            difficulty: 'intermediate',
-            duration: 35,
-            category: 'Data Science',
+            title: 'Data Structures and Algorithms: A Visual Approach',
+            description: 'A beginner-friendly course on fundamental data structures and algorithms, emphasizing visual learning methods.',
+            difficulty: 'beginner',
+            duration: 20,
+            category: 'General',
             instructorId: 'instructor3',
             status: 'published',
             rating: 4.7,
             reviewCount: 1567,
-            instructorName: 'Dr. Alex Johnson',
+            instructorName: 'Dr. Emily Rodriguez',
             enrollmentCount: 6789,
-            price: 0,
-            isFree: true
+            price: 99,
+            isFree: false
           },
           {
             id: '4',
-            title: 'Digital Marketing Mastery',
-            description: 'Master SEO, social media marketing, and content strategy to grow your business online.',
+            title: 'PMP Prep: A Beginner\'s Guide to Project Management',
+            description: 'This comprehensive course provides a foundational understanding of project management principles and PMP certification preparation.',
             difficulty: 'beginner',
-            duration: 25,
-            category: 'Marketing',
+            duration: 20,
+            category: 'General',
             instructorId: 'instructor4',
             status: 'published',
-            rating: 4.6,
+            rating: 4.5,
             reviewCount: 2341,
-            instructorName: 'Emma Wilson',
-            enrollmentCount: 9876,
-            price: 29,
+            instructorName: 'James Patterson',
+            enrollmentCount: 3456,
+            price: 99,
+            isFree: false
+          },
+          {
+            id: '5',
+            title: 'Introduction to Financial Planning: An Intermediate Guide',
+            description: 'This course provides a comprehensive overview of financial planning principles and strategies for intermediate learners.',
+            difficulty: 'beginner',
+            duration: 20,
+            category: 'General',
+            instructorId: 'instructor5',
+            status: 'published',
+            rating: 4.4,
+            reviewCount: 1876,
+            instructorName: 'Rebecca Martinez',
+            enrollmentCount: 4321,
+            price: 99,
+            isFree: false
+          },
+          {
+            id: '6',
+            title: 'Software Maintenance Fundamentals',
+            description: 'A beginner-friendly course covering essential aspects of software maintenance and best practices.',
+            difficulty: 'beginner',
+            duration: 20,
+            category: 'General',
+            instructorId: 'instructor6',
+            status: 'published',
+            rating: 4.3,
+            reviewCount: 1234,
+            instructorName: 'David Kumar',
+            enrollmentCount: 2789,
+            price: 99,
             isFree: false
           }
         ]);
@@ -143,19 +175,19 @@ export default function Marketplace() {
               setCourses([
           {
             id: '1',
-            title: 'Introduction to Web Development',
-            description: 'Learn the basics of HTML, CSS, and JavaScript to build modern websites from scratch.',
+            title: 'Introduction to C Programming: A Beginner\'s Guide',
+            description: 'A comprehensive introduction to the C programming language, designed for beginner programmers.',
             difficulty: 'beginner',
             duration: 20,
-            category: 'Programming',
+            category: 'General',
             instructorId: 'instructor1',
             status: 'published',
             rating: 4.8,
             reviewCount: 1247,
-            instructorName: 'Dr. Sarah Chen',
+            instructorName: 'Dr. Sarah Thompson',
             enrollmentCount: 5432,
-            price: 0,
-            isFree: true
+            price: 99,
+            isFree: false
           }
         ]);
     } finally {
@@ -173,6 +205,34 @@ export default function Marketplace() {
         return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+    }
+  };
+
+  const getCardHeaderColor = (difficulty: string, index: number) => {
+    switch (difficulty.toLowerCase()) {
+      case 'beginner':
+        return 'bg-green-200';
+      case 'intermediate':
+        return 'bg-yellow-200';
+      case 'advanced':
+        return 'bg-red-200';
+      default:
+        // Rotate through pastel colors for variety
+        const colors = ['bg-blue-200', 'bg-purple-200', 'bg-pink-200', 'bg-indigo-200', 'bg-teal-200'];
+        return colors[index % colors.length];
+    }
+  };
+
+  const getCardHeaderTextColor = (difficulty: string) => {
+    switch (difficulty.toLowerCase()) {
+      case 'beginner':
+        return 'text-green-800';
+      case 'intermediate':
+        return 'text-yellow-800';
+      case 'advanced':
+        return 'text-red-800';
+      default:
+        return 'text-gray-800';
     }
   };
 
@@ -419,7 +479,7 @@ export default function Marketplace() {
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-200 hover:scale-105"
               >
                 {/* Course Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 text-white relative">
+                <div className={`${getCardHeaderColor(course.difficulty, sortedCourses.indexOf(course))} p-4 ${getCardHeaderTextColor(course.difficulty)} relative`}>
                   {/* Best Seller Badge */}
                   {course.enrollmentCount && course.enrollmentCount > 5000 && (
                     <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold">
@@ -445,17 +505,17 @@ export default function Marketplace() {
                     </div>
                   )}
                   <div className="flex items-center justify-between mb-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium bg-white/30 backdrop-blur-sm`}>
                       {course.difficulty}
                     </span>
-                    <span className="text-sm">
+                    <span className="text-sm font-medium">
                       {course.duration} hours
                     </span>
                   </div>
                   <h3 className="text-lg font-semibold mb-1">
                     {course.title}
                   </h3>
-                  <p className="text-blue-100 text-sm line-clamp-2">
+                  <p className="text-gray-700 text-sm line-clamp-2">
                     {course.description}
                   </p>
                 </div>
@@ -499,7 +559,10 @@ export default function Marketplace() {
                         ))}
                       </div>
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {course.rating?.toFixed(1)} ({course.reviewCount?.toLocaleString() || 0} reviews)
+                        {course.rating && course.rating > 0 ? 
+                          `${course.rating.toFixed(1)} (${course.reviewCount?.toLocaleString() || 0} reviews)` : 
+                          `New Course (${course.reviewCount?.toLocaleString() || 0} reviews)`
+                        }
                       </span>
                     </div>
                     <div className="text-right">

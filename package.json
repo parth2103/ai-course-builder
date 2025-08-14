@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "cd src && npm run build",
+    "build:clean": "cd src && npm run build:clean",
     "dev": "cd src && npm run dev",
+    "dev:clean": "cd src && npm run dev:clean",
     "start": "cd src && npm run start"
   },
   "workspaces": [

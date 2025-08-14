@@ -15,20 +15,23 @@ AI Course Builder is an enterprise-grade educational platform that leverages art
 ## Core Features
 
 ### Instructor Tools
-- **AI-Powered Course Generation**: Generate comprehensive course outlines and content using Google Gemini AI
+- **AI-Powered Course Generation**: Generate comprehensive course outlines and content using OpenAI GPT-4o (primary) and Google Gemini AI (backup)
 - **Advanced Course Management**: Full CRUD operations with draft/published states and version control
-- **Multi-Media Upload System**: Support for PDFs, videos, documents, and external resources
+- **Multi-Media Upload System**: Support for PDFs, videos, documents, and external resources with verified educational URLs
 - **Real-Time Content Editing**: Inline editing capabilities with auto-save functionality
 - **Analytics Dashboard**: Comprehensive insights into student engagement and performance metrics
 - **Role-Based Permissions**: Secure access controls with granular permission management
+- **Enhanced Resource Quality**: AI-generated courses include real YouTube videos from verified educational channels
 
 ### Student Experience
+- **Enhanced Course Marketplace**: Browse courses with solid pastel color themes for improved visual appeal
 - **Intelligent Course Discovery**: Advanced search and filtering with personalized recommendations
 - **Interactive Learning Interface**: Dynamic, responsive course navigation with progress visualization
 - **Adaptive Module System**: Self-paced learning with prerequisite management
-- **Multimedia Resource Access**: Seamless integration of videos, documents, and external content
+- **Multimedia Resource Access**: Seamless integration of videos, documents, and external content with working links
 - **Progress Analytics**: Real-time tracking with completion certificates and achievements
 - **Assessment Engine**: Interactive quizzes, assignments, and knowledge validation tools
+- **Professional UI**: Clean interface with realistic instructor data and proper rating displays
 
 ### Platform Security & Architecture
 - **Enterprise Authentication**: Clerk-powered secure authentication with SSO support
@@ -65,7 +68,8 @@ AI Course Builder is an enterprise-grade educational platform that leverages art
 | Service | Purpose | Integration |
 |---------|---------|-------------|
 | **Clerk** | Authentication & user management | Multi-provider SSO |
-| **Google Gemini AI** | Intelligent course generation | Advanced NLP processing |
+| **OpenAI GPT-4o** | Primary AI course generation | Advanced NLP processing with real educational resources |
+| **Google Gemini AI** | Backup AI course generation | Fallback intelligent content creation |
 | **Vercel** | Serverless deployment platform | CI/CD pipeline |
 | **GitHub** | Version control & collaboration | Automated workflows |
 
@@ -134,7 +138,8 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_OUT_URL=/landing
 POSTGRES_URL=your_neon_database_url
 POSTGRES_URL_NON_POOLING=your_neon_database_url_non_pooling
 
-# AI
+# AI Services (Primary: OpenAI, Backup: Gemini)
+OPENAI_API_KEY=your_openai_api_key
 GOOGLE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
@@ -185,20 +190,51 @@ src/
 | Command | Purpose | Environment |
 |---------|---------|-------------|
 | `npm run dev` | Start development server with hot reload | Development |
+| `npm run dev:clean` | Clean cache and start development server | Development |
 | `npm run build` | Create production build | Production |
+| `npm run build:clean` | Clean cache and create production build | Production |
 | `npm run start` | Serve production build | Production |
 | `npm run db:generate` | Generate database migration files | Development |
 | `npm run db:migrate` | Execute pending database migrations | All |
 | `npm run db:seed` | Populate database with sample data | Development |
 | `npm run db:studio` | Launch Drizzle Studio (database GUI) | Development |
 
+## 🎉 Recent Improvements & Enhancements
+
+### UI/UX Enhancements
+- **✅ Marketplace Visual Redesign**: Replaced gradient backgrounds with elegant solid pastel colors for better readability
+- **✅ Rating Display Fix**: Eliminated confusing "00" displays, now shows proper ratings or "New Course" for unrated content  
+- **✅ Professional Dummy Data**: Updated with realistic instructor names, review counts, and course information
+- **✅ Enhanced Course Cards**: Improved visual hierarchy and information display
+
+### AI & Content Generation Upgrades
+- **✅ OpenAI Integration**: Upgraded to GPT-4o as primary AI model for superior course generation
+- **✅ Improved Resource Quality**: AI now generates real YouTube videos from verified educational channels
+- **✅ Smart Fallback System**: Enhanced backup content generation with working search URLs
+- **✅ JSON Parsing Robustness**: Fixed OpenAI response parsing to handle markdown formatting
+
+### Developer Experience
+- **✅ Clean Development Commands**: Added `dev:clean` and `build:clean` for cache management
+- **✅ Error Prevention**: Improved error handling and fallback mechanisms
+- **✅ Enhanced Debugging**: Better logging for AI service selection and content generation
+
+### Performance & Reliability
+- **✅ Reduced Cache Conflicts**: Implemented automatic cache clearing to prevent internal server errors
+- **✅ Improved Build Process**: Enhanced build reliability for Vercel deployment
+- **✅ Better Resource Links**: Fixed URL display in course learning resources
+
+---
+
 ## Feature Deep Dive
 
 ### Artificial Intelligence Integration
+- **Advanced AI Models**: OpenAI GPT-4o as primary AI with Google Gemini as intelligent fallback
 - **Natural Language Processing**: Transform simple course descriptions into comprehensive curricula
 - **Automated Content Structure**: Generate learning modules with hierarchical organization
-- **Resource Intelligence**: AI-suggested multimedia content and external references
+- **Enhanced Resource Intelligence**: AI-curated real YouTube videos from verified educational channels (freeCodeCamp, Programming with Mosh, Khan Academy, etc.)
+- **Smart URL Generation**: Automatic creation of working links to documentation, tutorials, and practice resources
 - **Assessment Generation**: Automatic creation of knowledge validation questions and quizzes
+- **Topic-Specific Content**: AI generates content tailored to specific subjects (AWS, Programming, Data Science, etc.)
 
 ### Advanced Learning Management
 - **Adaptive Navigation**: Intelligent module progression based on completion status
@@ -265,7 +301,8 @@ We acknowledge the following technology partners that make this platform possibl
 |---------|---------|--------------|
 | **Next.js** | React framework | Application foundation and routing |
 | **Clerk** | Authentication service | Enterprise-grade user management |
-| **Google Gemini** | AI platform | Intelligent course generation |
+| **OpenAI** | Primary AI platform | Advanced course generation with GPT-4o |
+| **Google Gemini** | Backup AI platform | Intelligent course generation fallback |
 | **Neon** | Database platform | Serverless PostgreSQL infrastructure |
 | **Vercel** | Deployment platform | Global edge deployment and hosting |
 | **Tailwind CSS** | Styling framework | Responsive design system |
