@@ -272,9 +272,12 @@ export default function StudentLearning() {
                     >
                       Continue Learning
                     </Link>
-                    <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
+                    <Link
+                      href={`/course-details/${enrollment.courseId}`}
+                      className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm text-center block"
+                    >
                       View Details
-                    </button>
+                    </Link>
                   </div>
 
                   <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">

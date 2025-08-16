@@ -246,6 +246,14 @@ export const enrollmentService = {
       .innerJoin(courses, eq(enrollments.courseId, courses.id))
       .where(eq(enrollments.id, enrollmentId));
     return enrollment;
+  },
+
+  async unenrollUser(userId: string, courseId: string) {
+    // Delete the enrollment record
+    await db.delete(enrollments)
+      .where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId)));
+    
+    return { success: true };
   }
 };
 

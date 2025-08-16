@@ -592,19 +592,27 @@ export default function Marketplace() {
                         </div>
                       )}
                     </div>
-                    <button
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        enrollingCourseId === course.id
-                          ? 'bg-gray-400 cursor-not-allowed'
-                          : course.isFree 
-                            ? 'bg-green-600 hover:bg-green-700 text-white'
-                            : 'bg-blue-600 hover:bg-blue-700 text-white'
-                      }`}
-                      onClick={() => handleEnroll(course.id)}
-                      disabled={enrollingCourseId === course.id}
-                    >
-                      {enrollingCourseId === course.id ? 'Enrolling...' : course.isFree ? 'Enroll Free' : 'Enroll Now'}
-                    </button>
+                    <div className="flex space-x-2">
+                      <Link
+                        href={`/course-details/${course.id}`}
+                        className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+                      >
+                        Preview
+                      </Link>
+                      <button
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                          enrollingCourseId === course.id
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : course.isFree 
+                              ? 'bg-green-600 hover:bg-green-700 text-white'
+                              : 'bg-blue-600 hover:bg-blue-700 text-white'
+                        }`}
+                        onClick={() => handleEnroll(course.id)}
+                        disabled={enrollingCourseId === course.id}
+                      >
+                        {enrollingCourseId === course.id ? 'Enrolling...' : course.isFree ? 'Enroll Free' : 'Enroll Now'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Course Features */}

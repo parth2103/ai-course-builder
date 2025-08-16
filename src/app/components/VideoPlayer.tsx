@@ -24,20 +24,39 @@ export default function VideoPlayer({
   const [videoId, setVideoId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Extract YouTube video ID from URL
+  // Extract YouTube video ID from URL with enhanced patterns
   const extractYouTubeId = (url: string): string | null => {
     const patterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-      /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+      /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtu\.be\/([^&\n?#]+)/,
+      /youtube\.com\/v\/([^&\n?#]+)/
     ];
 
     for (const pattern of patterns) {
       const match = url.match(pattern);
       if (match && match[1]) {
-        return match[1];
+        // Clean the video ID (remove any additional parameters)
+        return match[1].split('&')[0].split('?')[0];
       }
     }
     return null;
+  };
+
+  // Validate if video ID exists and is embeddable
+  const validateYouTubeVideo = async (videoId: string): Promise<boolean> => {
+    try {
+      // Try to fetch the video page to check if it exists
+      const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`, {
+        method: 'GET',
+        mode: 'cors'
+      });
+      return response.ok;
+    } catch (error) {
+      console.log('Video validation failed, but will still attempt embed:', error);
+      return true; // Assume valid if check fails
+    }
   };
 
   useEffect(() => {
@@ -124,14 +143,28 @@ export default function VideoPlayer({
       {/* Video Player */}
       <div className="relative aspect-video bg-black">
         <iframe
-          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0`}
+          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
           title={title}
           className="absolute inset-0 w-full h-full"
           frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           onLoad={handleIframeLoad}
+          onError={() => {
+            console.log('Iframe failed to load, showing fallback');
+            setError('Video cannot be embedded');
+          }}
         />
+        
+        {/* Loading overlay */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+            <div className="text-white text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+              <p className="text-sm">Loading video...</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Video Controls/Info */}
