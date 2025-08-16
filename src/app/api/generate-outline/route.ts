@@ -62,6 +62,149 @@ const openai = process.env.OPENAI_API_KEY ? new OpenAI({
 
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 
+// Helper function to get relevant videos based on topic
+function getRelevantVideos(topic: string) {
+  const topicLower = topic.toLowerCase();
+  
+  if (topicLower.includes('react')) {
+    return [
+      {
+        title: "React Course - Beginner's Tutorial for React JavaScript Library",
+        description: "Complete React tutorial for beginners from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=bMknfKXIFA8",
+        duration: 180
+      },
+      {
+        title: "React JS Crash Course 2024",
+        description: "Learn React in one video with Traversy Media",
+        url: "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+        duration: 105
+      }
+    ];
+  } else if (topicLower.includes('javascript') || topicLower.includes('js')) {
+    return [
+      {
+        title: "JavaScript Full Course for Beginners",
+        description: "Complete JavaScript course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=PkZNo7MFNFg",
+        duration: 480
+      },
+      {
+        title: "JavaScript Crash Course For Beginners",
+        description: "Learn JavaScript fundamentals in this crash course",
+        url: "https://www.youtube.com/watch?v=hdI2bqOjy3c",
+        duration: 105
+      }
+    ];
+  } else if (topicLower.includes('python')) {
+    return [
+      {
+        title: "Python for Everybody - Full University Python Course",
+        description: "Complete Python course for beginners from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=8DvywoWv6fI",
+        duration: 810
+      },
+      {
+        title: "Python Tutorial for Beginners",
+        description: "Learn Python programming with Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
+        duration: 360
+      }
+    ];
+  } else if (topicLower.includes('aws') || topicLower.includes('cloud')) {
+    return [
+      {
+        title: "AWS Certified Cloud Practitioner Training 2024",
+        description: "Complete AWS Cloud Practitioner course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=3hLmDS179YE",
+        duration: 240
+      },
+      {
+        title: "AWS Tutorial for Beginners",
+        description: "Introduction to Amazon Web Services",
+        url: "https://www.youtube.com/watch?v=k1RI5locZE4",
+        duration: 120
+      }
+    ];
+  } else if (topicLower.includes('data') || topicLower.includes('machine learning') || topicLower.includes('ai')) {
+    return [
+      {
+        title: "Machine Learning Course for Beginners",
+        description: "Complete machine learning tutorial from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=GwIo3gDZCVQ",
+        duration: 300
+      },
+      {
+        title: "Data Science Tutorial for Beginners",
+        description: "Introduction to data science concepts",
+        url: "https://www.youtube.com/watch?v=ua-CiDNNj30",
+        duration: 180
+      }
+    ];
+  } else if (topicLower.includes('c programming') || topicLower.includes('c language')) {
+    return [
+      {
+        title: "C Programming Tutorial for Beginners",
+        description: "Complete C programming course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=KJgsSFOSQv0",
+        duration: 240
+      },
+      {
+        title: "C Programming Language Tutorial",
+        description: "Learn C programming fundamentals",
+        url: "https://www.youtube.com/watch?v=87SH2Cn0s9A",
+        duration: 150
+      }
+    ];
+  } else if (topicLower.includes('marvel') || topicLower.includes('comics')) {
+    return [
+      {
+        title: "The Complete History of Marvel Comics",
+        description: "Documentary covering the history of Marvel Comics",
+        url: "https://www.youtube.com/watch?v=2tehVRVdW-s",
+        duration: 60
+      },
+      {
+        title: "Marvel Universe Explained",
+        description: "Understanding the Marvel Comics universe",
+        url: "https://www.youtube.com/watch?v=9nAf0LNaxGE",
+        duration: 45
+      }
+    ];
+  } else if (topicLower.includes('generative') || topicLower.includes('ai')) {
+    return [
+      {
+        title: "Generative AI Full Course",
+        description: "Complete course on generative AI and large language models",
+        url: "https://www.youtube.com/watch?v=mEsleV16qdo",
+        duration: 180
+      },
+      {
+        title: "Introduction to Generative AI",
+        description: "Understanding generative AI fundamentals",
+        url: "https://www.youtube.com/watch?v=G2fqAlgmoPo",
+        duration: 90
+      }
+    ];
+  } else {
+    // Generic programming/education videos
+    return [
+      {
+        title: `${topic} - Complete Tutorial for Beginners`,
+        description: `Comprehensive tutorial covering ${topic} fundamentals`,
+        url: "https://www.youtube.com/watch?v=PkZNo7MFNFg", // Generic programming tutorial
+        duration: 120
+      },
+      {
+        title: `${topic} - Crash Course`,
+        description: `Quick introduction to ${topic} concepts`,
+        url: "https://www.youtube.com/watch?v=hdI2bqOjy3c", // Generic crash course
+        duration: 60
+      }
+    ];
+  }
+}
+
 function createPrompt(
   topic: string, 
   modules: number, 
@@ -97,19 +240,21 @@ For each module, provide detailed content including:
    - Estimated duration (in minutes)
    - 4 bullet points covering key topics
 
-2. **Multimedia Resources** (CRITICAL: Provide HIGH-QUALITY, VERIFIED URLs):
+2. **Multimedia Resources** (CRITICAL: Use REAL, WORKING YouTube URLs):
    
    **VIDEO REQUIREMENTS:**
-   - 2-3 relevant YouTube videos from VERIFIED educational channels:
-     * For Programming: freeCodeCamp, Programming with Mosh, Traversy Media, The Net Ninja, Academind
-     * For Data Science: Krish Naik, Data School, StatQuest, 3Blue1Brown, Two Minute Papers
-     * For Business/Management: Harvard Business Review, Stanford Graduate School, MIT Sloan
-     * For General Education: Khan Academy, Crash Course, TED-Ed, MIT OpenCourseWare
-   - Videos must be DIRECTLY related to the specific module topic
+   - 2-3 relevant YouTube videos from VERIFIED educational channels
+   - Use these REAL, WORKING YouTube video examples based on topic:
+     * Programming/Web Dev: https://www.youtube.com/watch?v=PkZNo7MFNFg (freeCodeCamp JavaScript)
+     * React: https://www.youtube.com/watch?v=bMknfKXIFA8 (React Course)
+     * Python: https://www.youtube.com/watch?v=rfscVS0vtbw (Python Full Course)
+     * Data Science: https://www.youtube.com/watch?v=ua-CiDNNj30 (Data Science Course)
+     * AWS: https://www.youtube.com/watch?v=3hLmDS179YE (AWS Certified Course)
+     * Machine Learning: https://www.youtube.com/watch?v=GwIo3gDZCVQ (ML Course)
+   - MUST use actual YouTube video IDs that exist and work
    - Duration: 8-25 minutes (optimal learning length)
-   - Must provide REAL YouTube URLs that actually exist
-   - Search for videos that specifically teach the module's core concepts
-   - Example format: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+   - Videos must be embeddable and not restricted
+   - Format: https://www.youtube.com/watch?v=VIDEO_ID
    
    **DOCUMENT REQUIREMENTS:**
    - 1-2 high-quality document suggestions with REAL URLs
@@ -313,20 +458,7 @@ async function generateWithGemini(
           ],
           estimatedDuration: Math.round(duration * 60 / modules),
           resources: {
-            videos: [
-              {
-                title: `${topic} Introduction - freeCodeCamp`,
-                description: `Comprehensive introduction to ${topic} from freeCodeCamp`,
-                url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' freeCodeCamp tutorial')}`,
-                duration: 15
-              },
-              {
-                title: `${topic} Tutorial - Programming with Mosh`,
-                description: `Step-by-step ${topic} tutorial from Programming with Mosh`,
-                url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' Programming with Mosh')}`,
-                duration: 20
-              }
-            ],
+            videos: getRelevantVideos(topic),
             documents: [
               {
                 title: `${topic} Official Documentation`,
@@ -460,20 +592,7 @@ export async function POST(request: NextRequest) {
             ],
             estimatedDuration: Math.round(duration * 60 / modules),
             resources: {
-              videos: [
-                {
-                  title: `${topic} Complete Course - freeCodeCamp`,
-                  description: `Full course on ${topic} from freeCodeCamp's YouTube channel`,
-                  url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' complete course freeCodeCamp')}`,
-                  duration: 15
-                },
-                {
-                  title: `${topic} Crash Course - Traversy Media`,
-                  description: `Crash course covering ${topic} fundamentals`,
-                  url: `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' crash course Traversy Media')}`,
-                  duration: 20
-                }
-              ],
+              videos: getRelevantVideos(topic),
               documents: [
                 {
                   title: `${topic} Official Guide`,

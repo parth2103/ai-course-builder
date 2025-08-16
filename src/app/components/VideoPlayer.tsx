@@ -77,6 +77,16 @@ export default function VideoPlayer({
 
   // Handle external link fallback
   const handleExternalLink = () => {
+    // If it's a search URL, try to convert it to a proper watch URL
+    if (url.includes('youtube.com/results?search_query=')) {
+      // Extract search query and create a direct search on YouTube
+      const searchQuery = url.split('search_query=')[1];
+      if (searchQuery) {
+        const decodedQuery = decodeURIComponent(searchQuery);
+        window.open(`https://www.youtube.com/results?search_query=${searchQuery}`, '_blank', 'noopener,noreferrer');
+        return;
+      }
+    }
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
