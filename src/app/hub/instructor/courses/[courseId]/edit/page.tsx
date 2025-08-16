@@ -77,6 +77,10 @@ export default function EditCourse() {
       }
 
       alert('Course saved successfully as draft!');
+      // Reload the page to show updated status
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Error saving course:', error);
       alert('Failed to save course. Please try again.');
@@ -106,6 +110,10 @@ export default function EditCourse() {
       }
 
       alert('Course published successfully! Students can now enroll.');
+      // Navigate to instructor courses page
+      setTimeout(() => {
+        router.push('/hub/instructor/courses');
+      }, 1000);
     } catch (error) {
       console.error('Error publishing course:', error);
       alert('Failed to publish course. Please try again.');

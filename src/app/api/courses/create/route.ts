@@ -43,28 +43,73 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create course in database
-    const course = await courseService.createCourse({
-      title: courseTitle,
-      description,
-      totalDuration: totalDuration || 0,
-      instructorId: user.id,
-      status: status as 'draft' | 'published',
-      outline: {
-        courseTitle,
+    // Check if a draft course with the same title already exists for this instructor
+    const existingDraft = await courseService.getCoursesByInstructor(user.id);
+    const existingDraftCourse = existingDraft.find(course => 
+      course.title === courseTitle && course.status === 'draft'
+    );
+
+    let course;
+    if (existingDraftCourse && status === 'draft') {
+      // Update existing draft instead of creating new one
+      console.log('Updating existing draft course:', existingDraftCourse.id);
+      course = await courseService.updateCourse(existingDraftCourse.id, {
+        title: courseTitle,
         description,
-        totalDuration,
-        modules,
-        prerequisites: prerequisites || [],
-        learningOutcomes: learningOutcomes || []
-      }
-    });
+        duration: totalDuration || 0,
+        status: status as 'draft' | 'published',
+        outline: {
+          courseTitle,
+          description,
+          totalDuration,
+          modules,
+          prerequisites: prerequisites || [],
+          learningOutcomes: learningOutcomes || []
+        }
+      });
+    } else if (existingDraftCourse && status === 'published') {
+      // Convert existing draft to published
+      console.log('Converting existing draft to published:', existingDraftCourse.id);
+      course = await courseService.updateCourse(existingDraftCourse.id, {
+        title: courseTitle,
+        description,
+        duration: totalDuration || 0,
+        status: 'published',
+        outline: {
+          courseTitle,
+          description,
+          totalDuration,
+          modules,
+          prerequisites: prerequisites || [],
+          learningOutcomes: learningOutcomes || []
+        }
+      });
+    } else {
+      // Create new course
+      console.log('Creating new course');
+      course = await courseService.createCourse({
+        title: courseTitle,
+        description,
+        totalDuration: totalDuration || 0,
+        instructorId: user.id,
+        status: status as 'draft' | 'published',
+        outline: {
+          courseTitle,
+          description,
+          totalDuration,
+          modules,
+          prerequisites: prerequisites || [],
+          learningOutcomes: learningOutcomes || []
+        }
+      });
+    }
 
     console.log('Created course:', course);
 
     return NextResponse.json({ 
       success: true, 
       course,
+      courseId: course.id,
       message: status === 'published' ? 'Course published successfully!' : 'Course saved as draft!'
     });
 

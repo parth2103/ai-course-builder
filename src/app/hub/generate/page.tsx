@@ -133,7 +133,6 @@ export default function HubGenerate() {
         body: JSON.stringify({
           ...outline,
           status: 'draft',
-          instructorId: 'current-user-id', // This should come from auth context
         }),
       });
 
@@ -141,7 +140,13 @@ export default function HubGenerate() {
         throw new Error('Failed to save course');
       }
 
+      const data = await response.json();
       alert('Course saved successfully as draft!');
+      
+      // Navigate to course edit page
+      setTimeout(() => {
+        window.location.href = `/hub/instructor/courses/${data.courseId}/edit`;
+      }, 1000);
     } catch (error) {
       console.error('Error saving course:', error);
       alert('Failed to save course. Please try again.');
@@ -164,7 +169,6 @@ export default function HubGenerate() {
         body: JSON.stringify({
           ...outline,
           status: 'published',
-          instructorId: 'current-user-id', // This should come from auth context
         }),
       });
 
@@ -172,7 +176,13 @@ export default function HubGenerate() {
         throw new Error('Failed to publish course');
       }
 
+      const data = await response.json();
       alert('Course published successfully! Students can now enroll.');
+      
+      // Navigate to instructor courses page
+      setTimeout(() => {
+        window.location.href = '/hub/instructor/courses';
+      }, 1000);
     } catch (error) {
       console.error('Error publishing course:', error);
       alert('Failed to publish course. Please try again.');

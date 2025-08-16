@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useRoleAccess } from '../../../../hooks/useRoleAccess';
+import VideoPlayer from '../../../../components/VideoPlayer';
 
 interface CourseOutline {
   courseTitle: string;
@@ -447,22 +448,25 @@ export default function StudentLearning() {
                   
                   {/* Videos */}
                   {outline.modules[currentModule].resources?.videos?.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="font-medium text-gray-900 dark:text-white mb-2">📹 Videos</h4>
-                      <div className="space-y-2">
+                    <div className="mb-6">
+                      <h4 className="font-medium text-gray-900 dark:text-white mb-4">📹 Video Learning</h4>
+                      <div className="space-y-6">
                         {outline.modules[currentModule].resources.videos.map((video: any, index: number) => (
-                          <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <h5 className="font-medium text-gray-900 dark:text-white">{video.title}</h5>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{video.description}</p>
-                            <a
-                              href={video.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm"
-                            >
-                              Watch Video ({video.duration} min) →
-                            </a>
-                          </div>
+                          <VideoPlayer
+                            key={index}
+                            title={video.title}
+                            description={video.description}
+                            url={video.url}
+                            duration={video.duration}
+                            onVideoEnd={() => {
+                              console.log(`Video ${index + 1} completed`);
+                              // You can add progress tracking here
+                            }}
+                            onVideoProgress={(progress) => {
+                              console.log(`Video ${index + 1} progress:`, progress);
+                              // You can add progress tracking here
+                            }}
+                          />
                         ))}
                       </div>
                     </div>
