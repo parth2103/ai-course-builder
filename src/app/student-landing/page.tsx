@@ -404,7 +404,7 @@ export default function StudentLandingPage() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                "The web development course helped me land my first developer job. The AI-generated content was surprisingly comprehensive and practical."
+                &ldquo;The web development course helped me land my first developer job. The AI-generated content was surprisingly comprehensive and practical.&rdquo;
               </p>
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (
@@ -426,7 +426,7 @@ export default function StudentLandingPage() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                "The data science course was perfect for my career transition. The AI-generated projects were challenging but achievable."
+                &ldquo;The data science course was perfect for my career transition. The AI-generated projects were challenging but achievable.&rdquo;
               </p>
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (
@@ -448,7 +448,7 @@ export default function StudentLandingPage() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                "The digital marketing course gave me the skills to grow our company's online presence by 300% in just 6 months."
+                &ldquo;The digital marketing course gave me the skills to grow our company&apos;s online presence by 300% in just 6 months.&rdquo;
               </p>
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (

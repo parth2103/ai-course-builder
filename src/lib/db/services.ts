@@ -1,5 +1,5 @@
 import { db } from './index';
-import { users, courses, modules, resources, enrollments, courseAnalytics } from './schema';
+import { users, courses, enrollments } from './schema';
 import { eq, and, desc, count } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
@@ -87,7 +87,14 @@ export const courseService = {
     modules?: number;
     category?: string;
     status?: 'draft' | 'published';
-    outline?: any;
+    outline?: { 
+      courseTitle?: string;
+      description?: string;
+      totalDuration?: number;
+      modules?: Array<unknown>;
+      prerequisites?: Array<unknown>;
+      learningOutcomes?: Array<unknown>;
+    };
   }) {
     const [course] = await db.insert(courses).values({
       id: nanoid(),
@@ -227,7 +234,7 @@ export const enrollmentService = {
     return enrollment;
   },
 
-  async updateDetailedProgress(enrollmentId: string, detailedProgress: any) {
+  async updateDetailedProgress(enrollmentId: string, detailedProgress: Record<string, unknown>) {
     const [enrollment] = await db.update(enrollments)
       .set({ 
         detailedProgress, 

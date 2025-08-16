@@ -7,16 +7,10 @@ import RoleSelection from '../components/RoleSelection';
 export default function RoleSelectionPage() {
   const { user, isLoaded } = useUser();
   const [isNewUser, setIsNewUser] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<any>(null);
+  const [debugInfo, setDebugInfo] = useState<{ status?: number; statusText?: string; error?: string } | null>(null);
 
   useEffect(() => {
-    if (isLoaded && user) {
-      // First check if user has a role in Clerk's publicMetadata
-      checkUserRole();
-    }
-  }, [isLoaded, user]);
-
-  const checkUserRole = async () => {
+    const checkUserRole = async () => {
     try {
       // Check if user has a role in Clerk's publicMetadata
       const userRole = user?.publicMetadata?.role;
@@ -44,6 +38,12 @@ export default function RoleSelectionPage() {
       setDebugInfo({ error: error instanceof Error ? error.message : 'Unknown error' });
     }
   };
+
+    if (isLoaded && user) {
+      // First check if user has a role in Clerk's publicMetadata
+      checkUserRole();
+    }
+  }, [isLoaded, user]);
 
   if (!isLoaded) {
     return (
