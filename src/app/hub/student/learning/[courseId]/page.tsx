@@ -458,14 +458,6 @@ export default function StudentLearning() {
                             description={video.description}
                             url={video.url}
                             duration={video.duration}
-                            onVideoEnd={() => {
-                              console.log(`Video ${index + 1} completed`);
-                              // You can add progress tracking here
-                            }}
-                            onVideoProgress={(progress) => {
-                              console.log(`Video ${index + 1} progress:`, progress);
-                              // You can add progress tracking here
-                            }}
                           />
                         ))}
                       </div>

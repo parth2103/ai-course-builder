@@ -18,39 +18,29 @@ export default function RoleSelectionPage() {
 
   const checkUserRole = async () => {
     try {
-      console.log('Checking user role from Clerk:', user?.id);
-      console.log('User publicMetadata:', user?.publicMetadata);
-      
       // Check if user has a role in Clerk's publicMetadata
       const userRole = user?.publicMetadata?.role;
       
       if (userRole) {
         // User has a role, redirect to dashboard
-        console.log('User has role:', userRole, 'redirecting to dashboard');
         window.location.href = '/dashboard';
         return;
       }
       
       // If no role in Clerk, check if user exists in our database
-      console.log('No role in Clerk, checking database...');
       const response = await fetch(`/api/users/${user?.id}`);
-      console.log('Response status:', response.status);
       
       if (response.status === 404) {
         // User doesn't exist in our database, show role selection
-        console.log('User not found in database, showing role selection');
         setIsNewUser(true);
       } else if (response.ok) {
         // User exists in database, redirect to dashboard
-        console.log('User found in database, redirecting to dashboard');
         window.location.href = '/dashboard';
       } else {
         // Some other error
-        console.log('Error response:', response.status, response.statusText);
         setDebugInfo({ status: response.status, statusText: response.statusText });
       }
     } catch (error) {
-      console.error('Error checking user:', error);
       setDebugInfo({ error: error instanceof Error ? error.message : 'Unknown error' });
     }
   };

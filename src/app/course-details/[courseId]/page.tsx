@@ -41,7 +41,7 @@ export default function CourseDetails() {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'progress' | 'certificate'>('overview');
   const [isUnenrolling, setIsUnenrolling] = useState(false);
-  const [showCertificate, setShowCertificate] = useState(false);
+
 
   useEffect(() => {
     if (courseId && user) {
@@ -242,7 +242,7 @@ export default function CourseDetails() {
                 </Link>
                 {isCompleted() && (
                   <button
-                    onClick={() => setShowCertificate(true)}
+                    onClick={() => {/* Certificate functionality */}}
                     className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
                   >
                     View Certificate

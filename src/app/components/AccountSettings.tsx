@@ -1,14 +1,14 @@
 'use client';
 
-import { useUser, SignOutButton, useClerk } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import UserRoleBadge from "./UserRoleBadge";
 
 export default function AccountSettings() {
   const { user } = useUser();
   const { signOut } = useClerk();
-  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
 
   if (!user) return null;

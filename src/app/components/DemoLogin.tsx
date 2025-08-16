@@ -5,7 +5,7 @@ import { useSignIn } from '@clerk/nextjs';
 
 export default function DemoLogin() {
   const [showCredentials, setShowCredentials] = useState(false);
-  const [showRoleOptions, setShowRoleOptions] = useState(false);
+
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { signIn } = useSignIn();
 
@@ -32,7 +32,7 @@ export default function DemoLogin() {
 
   const handleDemoLogin = async (role: string) => {
     setIsLoggingIn(true);
-    setShowRoleOptions(false);
+
     
     try {
       const account = demoAccounts.find(acc => acc.role.toLowerCase() === role.toLowerCase());

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useUser } from '@clerk/nextjs';
+
 import Link from 'next/link';
 
 interface Analytics {
@@ -14,7 +14,7 @@ interface Analytics {
 }
 
 export default function InstructorAnalytics() {
-  const { user } = useUser();
+
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useUser } from '@clerk/nextjs';
+
 import Link from 'next/link';
 
 interface Course {
@@ -18,7 +18,7 @@ interface Course {
 }
 
 export default function InstructorCourses() {
-  const { user } = useUser();
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

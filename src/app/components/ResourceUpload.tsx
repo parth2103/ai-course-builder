@@ -83,15 +83,7 @@ export default function ResourceUpload({ onFileUpload, onVideoAdd, onExternalLin
     setLinkDescription('');
   };
 
-  const getFileTypeIcon = (type: string) => {
-    switch (type) {
-      case 'pdf': return '📄';
-      case 'ppt': return '📊';
-      case 'doc': return '📝';
-      case 'image': return '🖼️';
-      default: return '📄';
-    }
-  };
+
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">

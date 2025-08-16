@@ -43,12 +43,10 @@ export default function StudentLearning() {
 
   const fetchEnrollments = async () => {
     try {
-      console.log('Fetching enrollments for user:', user?.id);
       const response = await fetch(`/api/enrollments/user/${user?.id}`);
       if (response.ok) {
         const data = await response.json();
         const enrollmentsData = data.enrollments || [];
-        console.log('Fetched enrollments:', enrollmentsData);
         setEnrollments(enrollmentsData);
         
         // Calculate stats
@@ -64,7 +62,6 @@ export default function StudentLearning() {
           totalLessons
         };
         
-        console.log('Calculated stats:', calculatedStats);
         setStats(calculatedStats);
       } else {
         console.error('Failed to fetch enrollments:', response.status);

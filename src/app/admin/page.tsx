@@ -80,7 +80,7 @@ interface ApiResponse {
 }
 
 export default function AdminDashboard() {
-  const { isAdmin, userRole } = useRoleAccess();
+  const { isAdmin: _isAdmin } = useRoleAccess();
   const [loading, setLoading] = useState(false);
   const [outline, setOutline] = useState<CourseOutline | null>(null);
   const [error, setError] = useState<string>('');

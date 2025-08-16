@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import AuthHeader from '../components/AuthHeader';
-import DarkModeToggle from '../components/DarkModeToggle';
+
 import Image from "next/image";
 
 export default function StudentLandingPage() {

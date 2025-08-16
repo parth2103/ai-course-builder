@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRoleAccess } from '../../hooks/useRoleAccess';
 import CourseForm from '../../components/CourseForm';
-import EnhancedCourseDisplay from '../../components/EnhancedCourseDisplay';
+
 import EditableCourseContent from '../../components/EditableCourseContent';
 import ExportOptions from '../../components/ExportOptions';
 
@@ -176,7 +176,7 @@ export default function HubGenerate() {
         throw new Error('Failed to publish course');
       }
 
-      const data = await response.json();
+      // const data = await response.json();
       alert('Course published successfully! Students can now enroll.');
       
       // Navigate to instructor courses page

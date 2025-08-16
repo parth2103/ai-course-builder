@@ -7,22 +7,19 @@ interface VideoPlayerProps {
   description: string;
   url: string;
   duration?: number;
-  onVideoEnd?: () => void;
-  onVideoProgress?: (progress: number) => void;
+
 }
 
 export default function VideoPlayer({ 
   title, 
   description, 
   url, 
-  duration, 
-  onVideoEnd,
-  onVideoProgress 
+  duration
 }: VideoPlayerProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [videoId, setVideoId] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+
 
   // Extract YouTube video ID from URL with enhanced patterns
   const extractYouTubeId = (url: string): string | null => {
@@ -45,19 +42,7 @@ export default function VideoPlayer({
   };
 
   // Validate if video ID exists and is embeddable
-  const validateYouTubeVideo = async (videoId: string): Promise<boolean> => {
-    try {
-      // Try to fetch the video page to check if it exists
-      const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`, {
-        method: 'GET',
-        mode: 'cors'
-      });
-      return response.ok;
-    } catch (error) {
-      console.log('Video validation failed, but will still attempt embed:', error);
-      return true; // Assume valid if check fails
-    }
-  };
+
 
   useEffect(() => {
     const id = extractYouTubeId(url);
@@ -82,7 +67,7 @@ export default function VideoPlayer({
       // Extract search query and create a direct search on YouTube
       const searchQuery = url.split('search_query=')[1];
       if (searchQuery) {
-        const decodedQuery = decodeURIComponent(searchQuery);
+        // const decodedQuery = decodeURIComponent(searchQuery);
         window.open(`https://www.youtube.com/results?search_query=${searchQuery}`, '_blank', 'noopener,noreferrer');
         return;
       }
@@ -161,7 +146,6 @@ export default function VideoPlayer({
           allowFullScreen
           onLoad={handleIframeLoad}
           onError={() => {
-            console.log('Iframe failed to load, showing fallback');
             setError('Video cannot be embedded');
           }}
         />

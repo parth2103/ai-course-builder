@@ -23,8 +23,7 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
   const [learningStyle, setLearningStyle] = useState<'visual' | 'audio' | 'hands-on' | 'mixed'>('mixed');
   const [duration, setDuration] = useState(20);
   const [prerequisites, setPrerequisites] = useState('');
-  const [progress, setProgress] = useState(0);
-  const [currentStep, setCurrentStep] = useState(0);
+
 
   // Progress steps for the generation process
   const progressSteps = [
@@ -34,35 +33,7 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
     'Finalizing course outline...'
   ];
 
-  // Simulate progress when loading starts
-  useEffect(() => {
-    if (loading) {
-      setProgress(0);
-      setCurrentStep(0);
-      
-      const progressInterval = setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 90) return prev;
-          return prev + Math.random() * 15;
-        });
-      }, 1000);
 
-      const stepInterval = setInterval(() => {
-        setCurrentStep(prev => {
-          if (prev >= progressSteps.length - 1) return prev;
-          return prev + 1;
-        });
-      }, 3000);
-
-      return () => {
-        clearInterval(progressInterval);
-        clearInterval(stepInterval);
-      };
-    } else {
-      setProgress(0);
-      setCurrentStep(0);
-    }
-  }, [loading]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +139,6 @@ export default function CourseForm({ onSubmit, loading }: CourseFormProps) {
             value={duration}
             onChange={(e) => {
               const value = parseInt(e.target.value);
-              console.log('Duration input changed:', e.target.value, 'parsed:', value);
               setDuration(value || 20);
             }}
             min="1"

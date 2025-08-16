@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useRoleAccess } from '../../../../../hooks/useRoleAccess';
-import CourseForm from '../../../../../components/CourseForm';
-import EnhancedCourseDisplay from '../../../../../components/EnhancedCourseDisplay';
+
 import EditableCourseContent from '../../../../../components/EditableCourseContent';
 import ExportOptions from '../../../../../components/ExportOptions';
 
