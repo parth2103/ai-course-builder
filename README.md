@@ -1,6 +1,6 @@
 # AI Course Builder
 
-**A comprehensive AI-powered course creation and learning platform built with Next.js 15, React 19, and TypeScript.**
+**A comprehensive AI-powered course creation and learning platform built with Next.js 15, React 19, and TypeScript. Deploy with confidence on Vercel.**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen)](https://ai-course-builder-bkml15u0w-parth-gohils-projects-6952869a.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -10,7 +10,7 @@
 
 ## Overview
 
-AI Course Builder is an enterprise-grade educational platform that leverages artificial intelligence to streamline course creation and delivery. The platform serves educational institutions, corporate training departments, and independent instructors seeking to create engaging, data-driven learning experiences.
+AI Course Builder is an enterprise-grade educational platform that leverages artificial intelligence to streamline course creation and delivery. The platform serves educational institutions, corporate training departments, and independent instructors seeking to create engaging, data-driven learning experiences with seamless cloud deployment.
 
 ## Core Features
 
