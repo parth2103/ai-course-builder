@@ -19,6 +19,9 @@ export default function VideoPlayer({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [videoId, setVideoId] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isEmbeddable, setIsEmbeddable] = useState(true);
+  const [loadAttempts, setLoadAttempts] = useState(0);
 
 
   // Extract YouTube video ID from URL with enhanced patterns
@@ -42,22 +45,104 @@ export default function VideoPlayer({
   };
 
   // Validate if video ID exists and is embeddable
+  const validateVideo = async (videoId: string): Promise<boolean> => {
+    try {
+      // Create a test iframe to check if the video can be embedded
+      const testFrame = document.createElement('iframe');
+      testFrame.style.display = 'none';
+      testFrame.src = `https://www.youtube.com/embed/${videoId}`;
+      
+      return new Promise((resolve) => {
+        testFrame.onload = () => {
+          document.body.removeChild(testFrame);
+          resolve(true);
+        };
+        testFrame.onerror = () => {
+          document.body.removeChild(testFrame);
+          resolve(false);
+        };
+        
+        // Timeout after 5 seconds
+        setTimeout(() => {
+          if (document.body.contains(testFrame)) {
+            document.body.removeChild(testFrame);
+          }
+          resolve(false);
+        }, 5000);
+        
+        document.body.appendChild(testFrame);
+      });
+    } catch {
+      return false;
+    }
+  };
 
+  // Retry mechanism
+  const retryLoad = () => {
+    if (retryCount < 3) {
+      setRetryCount(prev => prev + 1);
+      setError(null);
+      setIsLoading(true);
+      setLoadAttempts(prev => prev + 1);
+    }
+  };
+
+  // Reset function
+  const resetPlayer = () => {
+    setRetryCount(0);
+    setError(null);
+    setIsLoading(true);
+    setIsEmbeddable(true);
+    setLoadAttempts(0);
+  };
 
   useEffect(() => {
-    const id = extractYouTubeId(url);
-    if (id) {
+    const initializeVideo = async () => {
+      setIsLoading(true);
+      const id = extractYouTubeId(url);
+      
+      if (!id) {
+        setError('Invalid YouTube URL format');
+        setIsLoading(false);
+        return;
+      }
+
       setVideoId(id);
+
+      // Validate if video is embeddable
+      if (loadAttempts === 0) {
+        const embeddable = await validateVideo(id);
+        setIsEmbeddable(embeddable);
+        
+        if (!embeddable) {
+          setError('Video embedding restricted by owner');
+          setIsLoading(false);
+          return;
+        }
+      }
+
       setError(null);
-    } else {
-      setError('Invalid YouTube URL');
-    }
-    setIsLoading(false);
-  }, [url]);
+      setIsLoading(false);
+    };
+
+    initializeVideo();
+  }, [url, retryCount, loadAttempts]);
 
   // Handle iframe load
   const handleIframeLoad = () => {
     setIsLoading(false);
+    setError(null);
+  };
+
+  // Enhanced error handling for iframe
+  const handleIframeError = () => {
+    setIsLoading(false);
+    if (retryCount < 3) {
+      setError(`Video loading failed (Attempt ${retryCount + 1}/3)`);
+    } else {
+      setError('Video cannot be embedded - maximum retries exceeded');
+      setIsEmbeddable(false);
+    }
   };
 
   // Handle external link fallback
@@ -87,7 +172,7 @@ export default function VideoPlayer({
     );
   }
 
-  if (error || !videoId) {
+  if (error || !videoId || !isEmbeddable) {
     return (
       <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
         <div className="flex items-start space-x-4">
@@ -99,20 +184,59 @@ export default function VideoPlayer({
           <div className="flex-1">
             <h5 className="font-medium text-gray-900 dark:text-white mb-2">{title}</h5>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{description}</p>
+            
+            {/* Error Message */}
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3 mb-3">
               <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                ⚠️ This video cannot be embedded. Click below to watch on YouTube.
+                ⚠️ {error || 'This video cannot be embedded. Click below to watch on YouTube.'}
               </p>
             </div>
-            <button
-              onClick={handleExternalLink}
-              className="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              Watch on YouTube {duration && `(${duration} min)`}
-            </button>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleExternalLink}
+                className="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                Watch on YouTube {duration && `(${duration} min)`}
+              </button>
+              
+              {/* Retry Button */}
+              {retryCount < 3 && error && (
+                <button
+                  onClick={retryLoad}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Retry ({3 - retryCount} left)
+                </button>
+              )}
+
+              {/* Reset Button */}
+              {retryCount >= 3 && (
+                <button
+                  onClick={resetPlayer}
+                  className="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Reset Player
+                </button>
+              )}
+            </div>
+
+            {/* Additional Info */}
+            {videoId && (
+              <div className="mt-3 p-2 bg-gray-100 dark:bg-gray-600 rounded text-xs text-gray-600 dark:text-gray-300">
+                Video ID: {videoId} | Attempts: {loadAttempts + 1}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -145,9 +269,7 @@ export default function VideoPlayer({
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           onLoad={handleIframeLoad}
-          onError={() => {
-            setError('Video cannot be embedded');
-          }}
+          onError={handleIframeError}
         />
         
         {/* Loading overlay */}
@@ -156,6 +278,9 @@ export default function VideoPlayer({
             <div className="text-white text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
               <p className="text-sm">Loading video...</p>
+              {retryCount > 0 && (
+                <p className="text-xs text-gray-300 mt-1">Retry attempt {retryCount}/3</p>
+              )}
             </div>
           </div>
         )}

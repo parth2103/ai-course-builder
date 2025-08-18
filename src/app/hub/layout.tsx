@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import AuthHeader from '../components/AuthHeader';
 import DarkModeToggle from '../components/DarkModeToggle';
+import DottedBackground from '../components/DottedBackground';
 import Image from 'next/image';
 
 export default function HubLayout({
@@ -288,8 +289,9 @@ export default function HubLayout({
             </div>
 
             {/* Content Area */}
-            <div className="content-area flex-1">
-              <main className="p-4 lg:p-6 max-w-7xl mx-auto w-full">
+            <div className="content-area flex-1 relative">
+              <DottedBackground />
+              <main className="p-4 lg:p-6 max-w-7xl mx-auto w-full relative z-10">
                 <div className="max-w-6xl mx-auto">
                   {children}
                 </div>

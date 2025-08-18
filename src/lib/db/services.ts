@@ -154,6 +154,25 @@ export const courseService = {
     return await db.select().from(courses)
       .where(eq(courses.instructorId, instructorId))
       .orderBy(desc(courses.createdAt));
+  },
+
+  async getAllCoursesForAdmin() {
+    return await db.select({
+      id: courses.id,
+      title: courses.title,
+      description: courses.description,
+      status: courses.status,
+      enrolledStudents: courses.enrolledStudents,
+      rating: courses.rating,
+      createdAt: courses.createdAt,
+      difficulty: courses.difficulty,
+      duration: courses.duration,
+      modules: courses.modules,
+      instructorId: courses.instructorId,
+      instructorName: users.firstName
+    }).from(courses)
+      .leftJoin(users, eq(courses.instructorId, users.id))
+      .orderBy(desc(courses.createdAt));
   }
 };
 

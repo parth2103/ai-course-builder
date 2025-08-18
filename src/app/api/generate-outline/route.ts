@@ -75,25 +75,37 @@ function getRelevantVideos(topic: string) {
         duration: 180
       },
       {
-        title: "React JS Crash Course 2024",
-        description: "Learn React in one video with Traversy Media",
-        url: "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
-        duration: 105
+        title: "React JS Full Course 2024 | Build an App and Master React in One Video",
+        description: "Complete React course with project build from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=CgkZ7MvWUAA",
+        duration: 150
+      },
+      {
+        title: "React Hooks Course - All React Hooks Explained",
+        description: "Comprehensive guide to React Hooks from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=LlvBzyy-558",
+        duration: 120
       }
     ];
   } else if (topicLower.includes('javascript') || topicLower.includes('js')) {
     return [
       {
-        title: "JavaScript Full Course for Beginners",
+        title: "JavaScript Full Course for Beginners | Complete All-in-One Tutorial",
         description: "Complete JavaScript course from freeCodeCamp",
         url: "https://www.youtube.com/watch?v=PkZNo7MFNFg",
         duration: 480
       },
       {
-        title: "JavaScript Crash Course For Beginners",
-        description: "Learn JavaScript fundamentals in this crash course",
-        url: "https://www.youtube.com/watch?v=hdI2bqOjy3c",
-        duration: 105
+        title: "Learn JavaScript - Full Course for Beginners",
+        description: "JavaScript fundamentals and projects from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=jS4aFq5-91M",
+        duration: 134
+      },
+      {
+        title: "JavaScript ES6, ES7, ES8: Learn to Code on the Bleeding Edge",
+        description: "Modern JavaScript features explained from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=nZ1DMMsyVyI",
+        duration: 102
       }
     ];
   } else if (topicLower.includes('python')) {
@@ -105,8 +117,14 @@ function getRelevantVideos(topic: string) {
         duration: 810
       },
       {
-        title: "Python Tutorial for Beginners",
-        description: "Learn Python programming with Programming with Mosh",
+        title: "Learn Python - Full Course for Beginners [Tutorial]",
+        description: "Comprehensive Python tutorial from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=rfscVS0vtbw",
+        duration: 279
+      },
+      {
+        title: "Python Tutorial - Python Full Course for Beginners",
+        description: "Complete Python programming tutorial from Programming with Mosh",
         url: "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
         duration: 360
       }
@@ -114,19 +132,25 @@ function getRelevantVideos(topic: string) {
   } else if (topicLower.includes('aws') || topicLower.includes('cloud')) {
     return [
       {
-        title: "AWS Certified Cloud Practitioner Training 2024",
+        title: "AWS Certified Cloud Practitioner Training 2024 - Full Course",
         description: "Complete AWS Cloud Practitioner course from freeCodeCamp",
         url: "https://www.youtube.com/watch?v=3hLmDS179YE",
         duration: 240
       },
       {
-        title: "AWS Tutorial for Beginners",
-        description: "Introduction to Amazon Web Services",
+        title: "AWS Tutorial for Beginners | Full Course in 10 Hours",
+        description: "Comprehensive AWS tutorial from Edureka",
         url: "https://www.youtube.com/watch?v=k1RI5locZE4",
-        duration: 120
+        duration: 600
+      },
+      {
+        title: "AWS Certified Solutions Architect - Associate 2024",
+        description: "Complete AWS Solutions Architect course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=Ia-UEYYR44s",
+        duration: 645
       }
     ];
-  } else if (topicLower.includes('data') || topicLower.includes('machine learning') || topicLower.includes('ai')) {
+  } else if (topicLower.includes('data') || topicLower.includes('machine learning') || topicLower.includes('ml')) {
     return [
       {
         title: "Machine Learning Course for Beginners",
@@ -135,10 +159,16 @@ function getRelevantVideos(topic: string) {
         duration: 300
       },
       {
-        title: "Data Science Tutorial for Beginners",
-        description: "Introduction to data science concepts",
+        title: "Data Science Tutorial for Beginners | Data Science Full Course",
+        description: "Comprehensive data science course from Edureka",
         url: "https://www.youtube.com/watch?v=ua-CiDNNj30",
-        duration: 180
+        duration: 540
+      },
+      {
+        title: "Python for Data Science - Course for Beginners",
+        description: "Python data science fundamentals from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=LHBE6Q9XlzI",
+        duration: 720
       }
     ];
   } else if (topicLower.includes('c programming') || topicLower.includes('c language')) {
@@ -150,40 +180,289 @@ function getRelevantVideos(topic: string) {
         duration: 240
       },
       {
-        title: "C Programming Language Tutorial",
-        description: "Learn C programming fundamentals",
+        title: "C Programming Full Course for free 🕹️",
+        description: "Comprehensive C programming tutorial from Bro Code",
         url: "https://www.youtube.com/watch?v=87SH2Cn0s9A",
-        duration: 150
+        duration: 240
+      },
+      {
+        title: "Learn C Programming with Dr. Chuck",
+        description: "University-level C programming course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=j-_s8f5K30I",
+        duration: 360
       }
     ];
-  } else if (topicLower.includes('marvel') || topicLower.includes('comics')) {
+  } else if (topicLower.includes('java')) {
     return [
       {
-        title: "The Complete History of Marvel Comics",
-        description: "Documentary covering the history of Marvel Comics",
-        url: "https://www.youtube.com/watch?v=2tehVRVdW-s",
+        title: "Java Tutorial for Beginners [2023]",
+        description: "Complete Java programming course from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=eIrMbAQSU34",
+        duration: 150
+      },
+      {
+        title: "Java Full Course for free ☕",
+        description: "Comprehensive Java tutorial from Bro Code",
+        url: "https://www.youtube.com/watch?v=xk4_1vDrzzo",
+        duration: 720
+      },
+      {
+        title: "Learn Java 8 - Full Tutorial for Beginners",
+        description: "Java fundamentals and features from Coding with John",
+        url: "https://www.youtube.com/watch?v=grEKMHGYyns",
+        duration: 540
+      }
+    ];
+  } else if (topicLower.includes('node') || topicLower.includes('nodejs')) {
+    return [
+      {
+        title: "Node.js Tutorial for Beginners: Learn Node in 1 Hour",
+        description: "Complete Node.js tutorial from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=TlB_eWDSMt4",
+        duration: 68
+      },
+      {
+        title: "Node.js and Express.js - Full Course",
+        description: "Complete Node.js and Express course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=Oe421EPjeBE",
+        duration: 480
+      },
+      {
+        title: "Node.js Crash Course 2024",
+        description: "Modern Node.js fundamentals from Traversy Media",
+        url: "https://www.youtube.com/watch?v=32M1al-Y6Ag",
+        duration: 90
+      }
+    ];
+  } else if (topicLower.includes('docker')) {
+    return [
+      {
+        title: "Docker Tutorial for Beginners [FULL COURSE in 3 Hours]",
+        description: "Complete Docker course from TechWorld with Nana",
+        url: "https://www.youtube.com/watch?v=3c-iBn73dDE",
+        duration: 180
+      },
+      {
+        title: "Docker Course - From BEGINNER to PRO",
+        description: "Comprehensive Docker tutorial from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=RqTEHSBrYFw",
+        duration: 240
+      },
+      {
+        title: "Docker Crash Course for Absolute Beginners",
+        description: "Quick Docker introduction from TechWorld with Nana",
+        url: "https://www.youtube.com/watch?v=pg19Z8LL06w",
+        duration: 60
+      }
+    ];
+  } else if (topicLower.includes('kubernetes') || topicLower.includes('k8s')) {
+    return [
+      {
+        title: "Kubernetes Course - Full Beginners Tutorial",
+        description: "Complete Kubernetes course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=d6WC5n9G_sM",
+        duration: 240
+      },
+      {
+        title: "Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]",
+        description: "Comprehensive Kubernetes tutorial from TechWorld with Nana",
+        url: "https://www.youtube.com/watch?v=X48VuDVv0do",
+        duration: 240
+      },
+      {
+        title: "Kubernetes Explained in 100 Seconds",
+        description: "Quick Kubernetes overview from Fireship",
+        url: "https://www.youtube.com/watch?v=PziYflu8cB8",
+        duration: 2
+      }
+    ];
+  } else if (topicLower.includes('vue') || topicLower.includes('vuejs')) {
+    return [
+      {
+        title: "Vue.js Course for Beginners [2024 Tutorial]",
+        description: "Complete Vue.js course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=FXpIoQ_rT_c",
+        duration: 300
+      },
+      {
+        title: "Vue 3 Tutorial - Full Course 2024",
+        description: "Modern Vue.js development from The Net Ninja",
+        url: "https://www.youtube.com/watch?v=YrxBCBibVo0",
+        duration: 180
+      },
+      {
+        title: "Vue.js Explained in 100 Seconds",
+        description: "Quick Vue.js introduction from Fireship",
+        url: "https://www.youtube.com/watch?v=nhBVL41-_Cw",
+        duration: 2
+      }
+    ];
+  } else if (topicLower.includes('angular')) {
+    return [
+      {
+        title: "Angular Tutorial for Beginners: Learn Angular & TypeScript",
+        description: "Complete Angular course from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=k5E2AVpwsko",
+        duration: 120
+      },
+      {
+        title: "Angular Course - Beginner to Advanced",
+        description: "Comprehensive Angular tutorial from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=2OHbjep_WjQ",
+        duration: 540
+      },
+      {
+        title: "Angular in 100 Seconds",
+        description: "Quick Angular overview from Fireship",
+        url: "https://www.youtube.com/watch?v=Ata9cSC2WpM",
+        duration: 2
+      }
+    ];
+  } else if (topicLower.includes('nextjs') || topicLower.includes('next.js')) {
+    return [
+      {
+        title: "Next.js 13 Full Course 2024 | Build and Deploy a Full Stack App",
+        description: "Complete Next.js 13 course from JavaScript Mastery",
+        url: "https://www.youtube.com/watch?v=wm5gMKuwSYk",
+        duration: 300
+      },
+      {
+        title: "Next.js Tutorial for Beginners",
+        description: "Next.js fundamentals from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=ZVnjOPwW4ZA",
+        duration: 75
+      },
+      {
+        title: "Next.js in 100 Seconds // Plus Full Beginner's Tutorial",
+        description: "Quick Next.js introduction and tutorial from Fireship",
+        url: "https://www.youtube.com/watch?v=Sklc_fQBmcs",
+        duration: 15
+      }
+    ];
+  } else if (topicLower.includes('typescript') || topicLower.includes('ts')) {
+    return [
+      {
+        title: "TypeScript Course for Beginners - Learn TypeScript from Scratch!",
+        description: "Complete TypeScript course from Academind",
+        url: "https://www.youtube.com/watch?v=BwuLxPH8IDs",
+        duration: 315
+      },
+      {
+        title: "Learn TypeScript - Full Course for Beginners",
+        description: "TypeScript fundamentals from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=30LWjhZzg50",
+        duration: 81
+      },
+      {
+        title: "TypeScript in 100 Seconds",
+        description: "Quick TypeScript overview from Fireship",
+        url: "https://www.youtube.com/watch?v=zQnBQ4tB3ZA",
+        duration: 2
+      }
+    ];
+  } else if (topicLower.includes('sql') || topicLower.includes('database')) {
+    return [
+      {
+        title: "SQL Tutorial - Full Database Course for Beginners",
+        description: "Complete SQL course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=HXV3zeQKqGY",
+        duration: 240
+      },
+      {
+        title: "MySQL Tutorial for Beginners [Full Course]",
+        description: "Comprehensive MySQL tutorial from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=7S_tz1z_5bA",
+        duration: 195
+      },
+      {
+        title: "Database Design Course - Learn how to design and plan a database",
+        description: "Database design principles from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=ztHopE5Wnpc",
+        duration: 300
+      }
+    ];
+  } else if (topicLower.includes('git')) {
+    return [
+      {
+        title: "Git and GitHub for Beginners - Crash Course",
+        description: "Complete Git and GitHub tutorial from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=RGOj5yH7evk",
+        duration: 70
+      },
+      {
+        title: "Git Tutorial for Beginners: Learn Git in 1 Hour",
+        description: "Git fundamentals from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=8JJ101D3knE",
+        duration: 64
+      },
+      {
+        title: "Git Explained in 100 Seconds",
+        description: "Quick Git overview from Fireship",
+        url: "https://www.youtube.com/watch?v=hwP7WQkmECE",
+        duration: 2
+      }
+    ];
+  } else if (topicLower.includes('css')) {
+    return [
+      {
+        title: "CSS Tutorial – Full Course for Beginners",
+        description: "Complete CSS course from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=OXGznpKZ_sA",
+        duration: 660
+      },
+      {
+        title: "Learn CSS in 20 Minutes",
+        description: "CSS fundamentals crash course from Web Dev Simplified",
+        url: "https://www.youtube.com/watch?v=1PnVor36_40",
+        duration: 20
+      },
+      {
+        title: "CSS Flexbox Course",
+        description: "Complete CSS Flexbox tutorial from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=-Wlt8NRtOpo",
+        duration: 85
+      }
+    ];
+  } else if (topicLower.includes('html')) {
+    return [
+      {
+        title: "HTML Tutorial for Beginners: HTML Crash Course",
+        description: "Complete HTML course from Programming with Mosh",
+        url: "https://www.youtube.com/watch?v=qz0aGYrrlhU",
         duration: 60
       },
       {
-        title: "Marvel Universe Explained",
-        description: "Understanding the Marvel Comics universe",
-        url: "https://www.youtube.com/watch?v=9nAf0LNaxGE",
-        duration: 45
+        title: "HTML Full Course - Build a Website Tutorial",
+        description: "HTML fundamentals from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=pQN-pnXPaVg",
+        duration: 120
+      },
+      {
+        title: "HTML in 100 Seconds",
+        description: "Quick HTML overview from Fireship",
+        url: "https://www.youtube.com/watch?v=ok-plXXHlWw",
+        duration: 2
       }
     ];
   } else if (topicLower.includes('generative') || topicLower.includes('ai')) {
     return [
       {
-        title: "Generative AI Full Course",
-        description: "Complete course on generative AI and large language models",
+        title: "Generative AI Full Course – Gemini Pro, OpenAI, Ollama, Langchain, LlamaIndex, & More",
+        description: "Complete course on generative AI and large language models from freeCodeCamp",
         url: "https://www.youtube.com/watch?v=mEsleV16qdo",
-        duration: 180
+        duration: 1080
       },
       {
-        title: "Introduction to Generative AI",
-        description: "Understanding generative AI fundamentals",
-        url: "https://www.youtube.com/watch?v=G2fqAlgmoPo",
-        duration: 90
+        title: "Introduction to Large Language Models",
+        description: "Understanding LLMs and generative AI from Andrej Karpathy",
+        url: "https://www.youtube.com/watch?v=zjkBMFhNj_g",
+        duration: 60
+      },
+      {
+        title: "ChatGPT API Tutorial - Build Your Own Chatbot",
+        description: "Practical AI application development from freeCodeCamp",
+        url: "https://www.youtube.com/watch?v=uRQH2CFvedY",
+        duration: 120
       }
     ];
   } else {
@@ -192,13 +471,13 @@ function getRelevantVideos(topic: string) {
       {
         title: `${topic} - Complete Tutorial for Beginners`,
         description: `Comprehensive tutorial covering ${topic} fundamentals`,
-        url: "https://www.youtube.com/watch?v=PkZNo7MFNFg", // Generic programming tutorial
+        url: "https://www.youtube.com/watch?v=PkZNo7MFNFg", // freeCodeCamp JavaScript
         duration: 120
       },
       {
         title: `${topic} - Crash Course`,
         description: `Quick introduction to ${topic} concepts`,
-        url: "https://www.youtube.com/watch?v=hdI2bqOjy3c", // Generic crash course
+        url: "https://www.youtube.com/watch?v=jS4aFq5-91M", // freeCodeCamp JS course
         duration: 60
       }
     ];

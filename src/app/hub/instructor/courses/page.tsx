@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
+import DeleteCourseModal from '../../../components/DeleteCourseModal';
+import { useUser } from '@clerk/nextjs';
 
 interface Course {
   id: string;
@@ -18,10 +20,15 @@ interface Course {
 }
 
 export default function InstructorCourses() {
-
+  const { user } = useUser();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    course: Course | null;
+  }>({ isOpen: false, course: null });
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchCourses();
@@ -43,6 +50,69 @@ export default function InstructorCourses() {
       setError(err instanceof Error ? err.message : 'Failed to fetch courses');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (course: Course) => {
+    setDeleteModal({ isOpen: true, course });
+  };
+
+  const handleDeleteConfirm = async (forceDelete = false) => {
+    if (!deleteModal.course) return;
+
+    setIsDeleting(true);
+    try {
+      const url = `/api/courses/${deleteModal.course.id}/delete${forceDelete ? '?force=true' : ''}`;
+      const response = await fetch(url, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete course');
+      }
+
+      const data = await response.json();
+      alert(`Course "${data.courseTitle}" deleted successfully!`);
+      
+      // Remove the deleted course from the list
+      setCourses(courses.filter(c => c.id !== deleteModal.course!.id));
+      
+      // Close modal
+      setDeleteModal({ isOpen: false, course: null });
+    } catch (error) {
+      console.error('Error deleting course:', error);
+      alert(error instanceof Error ? error.message : 'Failed to delete course');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModal({ isOpen: false, course: null });
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty.toLowerCase()) {
+      case 'beginner':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'intermediate':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'advanced':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'published':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'draft':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
   };
 
@@ -141,16 +211,38 @@ export default function InstructorCourses() {
                 </span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <Link 
-                  href={`/hub/instructor/courses/${course.id}/edit`}
-                  className="w-full bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium text-center block transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                  ✏️ Edit Course
-                </Link>
+                <div className="flex gap-2">
+                  <Link 
+                    href={`/hub/instructor/courses/${course.id}/edit`}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium text-center block transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    ✏️ Edit Course
+                  </Link>
+                  <button
+                    onClick={() => handleDeleteClick(course)}
+                    className="bg-red-600 hover:bg-red-700 focus:bg-red-700 active:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    title="Delete Course"
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {/* Delete Course Modal */}
+      {deleteModal.isOpen && deleteModal.course && (
+        <DeleteCourseModal
+          isOpen={deleteModal.isOpen}
+          onClose={handleDeleteCancel}
+          onConfirm={handleDeleteConfirm}
+          courseTitle={deleteModal.course.title}
+          enrolledStudents={deleteModal.course.enrolledStudents}
+          isAdmin={user?.publicMetadata?.role === 'admin'}
+          isDeleting={isDeleting}
+        />
       )}
     </div>
   );
