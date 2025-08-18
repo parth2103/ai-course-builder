@@ -168,7 +168,7 @@ export default function HubLayout({
   return (
     <>
       <SignedIn>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+        <div className="min-h-screen flex flex-col">
           {/* Auth Header */}
           <div className="flex-shrink-0">
             <AuthHeader />
