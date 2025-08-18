@@ -68,9 +68,8 @@ export default function CourseHub() {
         subtitle: "Manage your course platform",
         description: "Welcome to the admin dashboard. You have full control over the platform, including user management, course oversight, and system analytics.",
         quickActions: [
-          { name: "Generate Course", href: "/hub/generate", icon: "🤖", color: "bg-purple-500" },
-      
-          { name: "System Analytics", href: "/hub/analytics", icon: "📊", color: "bg-green-500" }
+          { name: "Generate Course", href: "/hub/generate", icon: "robot", color: "bg-purple-500" },
+          { name: "System Analytics", href: "/hub/analytics", icon: "chart", color: "bg-green-500" }
         ]
       };
     } else if (isInstructor) {
@@ -79,9 +78,9 @@ export default function CourseHub() {
         subtitle: "Create and manage your courses",
         description: "Welcome to your instructor dashboard. Create engaging courses, track student progress, and manage your teaching content.",
         quickActions: [
-          { name: "Create Course", href: "/hub/generate", icon: "➕", color: "bg-green-500" },
-          { name: "My Courses", href: "/hub/instructor/courses", icon: "📖", color: "bg-blue-500" },
-          { name: "My Analytics", href: "/hub/instructor/analytics", icon: "📈", color: "bg-purple-500" }
+          { name: "Create Course", href: "/hub/generate", icon: "plus", color: "bg-green-500" },
+          { name: "My Courses", href: "/hub/instructor/courses", icon: "book", color: "bg-blue-500" },
+          { name: "My Analytics", href: "/hub/instructor/analytics", icon: "chart", color: "bg-purple-500" }
         ]
       };
     } else {
@@ -90,15 +89,63 @@ export default function CourseHub() {
         subtitle: "Track your learning journey",
         description: "Welcome to your learning dashboard. Continue your courses, track your progress, and discover new learning opportunities.",
         quickActions: [
-          { name: "My Learning", href: "/hub/student/learning", icon: "🎓", color: "bg-purple-500" },
-          { name: "Enrolled Courses", href: "/hub/student/learning", icon: "📋", color: "bg-blue-500" },
-          { name: "Browse Courses", href: "/marketplace", icon: "📚", color: "bg-green-500" }
+          { name: "My Learning", href: "/hub/student/learning", icon: "graduation-cap", color: "bg-purple-500" },
+          { name: "Enrolled Courses", href: "/hub/student/learning", icon: "book-open", color: "bg-blue-500" },
+          { name: "Browse Courses", href: "/marketplace", icon: "book", color: "bg-green-500" }
         ]
       };
     }
   };
 
   const content = getWelcomeContent();
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'robot':
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        );
+      case 'chart':
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        );
+      case 'plus':
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        );
+      case 'book':
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        );
+      case 'book-open':
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        );
+      case 'graduation-cap':
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+        );
+      default:
+        return (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+          </svg>
+        );
+    }
+  };
 
   if (isLoading) {
     return (
@@ -114,7 +161,7 @@ export default function CourseHub() {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -143,11 +190,11 @@ export default function CourseHub() {
           <Link
             key={action.name}
             href={action.href}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6 hover:shadow-md transition-all duration-200"
           >
             <div className="flex items-center">
               <div className={`w-12 h-12 ${action.color} rounded-lg flex items-center justify-center mr-4`}>
-                <span className="text-white text-xl">{action.icon}</span>
+                <span className="text-white">{getIcon(action.icon)}</span>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -164,7 +211,7 @@ export default function CourseHub() {
 
       {/* Role-Specific Content */}
       {isAdmin && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             System Overview
           </h2>
@@ -190,7 +237,7 @@ export default function CourseHub() {
       )}
 
       {isInstructor && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Recent Activity
           </h2>
@@ -218,7 +265,7 @@ export default function CourseHub() {
       )}
 
       {isStudent && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Continue Learning
           </h2>

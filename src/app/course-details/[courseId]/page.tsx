@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
+import DottedBackground from '../../components/DottedBackground';
 
 interface Course {
   id: string;
@@ -144,7 +145,8 @@ export default function CourseDetails() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen relative flex items-center justify-center">
+        <DottedBackground />
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">Loading course details...</p>
@@ -166,13 +168,14 @@ export default function CourseDetails() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen relative">
+      <DottedBackground />
+      <div className="relative z-10 space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+      <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-900/30 dark:to-indigo-900/30 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-8">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">📚</span>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{course.title}</h1>
             </div>
             
@@ -204,7 +207,7 @@ export default function CourseDetails() {
 
             {/* Enrollment Status */}
             {isEnrolled && enrollment && (
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200/50 dark:border-gray-700/50">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Your Progress</span>
                   <span className="text-lg font-bold text-blue-600">{getCompletionPercentage()}%</span>
@@ -223,7 +226,7 @@ export default function CourseDetails() {
                     <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    Course Completed! 🎉
+                    Course Completed!
                   </div>
                 )}
               </div>
@@ -275,8 +278,8 @@ export default function CourseDetails() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50">
+        <div className="border-b border-gray-200/50 dark:border-gray-700/50">
           <nav className="flex space-x-1 p-1">
             {['overview', 'syllabus', ...(isEnrolled ? ['progress'] : []), ...(isCompleted() ? ['certificate'] : [])].map((tab) => (
               <button
@@ -341,7 +344,7 @@ export default function CourseDetails() {
               {course.outline?.modules && course.outline.modules.length > 0 ? (
                 <div className="space-y-4">
                   {course.outline.modules.map((module: any, index: number) => (
-                    <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                    <div key={index} className="border border-gray-200/50 dark:border-gray-600/50 rounded-lg p-4 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm">
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="text-lg font-medium text-gray-900 dark:text-white">
                           Module {index + 1}: {module.title}
@@ -452,13 +455,17 @@ export default function CourseDetails() {
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Course Completion Certificate</h3>
               
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-dashed border-blue-300 dark:border-blue-600 rounded-lg p-8 text-center">
-                <div className="text-6xl mb-4">🎓</div>
+                <div className="text-6xl mb-4">
+                  <svg className="w-16 h-16 mx-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                  </svg>
+                </div>
                 <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Congratulations!</h4>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
                   You have successfully completed <strong>{course.title}</strong>
                 </p>
                 
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 text-left">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 mb-6 text-left">
                   <h5 className="font-semibold text-gray-900 dark:text-white mb-3">Course Completion Summary:</h5>
                   <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                     <li>✓ Completed all {enrollment?.totalLessons || 0} lessons</li>
@@ -482,7 +489,9 @@ export default function CourseDetails() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {course.outline.learningOutcomes.map((outcome: string, index: number) => (
                       <div key={index} className="flex items-start space-x-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                        <span className="text-green-600 mt-1">🌟</span>
+                        <svg className="w-5 h-5 text-green-600 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
                         <span className="text-gray-700 dark:text-gray-300">{outcome}</span>
                       </div>
                     ))}
@@ -492,6 +501,7 @@ export default function CourseDetails() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import AuthHeader from '../components/AuthHeader';
-
 import Image from 'next/image';
 
 export default function LandingPage() {
@@ -136,7 +135,7 @@ export default function LandingPage() {
             </div>
 
             {/* Dashboard Preview */}
-            <div className="bg-white dark:bg-gray-800 rounded-b-lg shadow-2xl overflow-hidden">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-b-lg shadow-2xl overflow-hidden">
               {/* Desktop Layout */}
               <div className="hidden lg:flex">
                 {/* Sidebar */}
@@ -585,7 +584,7 @@ export default function LandingPage() {
             <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 transform -translate-y-1/2 z-0"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 text-center">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50 text-center">
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">
                   1
                 </div>
@@ -602,7 +601,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 text-center">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50 text-center">
                 <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">
                   2
                 </div>
@@ -619,7 +618,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 text-center">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50 text-center">
                 <div className="bg-gradient-to-r from-green-600 to-green-700 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">
                   3
                 </div>

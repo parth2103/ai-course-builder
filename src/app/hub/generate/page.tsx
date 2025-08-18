@@ -194,7 +194,7 @@ export default function HubGenerate() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -211,7 +211,7 @@ export default function HubGenerate() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50">
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-8 px-6">
             <button
@@ -254,7 +254,7 @@ export default function HubGenerate() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Course Form - Left Side (50%) */}
               <div>
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200/50 dark:border-gray-700/50 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Course Configuration
                   </h3>
@@ -294,7 +294,7 @@ export default function HubGenerate() {
 
               {/* Animation Area - Right Side (50%) */}
               <div>
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 h-full">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200/50 dark:border-gray-700/50 p-6 h-full">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Generation Status
                   </h3>
@@ -404,7 +404,7 @@ export default function HubGenerate() {
                           {outline.courseTitle}
                         </h3>
                         <p className="text-blue-700 dark:text-blue-300 text-sm">
-                          🤖 Generated with AI Course Builder • ⏱️ {outline.totalDuration || 0} hours • 📚 {outline.modules?.length || 0} modules
+                          Generated with AI Course Builder • {outline.totalDuration || 0} hours • {outline.modules?.length || 0} modules
                         </p>
                       </div>
                     </div>
@@ -434,7 +434,10 @@ export default function HubGenerate() {
                           </>
                         ) : (
                           <>
-                            💾 Save as Draft
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            Save as Draft
                           </>
                         )}
                       </button>
@@ -454,7 +457,10 @@ export default function HubGenerate() {
                           </>
                         ) : (
                           <>
-                            🚀 Publish Course
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                            Publish Course
                           </>
                         )}
                       </button>
@@ -498,7 +504,7 @@ export default function HubGenerate() {
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Export your course in various formats for different use cases.
                   </p>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200/50 dark:border-gray-700/50 p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <button
                         onClick={() => setShowExportModal(true)}

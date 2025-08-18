@@ -350,53 +350,49 @@ export default function StudentLearning() {
       </div>
 
       {/* Course Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="space-y-6">
         {/* Module Navigation */}
-        <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Course Modules
-            </h3>
-            <div className="space-y-2">
-              {outline?.modules?.map((module: Module, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => handleModuleChange(index)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    currentModule === index
-                      ? 'bg-blue-100 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-700'
-                      : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
-                  }`}
-                >
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Course Modules
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {outline?.modules?.map((module: Module, index: number) => (
+              <button
+                key={index}
+                onClick={() => handleModuleChange(index)}
+                className={`text-left p-3 rounded-lg transition-colors ${
+                  currentModule === index
+                    ? 'bg-blue-100 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-700'
+                    : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
+                }`}
+              >
+                <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-                        Module {index + 1}
-                      </h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
-                        {module.title}
-                      </p>
+                    <div className="font-medium text-gray-900 dark:text-white text-sm">
+                      Module {index + 1}
                     </div>
-                    <div className="flex items-center space-x-2">
-                      {completedModules.includes(index) && (
-                        <span className="text-green-600 text-sm">✅</span>
-                      )}
-                      <div className="w-8 h-2 bg-gray-200 dark:bg-gray-600 rounded-full">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${getModuleProgress(index)}%` }}
-                        ></div>
-                      </div>
-                    </div>
+                    {completedModules.includes(index) && (
+                      <span className="text-green-600 text-sm">✅</span>
+                    )}
                   </div>
-                </button>
-              ))}
-            </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                    {module.title}
+                  </div>
+                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${getModuleProgress(index)}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Module Content */}
-        <div className="lg:col-span-3">
+        <div>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             {outline?.modules?.[currentModule] ? (
               <div className="space-y-6">

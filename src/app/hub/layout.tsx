@@ -178,7 +178,7 @@ export default function HubLayout({
           <div className="sidebar-toggle">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="fixed top-20 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-md shadow-lg md:hidden"
+              className="fixed top-20 left-4 z-50 p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-md shadow-lg md:hidden"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -197,12 +197,12 @@ export default function HubLayout({
             )}
             
             {/* Sidebar */}
-            <div className={`sidebar w-64 xl:w-64 lg:w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out flex-shrink-0 ${
+            <div className={`sidebar w-64 xl:w-64 lg:w-56 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-r border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 ease-in-out flex-shrink-0 ${
               sidebarOpen ? 'open' : ''
             }`}>
               <div className="flex flex-col h-full">
                 {/* Sidebar Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between p-4 border-b border-gray-200/50 dark:border-gray-700/50">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <Image
@@ -235,7 +235,7 @@ export default function HubLayout({
                 </div>
 
                 {/* User Info */}
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="p-4 border-b border-gray-200/50 dark:border-gray-700/50">
                   <div className="flex items-center">
                     <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                       <span className="text-white font-semibold text-sm">
@@ -276,7 +276,7 @@ export default function HubLayout({
                 </nav>
 
                               {/* Footer */}
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50">
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                   <p>Role: {userRole}</p>
                   <p>Version: 1.0.0</p>
