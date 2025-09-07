@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
 import DottedBackground from '../components/DottedBackground';
@@ -23,6 +24,7 @@ interface Course {
 }
 
 export default function Marketplace() {
+  const { user } = useUser();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,11 +33,17 @@ export default function Marketplace() {
   const [sortBy, setSortBy] = useState('popularity');
   const [enrollingCourseId, setEnrollingCourseId] = useState<string | null>(null);
 
+  // Check user role
+  const userRole = user?.publicMetadata?.role as string;
+  const isInstructor = userRole === 'instructor' || userRole === 'admin';
+
   useEffect(() => {
     fetchCourses();
   }, []);
 
   const handleEnroll = async (courseId: string) => {
+    // Check if user is instructor (you'll need to add user role checking here)
+    // For now, this logic should be moved to component level with useUser hook
     setEnrollingCourseId(courseId);
     try {
       const response = await fetch('/api/enroll', {
@@ -591,19 +599,28 @@ export default function Marketplace() {
                       >
                         Preview
                       </Link>
-                      <button
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          enrollingCourseId === course.id
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : course.isFree 
-                              ? 'bg-green-600 hover:bg-green-700 text-white'
-                              : 'bg-blue-600 hover:bg-blue-700 text-white'
-                        }`}
-                        onClick={() => handleEnroll(course.id)}
-                        disabled={enrollingCourseId === course.id}
-                      >
-                        {enrollingCourseId === course.id ? 'Enrolling...' : course.isFree ? 'Enroll Free' : 'Enroll Now'}
-                      </button>
+                      {isInstructor ? (
+                        <button
+                          onClick={() => alert('You cannot enroll in courses as an instructor. Only students can enroll in courses.')}
+                          className="px-4 py-2 rounded-lg font-medium bg-gray-400 hover:bg-gray-500 text-white cursor-not-allowed"
+                        >
+                          Cannot Enroll (Instructor)
+                        </button>
+                      ) : (
+                        <button
+                          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                            enrollingCourseId === course.id
+                              ? 'bg-gray-400 cursor-not-allowed'
+                              : course.isFree 
+                                ? 'bg-green-600 hover:bg-green-700 text-white'
+                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                          }`}
+                          onClick={() => handleEnroll(course.id)}
+                          disabled={enrollingCourseId === course.id}
+                        >
+                          {enrollingCourseId === course.id ? 'Enrolling...' : course.isFree ? 'Enroll Free' : 'Enroll Now'}
+                        </button>
+                      )}
                     </div>
                   </div>
 

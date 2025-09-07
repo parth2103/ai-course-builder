@@ -13,7 +13,7 @@ export default function SignUpPage() {
           </p>
         </div>
         <SignUp 
-          redirectUrl="/dashboard"
+          redirectUrl="/hub"
           appearance={{
             elements: {
               formButtonPrimary: "bg-green-600 hover:bg-green-700 text-white",

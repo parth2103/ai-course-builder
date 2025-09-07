@@ -13,7 +13,7 @@ export default function SignInPage() {
           </p>
         </div>
         <SignIn 
-          redirectUrl="/dashboard"
+          redirectUrl="/hub"
           appearance={{
             elements: {
               formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",

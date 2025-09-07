@@ -60,6 +60,7 @@ interface ExternalLink {
 export default function HubGenerate() {
   const { isAdmin, isInstructor } = useRoleAccess();
   const [outline, setOutline] = useState<CourseOutline | null>(null);
+  const [formData, setFormData] = useState<any>(null); // Store form data including difficulty
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState<'generate' | 'curate' | 'export'>('generate');
   const [showExportModal, setShowExportModal] = useState(false);
@@ -132,6 +133,8 @@ export default function HubGenerate() {
         },
         body: JSON.stringify({
           ...outline,
+          difficulty: formData?.difficulty || 'beginner',
+          category: formData?.category || 'General',
           status: 'draft',
         }),
       });
@@ -168,6 +171,8 @@ export default function HubGenerate() {
         },
         body: JSON.stringify({
           ...outline,
+          difficulty: formData?.difficulty || 'beginner',
+          category: formData?.category || 'General',
           status: 'published',
         }),
       });
@@ -261,6 +266,7 @@ export default function HubGenerate() {
                   <CourseForm
                     onSubmit={async (data) => {
                       setIsGenerating(true);
+                      setFormData(data); // Store form data for later use
                       try {
                         const response = await fetch('/api/generate-outline', {
                           method: 'POST',

@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { courseTitle, description, totalDuration, modules, prerequisites, learningOutcomes, status } = body;
+    const { courseTitle, description, totalDuration, modules, prerequisites, learningOutcomes, status, difficulty, category } = body;
 
     // Validate required fields
     if (!courseTitle || !description || !modules || !status) {
@@ -56,7 +56,9 @@ export async function POST(request: NextRequest) {
       course = await courseService.updateCourse(existingDraftCourse.id, {
         title: courseTitle,
         description,
+        difficulty: difficulty as 'beginner' | 'intermediate' | 'advanced' || 'beginner',
         duration: totalDuration || 0,
+        category: category || 'General',
         status: status as 'draft' | 'published',
         outline: {
           courseTitle,
@@ -73,7 +75,9 @@ export async function POST(request: NextRequest) {
       course = await courseService.updateCourse(existingDraftCourse.id, {
         title: courseTitle,
         description,
+        difficulty: difficulty as 'beginner' | 'intermediate' | 'advanced' || 'beginner',
         duration: totalDuration || 0,
+        category: category || 'General',
         status: 'published',
         outline: {
           courseTitle,
@@ -90,7 +94,9 @@ export async function POST(request: NextRequest) {
       course = await courseService.createCourse({
         title: courseTitle,
         description,
+        difficulty: difficulty as 'beginner' | 'intermediate' | 'advanced' || 'beginner',
         totalDuration: totalDuration || 0,
+        category: category || 'General',
         instructorId: user.id,
         status: status as 'draft' | 'published',
         outline: {

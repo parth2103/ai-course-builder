@@ -36,9 +36,35 @@ export default function HubAdmin() {
   }>({ isOpen: false, course: null });
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Refresh stats when component mounts
+  // Fetch live stats from API
+  const fetchLiveStats = async () => {
+    try {
+      const response = await fetch('/api/admin/analytics');
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data.stats);
+      } else {
+        // Fallback to dataStore if API fails
+        setStats(dataStore.getStats());
+      }
+    } catch (error) {
+      console.error('Error fetching live stats:', error);
+      // Fallback to dataStore if API fails
+      setStats(dataStore.getStats());
+    }
+  };
+
+  // Refresh stats when component mounts and set up periodic refresh
   useEffect(() => {
-    setStats(dataStore.getStats());
+    fetchLiveStats();
+    
+    // Set up interval to refresh stats every 30 seconds
+    const interval = setInterval(fetchLiveStats, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Fetch courses when course management section is shown
+  useEffect(() => {
     if (showCourseManagement) {
       fetchAllCourses();
     }
@@ -231,7 +257,10 @@ export default function HubAdmin() {
             <h3 className="font-medium text-gray-900 dark:text-white">Manage Courses</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">View and delete all courses</p>
           </button>
-          <button className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-left hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+          <button 
+            onClick={() => alert('User management functionality coming soon!')}
+            className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-left hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+          >
             <div className="text-blue-600 text-lg mb-2">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
@@ -240,7 +269,10 @@ export default function HubAdmin() {
             <h3 className="font-medium text-gray-900 dark:text-white">Manage Users</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">View and edit user roles</p>
           </button>
-          <button className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-left hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+          <Link
+            href="/hub/analytics"
+            className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-left hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors block"
+          >
             <div className="text-green-600 text-lg mb-2">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
@@ -248,8 +280,11 @@ export default function HubAdmin() {
             </div>
             <h3 className="font-medium text-gray-900 dark:text-white">View Analytics</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">Platform performance metrics</p>
-          </button>
-          <button className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-left hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+          </Link>
+          <button 
+            onClick={() => alert('System settings functionality coming soon!')}
+            className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-left hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+          >
             <div className="text-purple-600 text-lg mb-2">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
@@ -293,10 +328,13 @@ export default function HubAdmin() {
 
       {/* Course Management Section */}
       {showCourseManagement && (
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 mt-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               All Courses Management
+              <span className="ml-2 px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded">
+                ACTIVE
+              </span>
             </h2>
             <button
               onClick={() => setShowCourseManagement(false)}
@@ -343,29 +381,29 @@ export default function HubAdmin() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Course
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">
                       Instructor
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden lg:table-cell">
                       Students
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden sm:table-cell">
                       Difficulty
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden xl:table-cell">
                       Created
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -373,46 +411,58 @@ export default function HubAdmin() {
                 <tbody className="bg-white/60 dark:bg-gray-800/60 divide-y divide-gray-200/50 dark:divide-gray-700/50">
                   {courses.map((course) => (
                     <tr key={course.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3">
                         <div className="max-w-xs">
                           <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
                             {course.title}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
                             {course.description}
+                          </div>
+                          {/* Show instructor on mobile when instructor column is hidden */}
+                          <div className="text-xs text-blue-600 dark:text-blue-400 md:hidden mt-1">
+                            By: {course.instructorName || course.instructorId}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        {course.instructorName || course.instructorId}
+                      <td className="px-3 py-3 text-sm text-gray-900 dark:text-white hidden md:table-cell">
+                        <div className="truncate max-w-[120px]">
+                          {course.instructorName || course.instructorId}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(course.status)}`}>
-                          {course.status}
-                        </span>
+                      <td className="px-3 py-3">
+                        <div className="flex flex-col space-y-1">
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full text-center ${getStatusColor(course.status)}`}>
+                            {course.status}
+                          </span>
+                          {/* Show students count on mobile when students column is hidden */}
+                          <span className="text-xs text-gray-500 dark:text-gray-400 lg:hidden">
+                            {course.enrolledStudents} students
+                          </span>
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      <td className="px-3 py-3 text-sm text-gray-900 dark:text-white text-center hidden lg:table-cell">
                         {course.enrolledStudents}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 hidden sm:table-cell">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getDifficultyColor(course.difficulty)}`}>
                           {course.difficulty}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      <td className="px-3 py-3 text-xs text-gray-500 dark:text-gray-400 hidden xl:table-cell">
                         {new Date(course.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
+                      <td className="px-3 py-3">
+                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
                           <Link
                             href={`/hub/instructor/courses/${course.id}/edit`}
-                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium"
                           >
                             Edit
                           </Link>
                           <button
                             onClick={() => handleDeleteClick(course)}
-                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 text-xs font-medium"
                           >
                             Delete
                           </button>

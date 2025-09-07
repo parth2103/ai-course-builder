@@ -11,7 +11,7 @@ interface RoleSelectionProps {
 }
 
 export default function RoleSelection({ userId, email, firstName, lastName }: RoleSelectionProps) {
-  const [selectedRole, setSelectedRole] = useState<'student' | 'instructor' | 'admin' | null>(null);
+  const [selectedRole, setSelectedRole] = useState<'student' | 'instructor' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function RoleSelection({ userId, email, firstName, lastName }: Ro
       description: 'I want to learn and take courses',
       icon: '🎓',
       color: 'bg-blue-500 hover:bg-blue-600',
-      features: ['Browse and enroll in courses', 'Track learning progress', 'Access course materials']
+      features: ['Browse and enroll in courses', 'Track learning progress', 'Access course materials', 'Take interactive quizzes']
     },
     {
       id: 'instructor',
@@ -31,15 +31,7 @@ export default function RoleSelection({ userId, email, firstName, lastName }: Ro
       description: 'I want to create and teach courses',
       icon: '👨‍🏫',
       color: 'bg-green-500 hover:bg-green-600',
-      features: ['Create AI-powered courses', 'Manage course content', 'Track student progress']
-    },
-    {
-      id: 'admin',
-      title: 'Administrator',
-      description: 'I want to manage the platform',
-      icon: '⚙️',
-      color: 'bg-purple-500 hover:bg-purple-600',
-      features: ['Manage all users and courses', 'View platform analytics', 'System administration']
+      features: ['Create AI-powered courses', 'Manage course content', 'Track student progress', 'Publish courses to marketplace']
     }
   ];
 
@@ -92,7 +84,7 @@ export default function RoleSelection({ userId, email, firstName, lastName }: Ro
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
           {roles.map((role) => (
             <div
               key={role.id}

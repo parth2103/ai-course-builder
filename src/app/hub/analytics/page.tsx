@@ -7,9 +7,36 @@ import { useEffect, useState } from 'react';
 export default function Analytics() {
   const { isAdmin } = useRoleAccess();
   const [stats, setStats] = useState(dataStore.getStats());
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAnalytics = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/admin/analytics');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch analytics data');
+      }
+      
+      const data = await response.json();
+      setStats(data.stats);
+    } catch (err) {
+      console.error('Error fetching analytics:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch analytics');
+      // Fallback to dataStore stats if API fails
+      setStats(dataStore.getStats());
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setStats(dataStore.getStats());
+    fetchAnalytics();
+    
+    // Set up interval to refresh analytics every 30 seconds
+    const interval = setInterval(fetchAnalytics, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   if (!isAdmin) {

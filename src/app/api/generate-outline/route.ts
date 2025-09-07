@@ -62,6 +62,12 @@ const openai = process.env.OPENAI_API_KEY ? new OpenAI({
 
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 
+// Helper function to validate YouTube URL format
+function validateYouTubeUrl(url: string): boolean {
+  const youtubeRegex = /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]+$/;
+  return youtubeRegex.test(url);
+}
+
 // Helper function to get relevant videos based on topic
 function getRelevantVideos(topic: string) {
   const topicLower = topic.toLowerCase();
@@ -484,6 +490,20 @@ function getRelevantVideos(topic: string) {
   }
 }
 
+// Function to ensure all videos have valid URLs
+function ensureValidVideoUrls(videos: any[]) {
+  return videos.map(video => {
+    if (!video.url || !validateYouTubeUrl(video.url)) {
+      // Fallback to a generic educational video if URL is invalid
+      return {
+        ...video,
+        url: "https://www.youtube.com/watch?v=PkZNo7MFNFg"
+      };
+    }
+    return video;
+  });
+}
+
 function createPrompt(
   topic: string, 
   modules: number, 
@@ -737,7 +757,7 @@ async function generateWithGemini(
           ],
           estimatedDuration: Math.round(duration * 60 / modules),
           resources: {
-            videos: getRelevantVideos(topic),
+            videos: ensureValidVideoUrls(getRelevantVideos(topic)),
             documents: [
               {
                 title: `${topic} Official Documentation`,
@@ -813,6 +833,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Content moderation check for inappropriate content
+    const inappropriateKeywords = [
+      'adult', 'explicit', 'nsfw', 'mature', 'xxx', 'sexual', 'dating', 'romance',
+      'gambling', 'betting', 'casino', 'alcohol', 'drugs', 'violence', 'weapon',
+      'harm', 'suicide', 'self-harm', 'hate', 'discrimination', 'pornography',
+      'escort', 'strip', 'naked', 'nude', '18+', 'erotic', 'fetish'
+    ];
+    
+    const contentToCheck = `${topic} ${prerequisites}`.toLowerCase();
+    const hasInappropriateContent = inappropriateKeywords.some(keyword => 
+      contentToCheck.includes(keyword)
+    );
+    
+    if (hasInappropriateContent) {
+      return NextResponse.json({ 
+        error: 'Content cannot be generated. This application is designed for educational purposes only. Please ensure your course topic is appropriate for educational content and does not include adult or inappropriate material.' 
+      }, { status: 400 });
+    }
+
     // Try to generate with available AI service
     let outline: CourseOutline;
     let generatedWith: string;
@@ -871,7 +910,7 @@ export async function POST(request: NextRequest) {
             ],
             estimatedDuration: Math.round(duration * 60 / modules),
             resources: {
-              videos: getRelevantVideos(topic),
+              videos: ensureValidVideoUrls(getRelevantVideos(topic)),
               documents: [
                 {
                   title: `${topic} Official Guide`,

@@ -40,8 +40,12 @@ export default function CourseDetails() {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'progress' | 'certificate'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'progress' | 'certificate' | 'preview'>('overview');
   const [isUnenrolling, setIsUnenrolling] = useState(false);
+
+  // Check user role
+  const userRole = user?.publicMetadata?.role as string;
+  const isInstructor = userRole === 'instructor' || userRole === 'admin';
 
 
   useEffect(() => {
@@ -259,13 +263,42 @@ export default function CourseDetails() {
                   {isUnenrolling ? 'Leaving...' : 'Leave Course'}
                 </button>
               </>
+            ) : isInstructor ? (
+              <button
+                onClick={() => alert('You cannot enroll in courses as an instructor. Only students can enroll in courses.')}
+                className="w-full px-6 py-3 bg-gray-400 hover:bg-gray-500 text-white rounded-lg font-medium text-center transition-colors cursor-not-allowed"
+              >
+                Cannot Enroll (Instructor)
+              </button>
             ) : (
-              <Link
-                href="/marketplace"
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/enroll', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ courseId }),
+                    });
+
+                    if (response.ok) {
+                      alert('Successfully enrolled in course!');
+                      // Reload to update enrollment status
+                      window.location.reload();
+                    } else {
+                      const errorData = await response.json();
+                      alert(errorData.error || 'Failed to enroll in course');
+                    }
+                  } catch (error) {
+                    console.error('Enrollment error:', error);
+                    alert('Failed to enroll in course. Please try again.');
+                  }
+                }}
                 className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-center transition-colors"
               >
                 Enroll in Course
-              </Link>
+              </button>
             )}
             <Link
               href="/hub/student/learning"
@@ -281,7 +314,7 @@ export default function CourseDetails() {
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-200/50 dark:border-gray-700/50">
         <div className="border-b border-gray-200/50 dark:border-gray-700/50">
           <nav className="flex space-x-1 p-1">
-            {['overview', 'syllabus', ...(isEnrolled ? ['progress'] : []), ...(isCompleted() ? ['certificate'] : [])].map((tab) => (
+            {['overview', 'syllabus', ...(!isEnrolled ? ['preview'] : []), ...(isEnrolled ? ['progress'] : []), ...(isCompleted() ? ['certificate'] : [])].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
@@ -381,11 +414,154 @@ export default function CourseDetails() {
                           </ul>
                         </div>
                       )}
+
+                      {/* Preview Resources for Non-Enrolled Users */}
+                      {!isEnrolled && index === 0 && (
+                        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                          <h6 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">🔍 Preview Sample Resources:</h6>
+                          
+                          {/* Sample Video Preview */}
+                          {module.resources?.videos && module.resources.videos.length > 0 && (
+                            <div className="mb-3">
+                              <div className="flex items-center space-x-2 text-sm text-blue-700 dark:text-blue-300">
+                                <span>📹</span>
+                                <span className="font-medium">{module.resources.videos[0].title}</span>
+                                <span className="text-xs text-blue-600 dark:text-blue-400">({module.resources.videos[0].duration} min)</span>
+                              </div>
+                              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 ml-6">{module.resources.videos[0].description}</p>
+                            </div>
+                          )}
+
+                          {/* Sample Documents Preview */}
+                          {module.resources?.documents && module.resources.documents.length > 0 && (
+                            <div className="mb-3">
+                              <div className="flex items-center space-x-2 text-sm text-blue-700 dark:text-blue-300">
+                                <span>📄</span>
+                                <span className="font-medium">{module.resources.documents[0].title}</span>
+                              </div>
+                              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 ml-6">{module.resources.documents[0].description}</p>
+                            </div>
+                          )}
+
+                          {/* Sample Quiz Preview */}
+                          {module.assessment?.quizQuestions && module.assessment.quizQuestions.length > 0 && (
+                            <div className="mb-3">
+                              <div className="flex items-center space-x-2 text-sm text-blue-700 dark:text-blue-300">
+                                <span>❓</span>
+                                <span className="font-medium">Sample Quiz:</span>
+                              </div>
+                              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 ml-6">"{module.assessment.quizQuestions[0].question}"</p>
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between mt-3 pt-2 border-t border-blue-200 dark:border-blue-700">
+                            <p className="text-xs text-blue-600 dark:text-blue-400 italic">
+                              ✨ Enroll to access all videos, documents, quizzes, and interactive content!
+                            </p>
+                            <span className="text-xs text-blue-500 dark:text-blue-400 font-medium">
+                              +{(module.resources?.videos?.length || 0) + (module.resources?.documents?.length || 0) + (module.assessment?.quizQuestions?.length || 0) - 3} more resources
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               ) : (
                 <p className="text-gray-600 dark:text-gray-400">Course syllabus is being prepared.</p>
+              )}
+            </div>
+          )}
+
+          {/* Preview Tab - Only for non-enrolled users */}
+          {activeTab === 'preview' && !isEnrolled && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Course Content Preview</h3>
+                <p className="text-gray-600 dark:text-gray-400">Get a sneak peek at what you'll learn in this course!</p>
+              </div>
+
+              {course.outline?.modules && course.outline.modules.length > 0 && (
+                <div className="space-y-4">
+                  {course.outline.modules.slice(0, 2).map((module: any, index: number) => (
+                    <div key={index} className="border border-gray-200/50 dark:border-gray-600/50 rounded-lg p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+                          Module {index + 1}: {module.title}
+                        </h4>
+                        <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded text-xs font-medium">
+                          {module.estimatedDuration} min
+                        </span>
+                      </div>
+                      
+                      {/* Sample Resources */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        {/* Video Preview */}
+                        {module.resources?.videos && module.resources.videos[0] && (
+                          <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg border border-blue-200/50 dark:border-blue-700/50">
+                            <div className="flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium mb-2">
+                              <span className="mr-2">🎬</span>
+                              Video Content
+                            </div>
+                            <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{module.resources.videos[0].title}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{module.resources.videos[0].description}</p>
+                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">Duration: {module.resources.videos[0].duration} minutes</p>
+                          </div>
+                        )}
+
+                        {/* Document Preview */}
+                        {module.resources?.documents && module.resources.documents[0] && (
+                          <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg border border-green-200/50 dark:border-green-700/50">
+                            <div className="flex items-center text-green-600 dark:text-green-400 text-sm font-medium mb-2">
+                              <span className="mr-2">📚</span>
+                              Study Material
+                            </div>
+                            <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{module.resources.documents[0].title}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{module.resources.documents[0].description}</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-2">Format: {module.resources.documents[0].type?.toUpperCase()}</p>
+                          </div>
+                        )}
+
+                        {/* Quiz Preview */}
+                        {module.assessment?.quizQuestions && module.assessment.quizQuestions[0] && (
+                          <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg border border-purple-200/50 dark:border-purple-700/50">
+                            <div className="flex items-center text-purple-600 dark:text-purple-400 text-sm font-medium mb-2">
+                              <span className="mr-2">🧠</span>
+                              Interactive Quiz
+                            </div>
+                            <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">Sample Question</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">"{module.assessment.quizQuestions[0].question}"</p>
+                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">{module.assessment.quizQuestions.length} total questions</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Resource Count */}
+                      <div className="mt-4 p-2 bg-blue-100/50 dark:bg-blue-900/20 rounded text-center">
+                        <p className="text-sm text-blue-800 dark:text-blue-200">
+                          This module includes {module.resources?.videos?.length || 0} videos, {module.resources?.documents?.length || 0} documents, 
+                          {module.resources?.externalLinks?.length || 0} external resources, and {module.assessment?.quizQuestions?.length || 0} quiz questions
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+
+                  {course.outline.modules.length > 2 && (
+                    <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10 rounded-lg border border-blue-200 dark:border-blue-700">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        +{course.outline.modules.length - 2} More Modules Available!
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                        Unlock access to all {course.outline.modules.length} modules with comprehensive learning materials, interactive quizzes, and expert guidance.
+                      </p>
+                      <div className="flex justify-center">
+                        <span className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium">
+                          🚀 Enroll Now to Access Everything!
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           )}

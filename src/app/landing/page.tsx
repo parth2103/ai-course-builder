@@ -203,7 +203,7 @@ export default function LandingPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="text-lg font-semibold mb-2">Create Course</h3>
-                          <p className="text-green-100 text-sm">Access create course</p>
+                          <p className="text-green-100 dark:text-green-200 text-sm">Access create course</p>
                         </div>
                         <svg className="w-8 h-8 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -300,7 +300,7 @@ export default function LandingPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="text-base font-semibold mb-1">Create Course</h3>
-                          <p className="text-green-100 text-xs">Access create course</p>
+                          <p className="text-green-100 dark:text-green-200 text-xs">Access create course</p>
                         </div>
                         <svg className="w-6 h-6 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -434,30 +434,30 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white">AI Course Builder</h3>
-                  <p className="text-green-600 dark:text-green-400 font-medium">2-4 hours per course</p>
+                  <p className="text-green-600 dark:text-green-300 font-medium">2-4 hours per course</p>
                 </div>
               </div>
               
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-400">AI Generation</span>
-                  <span className="text-green-600 font-semibold">30-45 minutes</span>
+                  <span className="text-green-600 dark:text-green-300 font-semibold">30-45 minutes</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Content Review</span>
-                  <span className="text-green-600 font-semibold">1-2 hours</span>
+                  <span className="text-green-600 dark:text-green-300 font-semibold">1-2 hours</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Customization</span>
-                  <span className="text-green-600 font-semibold">30-60 minutes</span>
+                  <span className="text-green-600 dark:text-green-300 font-semibold">30-60 minutes</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Final Polish</span>
-                  <span className="text-green-600 font-semibold">30-45 minutes</span>
+                  <span className="text-green-600 dark:text-green-300 font-semibold">30-45 minutes</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Publishing</span>
-                  <span className="text-green-600 font-semibold">5-10 minutes</span>
+                  <span className="text-green-600 dark:text-green-300 font-semibold">5-10 minutes</span>
                 </div>
               </div>
             </div>

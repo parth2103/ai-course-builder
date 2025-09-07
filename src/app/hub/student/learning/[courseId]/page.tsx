@@ -543,21 +543,56 @@ export default function StudentLearning() {
                             {index + 1}. {question.question}
                           </h4>
                           <div className="space-y-2">
-                            {question.options.map((option: string, optionIndex: number) => (
-                              <label key={optionIndex} className="flex items-center space-x-2 cursor-pointer">
-                                <input
-                                  type="radio"
-                                  name={`question-${currentModule}-${index}`}
-                                  value={optionIndex}
-                                  checked={quizAnswers[`module-${currentModule}-question-${index}`] === optionIndex}
-                                  onChange={() => handleQuizAnswerChange(index, optionIndex)}
-                                  className="text-blue-600"
-                                  disabled={quizSubmitted[`module-${currentModule}`]}
-                                />
-                                <span className="text-gray-700 dark:text-gray-300">{option}</span>
-                              </label>
-                            ))}
+                            {question.options.map((option: string, optionIndex: number) => {
+                              const isSubmitted = quizSubmitted[`module-${currentModule}`];
+                              const isUserAnswer = quizAnswers[`module-${currentModule}-question-${index}`] === optionIndex;
+                              const isCorrectAnswer = question.correctAnswer === optionIndex;
+                              
+                              // Determine colors after submission
+                              let optionColorClass = "text-gray-700 dark:text-gray-300";
+                              let bgColorClass = "";
+                              
+                              if (isSubmitted) {
+                                if (isCorrectAnswer) {
+                                  // Correct answer - always green
+                                  optionColorClass = "text-green-700 dark:text-green-300 font-medium";
+                                  bgColorClass = "bg-green-50 dark:bg-green-900/20";
+                                } else if (isUserAnswer) {
+                                  // User's wrong answer - red
+                                  optionColorClass = "text-red-700 dark:text-red-300 font-medium";
+                                  bgColorClass = "bg-red-50 dark:bg-red-900/20";
+                                }
+                              }
+                              
+                              return (
+                                <label key={optionIndex} className={`flex items-center space-x-2 cursor-pointer p-2 rounded ${bgColorClass} transition-colors`}>
+                                  <input
+                                    type="radio"
+                                    name={`question-${currentModule}-${index}`}
+                                    value={optionIndex}
+                                    checked={isUserAnswer}
+                                    onChange={() => handleQuizAnswerChange(index, optionIndex)}
+                                    className="text-blue-600"
+                                    disabled={isSubmitted}
+                                  />
+                                  <span className={optionColorClass}>
+                                    {option}
+                                    {isSubmitted && isCorrectAnswer && " ✓"}
+                                    {isSubmitted && isUserAnswer && !isCorrectAnswer && " ✗"}
+                                  </span>
+                                </label>
+                              );
+                            })}
                           </div>
+                          
+                          {/* Show explanation after submission */}
+                          {quizSubmitted[`module-${currentModule}`] && question.explanation && (
+                            <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded">
+                              <p className="text-sm text-blue-800 dark:text-blue-200">
+                                <strong>Explanation:</strong> {question.explanation}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
